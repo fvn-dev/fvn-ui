@@ -1,4 +1,4 @@
-import { el, col, getCallback, withValue, parseArgs, propsToClasses } from '../dom.js'
+import { el, col, getCallback, withValue, parseArgs, configToClasses } from '../dom.js'
 import { button } from './button.js'
 import { label as textLabel } from './text.js'
 import './input.css'
@@ -29,7 +29,6 @@ export function input(...args) {
     label,
     placeholder,
     attrs = {},
-    props = {},
     ...rest
   } = parseArgs(...args);
 
@@ -47,7 +46,7 @@ export function input(...args) {
 
   const root = col(parent, {
     gap: 2,
-    class: [propsToClasses(props), rest.class],
+    class: [configToClasses(rest), rest.class],
     children: [
       label && textLabel({ text: label, soft: true }),
       el('div', {

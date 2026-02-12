@@ -86,17 +86,6 @@ const CLASS_SHORTHANDS = {
   muted: 'muted'
 };
 
-// Convert props object to class array (e.g. { padding: 4, border: true } → ['pad-4', 'border'])
-export const propsToClasses = (props) => {
-  if (!props) return [];
-  return Object.entries(props)
-    .filter(([, val]) => val !== undefined && val !== null && val !== false)
-    .map(([key, val]) => {
-      const prefix = CLASS_SHORTHANDS[key] || key;
-      return val === true ? prefix : `${prefix}-${val}`;
-    });
-};
-
 /**
  * Convert shorthand config props to CSS classes.
  * Use this when you want shorthands like gap, padding to become utility classes.

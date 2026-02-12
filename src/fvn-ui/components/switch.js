@@ -1,4 +1,4 @@
-import { el, getCallback, withValue, parseArgs, propsToClasses } from '../dom.js'
+import { el, getCallback, withValue, parseArgs, configToClasses } from '../dom.js'
 import { label as textLabel } from './text.js'
 import './switch.css'
 
@@ -24,7 +24,6 @@ export function switchComponent(...args) {
     color = 'default',
     label,
     id,
-    props = {},
     ...rest
   } = parseArgs(...args);
 
@@ -56,7 +55,7 @@ export function switchComponent(...args) {
 
   const root = el('div', parent, {
     ...rest,
-    class: ['ui-switch', propsToClasses(props), rest.class],
+    class: ['ui-switch', configToClasses(rest), rest.class],
     data: { checked: state, uiCol: color },
     children: [
       el('button', {

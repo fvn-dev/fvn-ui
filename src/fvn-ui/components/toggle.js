@@ -1,4 +1,4 @@
-import { el, getCallback, withValue, parseArgs, propsToClasses } from '../dom.js'
+import { el, getCallback, withValue, parseArgs, configToClasses } from '../dom.js'
 import './toggle.css'
 
 /**
@@ -23,7 +23,6 @@ export function toggle(...args) {
     disabled,
     color = 'default',
     id,
-    props = {},
     ...rest
   } = parseArgs(...args);
 
@@ -43,7 +42,7 @@ export function toggle(...args) {
 
   const root = el('nav', parent, {
     ...rest,
-    class: ['ui-toggle', propsToClasses(props), rest.class],
+    class: ['ui-toggle', configToClasses(rest), rest.class],
     data: { checked: state, uiCol: color },
     disabled,
     id,

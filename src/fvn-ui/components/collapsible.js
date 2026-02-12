@@ -1,4 +1,4 @@
-import { el, col, getCallback, withValue, parseArgs, propsToClasses } from '../dom.js'
+import { el, col, getCallback, withValue, parseArgs, configToClasses } from '../dom.js'
 import { button } from './button.js'
 import { svg } from './svg.js'
 import './collapsible.css'
@@ -24,7 +24,6 @@ export function collapsible(...args) {
     open,
     disabled,
     content,
-    props = {},
     ...rest
   } = parseArgs(...args);
 
@@ -46,7 +45,7 @@ export function collapsible(...args) {
 
   const root = el('div', parent, {
     ...rest,
-    class: ['ui-collapsible', disabled && 'disabled', propsToClasses(props), rest.class],
+    class: ['ui-collapsible', disabled && 'disabled', configToClasses(rest), rest.class],
     data: { open: state },
     children: [
       button({

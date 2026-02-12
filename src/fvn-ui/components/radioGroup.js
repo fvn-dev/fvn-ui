@@ -1,4 +1,4 @@
-import { el, getCallback, withValue, parseArgs, propsToClasses } from '../dom.js'
+import { el, getCallback, withValue, parseArgs, configToClasses } from '../dom.js'
 import { label as textLabel } from './text.js'
 import './form.css'
 import './radioGroup.css'
@@ -27,7 +27,6 @@ export function radioGroup(...args) {
     orientation,
     disabled,
     color = 'default',
-    props = {},
     ...rest
   } = parseArgs(...args);
 
@@ -52,7 +51,7 @@ export function radioGroup(...args) {
 
   const root = el('div', parent, {
     ...rest,
-    class: ['ui-radio-group ui-form-group', isRow && 'horizontal', propsToClasses(props), rest.class],
+    class: ['ui-radio-group ui-form-group', isRow && 'horizontal', configToClasses(rest), rest.class],
     attrs: { role: 'radiogroup' },
     children: [
       label && textLabel({ text: label, soft: true }),

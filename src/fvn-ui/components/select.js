@@ -1,4 +1,4 @@
-import { el, col, getCallback, escapeHtml, onOutsideClick, withValue, parseArgs, propsToClasses } from '../dom.js'
+import { el, col, getCallback, escapeHtml, onOutsideClick, withValue, parseArgs, configToClasses } from '../dom.js'
 import { button } from './button.js'
 import { text } from './text.js'
 import { svg } from './svg.js'
@@ -37,7 +37,6 @@ export function selectComponent(...args) {
     multiselect = false,
     filter: filterProp,
     filterPlaceholder = 'Filter...',
-    props = {},
     ...rest
   } = parseArgs(...args);
 
@@ -253,7 +252,7 @@ export function selectComponent(...args) {
   const root = col(parent, {
     ...rest,
     gap: 2,
-    class: [propsToClasses(props), rest.class],
+    class: [configToClasses(rest), rest.class],
     children: [
       label && text.label({ text: label, soft: true }),
       el('div', {

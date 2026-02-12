@@ -1,4 +1,4 @@
-import { el, parseArgs, propsToClasses } from '../dom.js'
+import { el, parseArgs, configToClasses } from '../dom.js'
 import { image } from './image.js'
 import './text.css'
 import './avatar.css'
@@ -37,7 +37,6 @@ export function avatar(...args) {
     variant = 'round',
     size = 'small',
     color,
-    props = {},
     ...rest
   } = parseArgs(...args);
 
@@ -45,7 +44,7 @@ export function avatar(...args) {
 
   return el('div', parent, {
     ...rest,
-    class: ['ui-avatar', variant !== 'square' && 'ui-avatar--round', size && `ui-avatar--${size}`, propsToClasses(props), rest.class],
+    class: ['ui-avatar', variant !== 'square' && 'ui-avatar--round', size && `ui-avatar--${size}`, configToClasses(rest), rest.class],
     children: [
       el('div', {
         class: 'ui-avatar__box',

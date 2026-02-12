@@ -1,4 +1,4 @@
-import { el, col, parseArgs, propsToClasses } from '../dom.js'
+import { el, col, parseArgs, configToClasses } from '../dom.js'
 import { header } from './text.js'
 import './card.css'
 
@@ -25,7 +25,6 @@ export function card(...args) {
     border = true,
     padding,
     width,
-    props = {},
     ...rest 
   } = parseArgs(...args);
 
@@ -46,7 +45,7 @@ export function card(...args) {
       withBorder && 'border',
       !hasPadding && 'pad-8',
       hasPadding && `pad-${padding}`,
-      propsToClasses(props), 
+      configToClasses(rest), 
       rest.class
     ],
     children: [

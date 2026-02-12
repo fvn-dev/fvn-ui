@@ -1,4 +1,4 @@
-import { el, getCallback, parseArgs, onOutsideClick, propsToClasses } from '../dom.js'
+import { el, getCallback, parseArgs, onOutsideClick, configToClasses } from '../dom.js'
 import './dialog.css'
 
 const dialogCache = new WeakMap(); // cache toggled dialogs
@@ -40,7 +40,6 @@ export function dialog(...args) {
     hover, // if true, close on mouseleave from anchor/dialog
     inverted,
     _isChildOfAnchor, // internal: tooltip is child of anchor for hover persistence
-    props = {},
     ...rest
   } = parseArgs(...args);
 
@@ -255,7 +254,7 @@ export function dialog(...args) {
   if (isModal) {
     root = el('dialog', parent, {
       ...rest,
-      class: ['ui-dialog', 'ui-dialog-component', propsToClasses(props), rest.class],
+      class: ['ui-dialog', 'ui-dialog-component', configToClasses(rest), rest.class],
       onClick: (e) => {
         const r = root.getBoundingClientRect();
         const inDialog = r.top <= e.clientY && e.clientY <= r.bottom
@@ -269,7 +268,7 @@ export function dialog(...args) {
   } else {
     root = el('div', parent, {
       ...rest,
-      class: ['ui-popover', 'ui-dialog-component', propsToClasses(props), rest.class],
+      class: ['ui-popover', 'ui-dialog-component', configToClasses(rest), rest.class],
       data: { open: 'false', position },
       style: _isChildOfAnchor ? { position: 'absolute' } : undefined,
       children: [

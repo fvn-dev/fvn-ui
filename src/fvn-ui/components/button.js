@@ -1,4 +1,4 @@
-import { el, parseArgs, propsToClasses } from '../dom.js'
+import { el, parseArgs, configToClasses } from '../dom.js'
 import { svg } from './svg.js'
 import './button.css'
 
@@ -36,7 +36,6 @@ export function button(...args) {
     disabled,
     attrs = {},
     dataset,
-    props = {},
     ...rest
   } = parseArgs(...args);
 
@@ -68,7 +67,7 @@ export function button(...args) {
       shape && !isMinimal && `ui-btn--${shape}`,
       size && `ui-size--${size}`,
       muted && 'ui-btn--muted',
-      propsToClasses(props),
+      configToClasses(rest),
       rest.class
     ],
     attrs,

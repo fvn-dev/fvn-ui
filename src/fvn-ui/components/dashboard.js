@@ -1,4 +1,4 @@
-import { el, row, col, parseArgs, propsToClasses } from '../dom.js'
+import { el, row, col, parseArgs, configToClasses } from '../dom.js'
 import { button } from './button.js'
 import { header } from './text.js'
 import './dashboard.css'
@@ -30,7 +30,6 @@ export function dashboard(...args) {
     menu = [],
     views = {},
     defaultView = 'default',
-    props = {},
     ...rest
   } = parseArgs(...args);
 
@@ -100,7 +99,7 @@ export function dashboard(...args) {
   );
 
   const headerEl = row('between', {
-    class: ['ui-dashboard__header', 'border-bottom', propsToClasses(props)],
+    class: ['ui-dashboard__header', 'border-bottom', configToClasses(rest)],
     children: [
       header({ title, description, gap: 1, flex: 1 }),
       row({ gap: 0, class: 'ui-dashboard__menu', children: menuButtons })

@@ -1,4 +1,4 @@
-import { el, getCallback, parseArgs, propsToClasses } from '../dom.js'
+import { el, getCallback, parseArgs, configToClasses } from '../dom.js'
 import { button } from './button.js'
 import { dialog } from './dialog.js'
 import { header } from './text.js'
@@ -42,7 +42,6 @@ export function confirm(...args) {
     cancel = 'Cancel',
     dialogVariant,
     type, // backward compat alias for dialogVariant
-    props = {},
     inverted,
     ...rest
   } = parseArgs(...args);
@@ -51,7 +50,7 @@ export function confirm(...args) {
   const cbConfirm = getCallback('onConfirm', rest);
   const dlgVariant = dialogVariant || type || 'modal';
 
-  const root = el('div', parent, { ...rest, class: [propsToClasses(props), rest.class] });
+  const root = el('div', parent, { ...rest, class: [configToClasses(rest), rest.class] });
 
   const trigger = button(root, {
     label,

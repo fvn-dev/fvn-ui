@@ -1,4 +1,4 @@
-import { el, parseArgs, propsToClasses } from '../dom.js'
+import { el, parseArgs, configToClasses } from '../dom.js'
 import './image.css'
 
 const loadImage = (container) => {
@@ -38,13 +38,12 @@ export function image(...args) {
     src,
     alt = '',
     lazy = true,
-    props = {},
     ...rest
   } = parseArgs(...args);
 
   const root = el('div', parent, {
     ...rest,
-    class: ['ui-image', propsToClasses(props), rest.class],
+    class: ['ui-image', configToClasses(rest), rest.class],
     children: [
       el('img', {
         class: 'ui-image__img',

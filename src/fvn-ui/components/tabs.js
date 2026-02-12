@@ -1,4 +1,4 @@
-import { el, getCallback, withValue, parseArgs, propsToClasses } from '../dom.js'
+import { el, getCallback, withValue, parseArgs, configToClasses } from '../dom.js'
 import { BASE_CLASS } from './index.js'
 import { button } from './button.js'
 import './tabs.css'
@@ -42,7 +42,6 @@ export function tabs(...args) {
     shade,
     padding,
     width,
-    props = {},
     asButtonGroup,
     ...rest
   } = parseArgs(...args);
@@ -135,7 +134,7 @@ export function tabs(...args) {
       'flex-col', 
       !withBorder && 'gap-2',
       withShade && 'ui-tabs--shade',
-      propsToClasses(props),
+      configToClasses(rest),
       rest.class
     ],
     children: [

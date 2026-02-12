@@ -1,4 +1,4 @@
-import { el, col, parseArgs, propsToClasses } from '../dom.js'
+import { el, col, parseArgs, configToClasses } from '../dom.js'
 import './text.css'
 
 /**
@@ -11,12 +11,12 @@ import './text.css'
  * @category Layout
  */
 export const title = (...args) => {
-  const { parent, text = '', large, props = {}, ...rest } = parseArgs(...args);
+  const { parent, text = '', large, ...rest } = parseArgs(...args);
   const tag = large ? 'h1' : 'div';
   
   return el(tag, parent, {
     ...rest,
-    class: ['ui-title', large && 'ui-title--large', propsToClasses(props), rest.class],
+    class: ['ui-title', large && 'ui-title--large', configToClasses(rest), rest.class],
     html: rest.html || text
   });
 };
@@ -31,11 +31,11 @@ export const title = (...args) => {
  * @category Layout
  */
 export const description = (...args) => {
-  const { parent, text = '', small = true, props = {}, ...rest } = parseArgs(...args);
+  const { parent, text = '', small = true, ...rest } = parseArgs(...args);
   
   return el('p', parent, {
     ...rest,
-    class: ['ui-description', 'muted', small && 'small', propsToClasses(props), rest.class],
+    class: ['ui-description', 'muted', small && 'small', configToClasses(rest), rest.class],
     html: rest.html || text
   });
 };
@@ -52,11 +52,11 @@ export const description = (...args) => {
  * @category Layout
  */
 export const label = (...args) => {
-  const { parent, text = '', soft, props = {}, ...rest } = parseArgs(...args);
+  const { parent, text = '', soft, ...rest } = parseArgs(...args);
   
   return el('label', parent, {
     ...rest,
-    class: ['ui-label', soft && 'ui-label--soft', 'block-1', propsToClasses(props), rest.class],
+    class: ['ui-label', soft && 'ui-label--soft', 'block-1', configToClasses(rest), rest.class],
     html: rest.html || text
   });
 };
