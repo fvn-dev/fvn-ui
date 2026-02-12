@@ -1,0 +1,46 @@
+.ui-toggle {
+  --bg: var(--text);
+  --fg: var(--back);
+  display: inline-flex;
+  background: var(--hover);
+  padding: 0;
+  border-radius: 999px;
+  user-select: none;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-size: 72.5%;
+  font-weight: 500;
+  cursor: pointer;
+}
+.ui-toggle[disabled] {
+  opacity: .5;
+  pointer-events: none;
+}
+.ui-toggle div {
+  pointer-events: none;
+  padding: var(--space-2) var(--space-5);
+  border-radius: 999px;
+}
+.ui-toggle div:first-child {
+  background: var(--text);
+  color: var(--back);
+}
+.ui-toggle div:last-child {
+  background: transparent;
+  color: inherit;
+  padding-left: var(--space-3);
+}
+.ui-toggle[data-checked="true"] div:first-child {
+  background: transparent;
+  color: inherit;
+  padding-right: var(--space-3);
+  color: var(--muted);
+}
+.ui-toggle[data-checked="false"] div:last-child {
+  color: var(--muted);
+}
+.ui-toggle[data-checked="true"] div:last-child {
+  background: var(--bg);
+  color: var(--fg);
+  padding: var(--space-2) var(--space-5);
+}

@@ -1,0 +1,88 @@
+.ui-dialog::backdrop { 
+  --hover-opacity: .3; 
+}
+.ui-dialog {
+  border: none;
+  border-radius: var(--radius);
+  width: min(520px, calc(100vw - 32px));
+  box-shadow: var(--shadow-md);
+  background: var(--back);
+  color: var(--text);
+}
+.ui-dialog:not([open]) {
+  display: none;
+}
+.ui-dialog__inner { padding: var(--space-4); }
+.ui-dialog__title { font-weight: 650; font-size: 1.1rem; margin: 0; color: var(--text); }
+.ui-dialog__desc { margin: var(--space-2) 0 0 0; color: var(--muted); font-size: 0.95rem; }
+.ui-dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-4);
+}
+
+/* ---- Popover (tooltip/dropdown variant) ---- */
+.ui-popover {
+  position: fixed;
+  z-index: 50;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--back);
+  color: var(--text);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-3);
+  opacity: 0;
+  transform: scale(0.96) translateY(4px);
+  pointer-events: none;
+  transition: opacity .12s ease;
+}
+.ui-popover[data-open="true"] {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
+}
+/* Invisible bridge to cover gap between anchor and tooltip */
+.ui-popover[data-open="true"]:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 12px;
+}
+.ui-popover[data-position="bottom"][data-open="true"]:before {
+  top: -12px;
+}
+.ui-popover[data-position="top"][data-open="true"]:before {
+  bottom: -12px;
+}
+.ui-popover[data-position="top"] {
+  transform-origin: bottom center;
+}
+.ui-popover[data-position="top"][data-open="true"] {
+  transform: scale(1) translateY(0);
+}
+.ui-popover[data-position="bottom"] {
+  transform-origin: top center;
+}
+
+.ui-popover__arrow {
+  --arrow-space: calc(-5px - var(--space-3));
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--back);
+  border: 1px solid var(--border);
+  border-right: 0;
+  border-bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  transition: left .12s ease;
+}
+.ui-popover[data-position="bottom"] .ui-popover__arrow {
+  top: -5px;
+}
+.ui-popover[data-position="top"] .ui-popover__arrow {
+  bottom: -5px;
+  transform: translateX(-50%) rotate(-135deg);
+}

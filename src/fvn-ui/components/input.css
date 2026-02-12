@@ -1,0 +1,30 @@
+.ui-input {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--input-padding);
+  color: var(--text);
+  background: var(--back);
+  width: 100%;
+}
+.ui-input::placeholder { color: var(--muted); }
+
+.ui-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.ui-input-wrap .ui-input {
+  padding-right: 40px;
+}
+.ui-input-wrap .ui-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  padding: var(--input-padding);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.ui-input-wrap.has-value .ui-btn {
+  background: var(--hover);
+}

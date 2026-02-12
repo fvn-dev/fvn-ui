@@ -1,0 +1,21 @@
+.ui-image {
+  position: relative;
+  overflow: hidden;
+  background: var(--shade);
+
+  &[data-loaded="true"] .ui-image__img {
+    opacity: 1;
+  }
+
+  &[data-error="true"] {
+    background: var(--shade);
+  }
+}
+
+.ui-image__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity .3s ease;
+}
