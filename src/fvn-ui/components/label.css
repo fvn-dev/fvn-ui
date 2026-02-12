@@ -1,2 +1,2 @@
-.ui-label { font-size: 0.875em; color: var(--text); font-weight: 500; }
+.ui-label { font-size: 0.875em; color: var(--text); font-weight: 500; display: block; }
 .ui-label--soft { font-weight: 300; }

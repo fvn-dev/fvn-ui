@@ -33,7 +33,11 @@
   "files": [
     "src/fvn-ui"
   ],
-  "keywords": ["ui", "components", "vanilla-js"],
+  "keywords": [
+    "ui",
+    "components",
+    "vanilla-js"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -43,10 +47,12 @@
     "dev": "vite",
     "start": "vite",
     "build": "vite build",
+    "doc": "documentation build src/fvn-ui/**/*.js -f json -o docs/api.json",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix"
   },
   "devDependencies": {
+    "documentation": "^14.0.3",
     "eslint": "^9.0.0",
     "sass": "^1.97.3",
     "vite": "^7.2.4"

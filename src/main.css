@@ -4,6 +4,24 @@
 }
 .demo-code {
   font-family: monospace;
-  font-size: 11px;;
+  font-size: 12px;
+  line-height: 1.75;
   white-space: pre-wrap;
+  background: var(--shade);
+  padding: .25em .5em;
+  border-radius: var(--radius);
+  color: hsl(var(--hsl-text) / 0.8);
+  display: block;
+}
+.docs-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.docs-table td {
+  padding: 4px 8px 4px 0;
+  vertical-align: top;
+}
+.docs-table code {
+  font-size: 12px;
+  color: var(--primary);
 }

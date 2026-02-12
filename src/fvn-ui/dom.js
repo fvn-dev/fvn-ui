@@ -38,6 +38,9 @@
 
 import { merge } from './helpers.js'
 
+export const dom = {};
+export const colors = ['primary', 'red', 'blue', 'green', 'pink', 'yellow', 'orange', 'default'];
+
 // ---- Helpers ----
 
 export const escapeHtml = (s) => String(s)
@@ -295,6 +298,27 @@ export const patch = (node, source, state = {}) => {
 
 const template = document.createElement('template');
 
+/**
+ * Creates a DOM element with flexible argument order
+ * @param {string} tag - HTML tag name or HTML string (e.g. 'div' or '<div class="foo">')
+ * @param {Node} [parent] - Parent element to append to
+ * @param {Object} [config] - Element configuration
+ * @param {string|string[]} [config.class] - CSS class(es)
+ * @param {string} [config.text] - Text content
+ * @param {string} [config.html] - HTML content
+ * @param {Object} [config.style] - Inline styles
+ * @param {Object} [config.data] - Data attributes
+ * @param {Object} [config.attrs] - HTML attributes
+ * @param {Node[]} [config.children] - Child elements
+ * @param {Function} [config.ref] - Callback receiving the created element
+ * @param {Function} [config.onClick] - Click handler (also onInput, onChange, etc.)
+ * @returns {HTMLElement} The created element
+ * @category Layout
+ * @example
+ * el('div', { class: 'card', text: 'Hello' })
+ * el('button', document.body, { text: 'Click me', onClick: handleClick })
+ * el('<input type="text">', { placeholder: 'Name' })
+ */
 export function el(...args) {
   let str, txtArg, parent, config;
 
@@ -344,6 +368,10 @@ export function el(...args) {
   }
   if (state.parent) {
     state.parent.appendChild(node);
+  }
+
+  if (node.id) {
+    dom[node.id] = node;
   }
 
   return node;
@@ -431,10 +459,40 @@ const createLayout = (direction, defaults, ...args) => {
   });
 };
 
+/**
+ * Creates a horizontal flex row layout
+ * @param {Node} [parent] - Parent element to append to
+ * @param {Object} [config] - Layout configuration
+ * @param {Node[]} [config.children] - Child elements (also accepts array as second arg)
+ * @param {string} [config.justify='start'] - Justify content (start, center, end, between, around)
+ * @param {string} [config.align='center'] - Align items (start, center, end, stretch)
+ * @param {number} [config.gap=2] - Gap between children (0-10)
+ * @param {boolean} [config.full] - Full viewport height, centered
+ * @param {number} [config.flex] - Apply flex-N to all children
+ * @returns {HTMLDivElement} Flex container element
+ * @category Layout
+ * @example
+ * layout.row([button('One'), button('Two')])
+ * layout.row({ gap: 4, justify: 'between' }, [left, right])
+ */
 export const row = (...args) => createLayout('row', { justify: 'start', align: 'center' }, ...args);
+
+/**
+ * Creates a vertical flex column layout
+ * @param {Node} [parent] - Parent element to append to
+ * @param {Object} [config] - Layout configuration
+ * @param {Node[]} [config.children] - Child elements (also accepts array as second arg)
+ * @param {string} [config.justify='start'] - Justify content (start, center, end, between, around)
+ * @param {string} [config.align='start'] - Align items (start, center, end, stretch)
+ * @param {number} [config.gap=2] - Gap between children (0-10)
+ * @param {boolean} [config.full] - Full viewport height, centered
+ * @param {number} [config.flex] - Apply flex-N to all children
+ * @returns {HTMLDivElement} Flex container element
+ * @category Layout
+ * @example
+ * layout.col([input({ label: 'Name' }), input({ label: 'Email' })])
+ * layout.col({ gap: 6, align: 'center' }, [title, content, footer])
+ */
 export const col = (...args) => createLayout('col', { justify: 'start', align: 'start' }, ...args);
-export const layout = { row, col };
 
-export const dom = {};
-
-export const colors = ['primary', 'red', 'blue', 'green', 'pink', 'yellow', 'orange', 'default'];
+export const layout = { row, col, column: col };

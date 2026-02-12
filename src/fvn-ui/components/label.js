@@ -19,7 +19,7 @@ export function label(...args) {
   const { parent, text = '', props = {}, ...rest } = parseArgs(...args);
   
   return el('label', parent, {
-    class: ['ui-label', propsToClasses(props), rest.class],
+    class: ['ui-label', 'block-2', propsToClasses(props), rest.class],
     html: rest.html || text,
     ...rest
   });

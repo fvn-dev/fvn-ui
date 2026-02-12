@@ -1,3 +1,10 @@
+/*
+  todo! 
+    • collapsible with "card" 
+    • toggle with "card"
+
+*/
+
 /**
  * fvn-ui — Minimalist vanilla JS component library
  * @see ./LLM.md for usage reference

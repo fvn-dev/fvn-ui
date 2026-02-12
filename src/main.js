@@ -1,7 +1,6 @@
 import './main.css';
-import codeExample from './main.txt?raw';
-import { dom, el, dashboard, layout, card, input, label, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radioGroup, avatar, colors } from './fvn-ui'
-import { collapsible } from './fvn-ui/components/collapsible';
+import apiDocs from '../docs/api.json';
+import { dom, el, dashboard, layout, card, input, label, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radioGroup, avatar, colors, collapsible } from './fvn-ui'
 
 function init() {
   dashboard(document.body, {
@@ -9,15 +8,13 @@ function init() {
     title: 'FVN-UI beta',
     description: 'Diverse junk',
     menu: [
-      { icon: 'code', view: 'code' },
+      { icon: 'doc', view: 'doc' },
       { icon: 'rabbit', action: () => document.body.classList.toggle('shaded') },
-      { icon: 'moon', action: () => document.documentElement.classList.toggle('dark') },
-      { icon: 'dots', view: 'demo' }
+      { icon: 'moon', action: () => document.documentElement.classList.toggle('dark') }
     ],
     views: {
-      default: () => exampleTabs(),
-      code: () => card({ content: el('code', { class: 'demo-code', text: codeExample }) }),
-      demo: () => examplePresentation()
+      default: () => presentation(),
+      doc: () => docs()
     }
   });
 
@@ -37,7 +34,7 @@ init();
 
 // --->
 
-function exampleTabs(body) {
+function presentation(body) {
   return tabs(body, {
     variant: 'outline',
     items: [
@@ -453,22 +450,79 @@ function tabsPresentation() {
 
 // --->
 
-function examplePresentation() {
-  const pillButton = label => button({ 
-    label,
-    variant: 'outline', 
-    shape: 'pill', 
-    color: 'primary',
-    onclick() {
-      this.toggleLoading('Henter noe');
-      setTimeout(() => this.toggleLoading(), 2000);
-    }
-  });
+function docs() {
+  const getDescription = (doc) => {
+    if (!doc.description?.children?.[0]?.children?.[0]?.value) return '';
+    return doc.description.children[0].children[0].value;
+  };
 
-  return layout.col({ border: true, align: 'center', justify: 'center', block: 10, gap: 3 }, [
-    label('Omtrent', { block: 2 }),
-    pillButton('Det'),
-    pillButton('Samme'),
-    pillButton('Utseendet')
-  ]);
+  const getParams = (doc) => {
+    return doc.tags
+      ?.filter(t => t.title === 'param')
+      .map(t => ({
+        name: t.name,
+        description: t.description || '',
+        type: t.type?.name || t.type?.expression?.name || 'any',
+        optional: t.type?.type === 'OptionalType'
+      })) || [];
+  };
+
+  const getReturns = (doc) => {
+    const ret = doc.tags?.find(t => t.title === 'returns');
+    return ret?.description || '';
+  };
+
+  const getExamples = (doc) => {
+    return doc.tags
+      ?.filter(t => t.title === 'example')
+      .map(t => t.description) || [];
+  };
+
+  const renderDoc = (doc) => {
+    const params = getParams(doc);
+    const returns = getReturns(doc);
+    const examples = getExamples(doc);
+
+    return collapsible({
+      width: 'full',
+      label: `<b>${doc.name}</b> <span class="muted small">${getDescription(doc)}</span>`,
+      content: card({ content: layout.col({ gap: 4 }, [
+        params.length && el('div', {
+          width: 'full',
+          children: [
+            label('Parameters'),
+            el('table', { class: 'docs-table', html: params.map(p => `
+              <tr>
+                <td><code>${p.name}</code></td>
+                <td class="muted small">${p.type}${p.optional ? '?' : ''}</td>
+                <td class="small">${p.description}</td>
+              </tr>
+            `).join('') })
+          ]
+        }),
+        returns && el('div', {
+          children: [
+            label('Returns'),
+            el('span', { class: 'small', text: returns })
+          ]
+        }),
+        examples.length && el('div', {
+          children: [
+            label('Examples'),
+            el('code', { class: 'demo-code', text: examples.join('\n\n') })
+          ]
+        })
+      ].filter(Boolean)) })
+    })
+  };
+
+  const componentDocs = apiDocs.filter(d => !d.tags?.some(t => t.title === 'category' && t.description === 'Layout'));
+  const layoutDocs = apiDocs.filter(d => d.tags?.some(t => t.title === 'category' && t.description === 'Layout'));
+
+  return card({ content: layout.col({ gap: 4 }, [
+    label('Components'),
+    layout.col({ gap: 2 }, componentDocs.map(renderDoc)),
+    layoutDocs.length && label('Layout'),
+    layoutDocs.length && layout.col({ gap: 2 }, layoutDocs.map(renderDoc))
+  ].filter(Boolean)) });
 }

@@ -15,11 +15,14 @@ import './select.css'
  * @param {string} [config.filterPlaceholder='Filter...'] - Filter input placeholder
  * @param {Function} [config.onChange] - Called with (value, item, event) or (values[], items[], event) for multiselect
  * @param {string} [config.id] - Registers to dom.select[id] and dom[id]
- * @returns {HTMLDivElement} Select element with .value getter/setter
+ * @returns {HTMLDivElement} Select element with .value getter/setter and .update() method
+ * @property {Function} update - Updates options/items and optionally value: update({ options, value })
  * @example
  * selectComponent({ label: 'Country', options: [{ value: 'us', label: 'USA' }] })
  * selectComponent({ placeholder: 'Pick fruit', options: fruits, onChange: handleChange })
  * selectComponent({ label: 'Tags', options: tags, multiselect: true })
+ * // Update options programmatically:
+ * const sel = selectComponent({ options }); sel.update({ options: newOptions, value: 'new' })
  */
 export function selectComponent(...args) {
   const {
@@ -328,12 +331,6 @@ export function selectComponent(...args) {
     });
   });
 
-  /**
-   * Updates the select component's options/items and optionally value.
-   * @param {Object} config
-   * @param {{value: string|number, label: string, disabled?: boolean}[]} [config.options] - New options/items
-   * @param {string|number|(string|number)[]} [config.value] - New value(s)
-   */
   root.update = function({ options: newOptions, items: newItems, value: newValue } = {}) {
     if (newOptions || newItems) {
       items = newItems || newOptions;
