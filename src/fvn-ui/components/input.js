@@ -1,5 +1,6 @@
 import { el, col, getCallback, withValue, parseArgs, propsToClasses } from '../dom.js'
 import { button } from './button.js'
+import { label as textLabel } from './text.js'
 import './input.css'
 
 /**
@@ -48,7 +49,7 @@ export function input(...args) {
     gap: 2,
     class: [propsToClasses(props), rest.class],
     children: [
-      label && el('div', { class: 'ui-label ui-label--soft', text: label }),
+      label && textLabel({ text: label, soft: true }),
       el('div', {
         class: ['ui-input-wrap', `ui-size--${size}`],
         ref: (e) => wrapEl = e,

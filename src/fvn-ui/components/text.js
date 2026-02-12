@@ -56,7 +56,7 @@ export const label = (...args) => {
   
   return el('label', parent, {
     ...rest,
-    class: ['ui-label', soft && 'ui-label--soft', propsToClasses(props), rest.class],
+    class: ['ui-label', soft && 'ui-label--soft', 'block-1', propsToClasses(props), rest.class],
     html: rest.html || text
   });
 };

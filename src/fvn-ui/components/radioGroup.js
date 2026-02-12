@@ -1,4 +1,6 @@
 import { el, getCallback, withValue, parseArgs, propsToClasses } from '../dom.js'
+import { label as textLabel } from './text.js'
+import './form.css'
 import './radioGroup.css'
 
 /**
@@ -50,12 +52,12 @@ export function radioGroup(...args) {
 
   const root = el('div', parent, {
     ...rest,
-    class: ['ui-radio-group', isRow && 'horizontal', propsToClasses(props), rest.class],
+    class: ['ui-radio-group ui-form-group', isRow && 'horizontal', propsToClasses(props), rest.class],
     attrs: { role: 'radiogroup' },
     children: [
-      label && el('span', { class: 'ui-radio-group__label', text: label }),
+      label && textLabel({ text: label, soft: true }),
       el('div', {
-        class: 'ui-radio-group__items',
+        class: 'ui-form-group__items',
         children: list.map(item => {
           const val = String(getVal(item));
           const itemLabel = item?.label ?? val;
@@ -64,23 +66,23 @@ export function radioGroup(...args) {
           let inputEl, controlEl;
 
           const itemEl = el('label', {
-            class: ['ui-radio', itemDisabled && 'disabled'],
+            class: ['ui-radio ui-form-item', itemDisabled && 'disabled'],
             data: { state: checked ? 'checked' : 'unchecked' },
             children: [
               el('input', {
                 type: 'radio',
-                class: 'ui-radio__input',
+                class: 'ui-form-input',
                 name, value: val, disabled: itemDisabled,
                 checked,
                 ref: e => inputEl = e,
                 onChange: e => setValue(e.target.value, e)
               }),
               el('span', { 
-                class: 'ui-radio__control ui-border',
+                class: 'ui-form-control ui-form-control--round ui-border',
                 data: { uiCol: checked ? color : `sub-${color}` },
                 ref: e => controlEl = e
               }),
-              el('span', { class: 'ui-radio__label', text: itemLabel })
+              textLabel({ text: itemLabel, small: true })
             ]
           });
 

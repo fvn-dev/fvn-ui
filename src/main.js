@@ -201,6 +201,7 @@ function checkboxPresentation() {
 function radioPresentation() {
   return layout.col([
     radioGroup({
+      label: 'Radio group',
       value: 0,
       color: 'primary',
       items: exampleOptions.slice(0, 4)
@@ -212,8 +213,8 @@ function radioPresentation() {
 
 function checkAndRadioPresentation() {
   return layout.row({ gap: 10 }, [ 
-    layout.col([text.label('Checkbox'), checkboxPresentation()]), 
-    layout.col([text.label('Radio group'), radioPresentation()])
+    layout.col([text.label('Checkbox', { soft: true }), checkboxPresentation()]), 
+    layout.col([radioPresentation()])
   ]);
 }
 

@@ -1,4 +1,5 @@
 import { el, getCallback, withValue, parseArgs, propsToClasses } from '../dom.js'
+import { label as textLabel } from './text.js'
 import './switch.css'
 
 /**
@@ -69,9 +70,9 @@ export function switchComponent(...args) {
         onClick: toggle,
         onKeydown
       }),
-      label && el('span', { 
-        class: 'small ui-switch__label', 
-        text: label,
+      label && textLabel({ 
+        text: label, 
+        small: true,
         onClick: toggle,
         style: { cursor: disabled ? 'default' : 'pointer' }
       })

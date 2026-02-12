@@ -1,5 +1,6 @@
 import { el, col, getCallback, escapeHtml, onOutsideClick, withValue, parseArgs, propsToClasses } from '../dom.js'
 import { button } from './button.js'
+import { text } from './text.js'
 import { svg } from './svg.js'
 import './select.css'
 
@@ -254,7 +255,7 @@ export function selectComponent(...args) {
     gap: 2,
     class: [propsToClasses(props), rest.class],
     children: [
-      label && el('div', { class: 'ui-label ui-label--soft', html: label }),
+      label && text.label({ text: label, soft: true }),
       el('div', {
         class: ['ui-select', multiselect && 'ui-select--multi'],
         data: { open: false },

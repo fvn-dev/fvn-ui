@@ -1,5 +1,6 @@
 import { el, parseArgs, propsToClasses } from '../dom.js'
 import { image } from './image.js'
+import './text.css'
 import './avatar.css'
 
 const getInitials = (name) => {
@@ -57,8 +58,8 @@ export function avatar(...args) {
       (name || description) && el('div', {
         class: 'ui-avatar__info',
         children: [
-          name && el('span', { class: 'ui-avatar__name', text: name }),
-          description && el('span', { class: 'ui-avatar__desc', text: description })
+          name && el('span', { class: 'ui-name', text: name }),
+          description && el('span', { class: 'ui-subtitle', text: description })
         ]
       })
     ]

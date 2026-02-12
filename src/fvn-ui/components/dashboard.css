@@ -1,22 +1,11 @@
-/* Dashboard Component */
+/* Dashboard Component - uses text.css header() */
+
 .ui-dashboard {
   width: 100%;
 }
 
 .ui-dashboard__header {
   width: 100%;
-}
-
-.ui-dashboard__title {
-  margin: 0;
-  font-size: 1.15em;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.ui-dashboard__desc {
-  margin: 0;
-  font-size: 0.875em;
 }
 
 .ui-dashboard__menu {

@@ -1,0 +1,94 @@
+/* ====================================================
+   Form Primitives
+   Shared building blocks for checkbox, radio, switch, etc.
+   ==================================================== */
+
+/* Hidden native input - visually hidden but accessible */
+.ui-form-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Control box - the visual indicator (checkbox square, radio circle) */
+.ui-form-control {
+  --control-size: calc(var(--space) * 1.75);
+  width: var(--control-size);
+  height: var(--control-size);
+  border-radius: calc(var(--radius) * .5);
+  border: 1px solid var(--border);
+  background: var(--bg, var(--back));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: var(--core-transition);
+}
+
+.ui-form-control--round {
+  border-radius: 50%;
+}
+
+/* Control icon (checkmark, dot, etc.) */
+.ui-form-control .ui-icon {
+  --icon-size: calc(var(--control-size) * .7);
+  color: var(--fg, var(--back));
+  opacity: 0;
+  transform: scale(.5);
+  transition: var(--core-transition);
+}
+
+/* Checked state */
+[data-state="checked"] > .ui-form-control {
+  border-color: transparent;
+}
+
+[data-state="checked"] > .ui-form-control .ui-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Focus state */
+.ui-form-input:focus-visible + .ui-form-control {
+  box-shadow: var(--shadow-sm);
+}
+
+/* Form item wrapper (checkbox/radio container) */
+.ui-form-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.ui-form-item.disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+/* Hover state for unchecked */
+.ui-form-item:hover .ui-form-input:not(:checked):not(:disabled) + .ui-form-control {
+  background: var(--shade);
+}
+
+/* Form group (radio group, checkbox group) */
+.ui-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.ui-form-group.horizontal {
+  flex-direction: row;
+  align-items: center;
+}
+
+.ui-form-group.horizontal .ui-form-group__items {
+  flex-direction: row;
+}
+
+.ui-form-group__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}

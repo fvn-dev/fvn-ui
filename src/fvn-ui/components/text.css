@@ -1,26 +1,62 @@
+/* ====================================================
+   Text Primitives
+   Shared typography building blocks
+   ==================================================== */
+
+/* Title - primary headings */
 .ui-title {
   line-height: 1.2;
   font-weight: 650;
   font-size: 1.1em;  
   margin: 0;
 }
+
 .ui-title--large {
   font-weight: 700;
   font-size: 1.15em;
 }
 
+/* Description - secondary text, usually paired with title */
 .ui-description {
   line-height: 1.4;
   margin: 0;
 }
 
+/* Label - form labels and small headings */
 .ui-label {
   display: block;
   font-size: 0.875em;
   font-weight: 500;
   color: var(--text);
 }
+
 .ui-label--soft {
   font-weight: 400;
   opacity: 0.7;
+}
+
+/* Truncate - single line text with ellipsis */
+.ui-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* Name - bold truncated text (for avatars, lists) */
+.ui-name {
+  font-weight: 500;
+  font-size: .95em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Subtitle - muted truncated text */
+.ui-subtitle {
+  font-size: .85em;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

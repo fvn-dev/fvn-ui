@@ -51,19 +51,3 @@
   gap: calc(.025 * var(--size));
   min-width: 0;
 }
-
-.ui-avatar__name {
-  font-weight: 500;
-  font-size: .95em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.ui-avatar__desc {
-  font-size: .85em;
-  color: var(--muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}

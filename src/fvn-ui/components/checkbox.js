@@ -1,5 +1,7 @@
 import { el, getCallback, withValue, parseArgs, propsToClasses } from '../dom.js'
 import { svg } from './svg.js'
+import { label as textLabel } from './text.js'
+import './form.css'
 import './checkbox.css'
 
 /**
@@ -53,24 +55,24 @@ export function checkbox(...args) {
 
   const root = el('label', parent, {
     ...rest,
-    class: ['ui-checkbox', disabled && 'disabled', propsToClasses(props), rest.class],
+    class: ['ui-checkbox ui-form-item', disabled && 'disabled', propsToClasses(props), rest.class],
     data: { state: getStateStr() },
     children: [
       el('input', {
         type: 'checkbox',
-        class: 'ui-checkbox__input',
+        class: 'ui-form-input',
         id, name, value, disabled,
         checked: state,
         ref: (e) => inputEl = e,
         onChange: (e) => setState(e.target.checked, e)
       }),
       el('span', { 
-        class: 'ui-checkbox__control ui-border',
+        class: 'ui-form-control ui-border',
         data: { uiCol: getColor() },
         ref: (e) => controlEl = e,
         html: svg('check')
       }),
-      label && el('span', { class: 'ui-checkbox__label', text: label })
+      label && textLabel({ text: label, small: true })
     ]
   });
 
