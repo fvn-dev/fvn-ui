@@ -43,12 +43,10 @@
     "dev": "vite",
     "start": "vite",
     "build": "vite build",
-    "deploy": "npm run build && node deploy.js",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix"
   },
   "devDependencies": {
-    "aws-sdk": "^2.1693.0",
     "eslint": "^9.0.0",
     "sass": "^1.97.3",
     "vite": "^7.2.4"

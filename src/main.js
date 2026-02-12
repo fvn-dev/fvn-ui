@@ -284,7 +284,7 @@ function inputPresentation() {
 // --->
 
 function dialogPresentation() {
-  return layout.col({ gap: 4, align: 'center' }, [
+  return layout.col({ gap: 4 }, [
     confirm({
       type: 'tooltip',
       label: 'Tooltip',
