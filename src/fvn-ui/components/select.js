@@ -37,7 +37,7 @@ export function selectComponent(...args) {
     ...rest
   } = parseArgs(...args);
 
-  const items = itemsProp || options || [];
+  let items = itemsProp || options || [];
   const showFilter = Number.isInteger(filterProp) ? items.length > filterProp : !!filterProp;
   const cb = getCallback('onChange', rest);
 
@@ -327,6 +327,27 @@ export function selectComponent(...args) {
       sizer.remove();
     });
   });
+
+  /**
+   * Updates the select component's options/items and optionally value.
+   * @param {Object} config
+   * @param {{value: string|number, label: string, disabled?: boolean}[]} [config.options] - New options/items
+   * @param {string|number|(string|number)[]} [config.value] - New value(s)
+   */
+  root.update = function({ options: newOptions, items: newItems, value: newValue } = {}) {
+    if (newOptions || newItems) {
+      items = newItems || newOptions;
+    }
+    if (typeof newValue !== 'undefined') {
+      if (multiselect) {
+        selected = new Set(Array.isArray(newValue) ? newValue.map(toValue) : newValue != null ? [toValue(newValue)] : []);
+      } else {
+        selected = newValue;
+      }
+    }
+    renderValue();
+    if (isOpen) renderList();
+  };  
 
   return withValue(
     root, 

@@ -106,7 +106,7 @@ export function dashboard(...args) {
         class: 'ui-dashboard__title-wrap',
         children: [
           title && el('h1', { class: 'ui-dashboard__title', text: title }),
-          description && el('p', { class: 'ui-dashboard__desc muted', text: description })
+          description && el('p', { class: 'ui-dashboard__desc muted', html: description })
         ]
       }),
       row({ gap: 0, class: 'ui-dashboard__menu', children: menuButtons })

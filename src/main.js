@@ -1,5 +1,5 @@
 import './main.css';
-import { dom, dashboard, layout, card, input, label, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radioGroup, avatar, colors } from './fvn-ui'
+import { dom, el, dashboard, layout, card, input, label, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radioGroup, avatar, colors } from './fvn-ui'
 import { collapsible } from './fvn-ui/components/collapsible';
 
 dashboard(document.body, {
@@ -20,7 +20,7 @@ dashboard(document.body, {
 card(dom.dash, {  
   title: 'Card component',
   description: `Yeah I'm rollin' down Rodeo wit a shotgun. These people ain't seen a brown skin man since their grandparents bought one.`,
-  content: label('Zach')
+  content: layout.col({ gap: 4 }, [label('Zach'), el('a', { small: true, href: 'https://github.com/fvn-dev/fvn-ui', text: 'Github', style: { marginLeft: 'auto'} })])
 })
 
 // --->
