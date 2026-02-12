@@ -1,4 +1,5 @@
 import './main.css';
+import codeExample from './main.txt?raw';
 import { dom, el, dashboard, layout, card, input, label, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radioGroup, avatar, colors } from './fvn-ui'
 import { collapsible } from './fvn-ui/components/collapsible';
 
@@ -15,7 +16,7 @@ function init() {
     ],
     views: {
       default: () => exampleTabs(),
-      code: () => card(dom.dash, { content: el('code', { class: 'demo-code', text: init.toString() }) }),
+      code: () => card(dom.dash, { content: el('code', { class: 'demo-code', text: codeExample }) }),
       demo: () => examplePresentation()
     }
   });
