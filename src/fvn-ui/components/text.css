@@ -1,0 +1,26 @@
+.ui-title {
+  line-height: 1.2;
+  font-weight: 650;
+  font-size: 1.1em;  
+  margin: 0;
+}
+.ui-title--large {
+  font-weight: 700;
+  font-size: 1.15em;
+}
+
+.ui-description {
+  line-height: 1.4;
+  margin: 0;
+}
+
+.ui-label {
+  display: block;
+  font-size: 0.875em;
+  font-weight: 500;
+  color: var(--text);
+}
+.ui-label--soft {
+  font-weight: 400;
+  opacity: 0.7;
+}

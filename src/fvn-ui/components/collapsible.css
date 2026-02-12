@@ -13,10 +13,10 @@
   font-weight: 500;
 }
 
-.ui-collapsible[data-open="false"] .ui-collapsible__content {
+.ui-collapsible[data-open="false"] > .ui-collapsible__content {
   display: none;
 }
 
-.ui-collapsible[data-open="true"] .ui-collapsible__content {
+.ui-collapsible[data-open="true"] > .ui-collapsible__content {
   display: flex;
 }

@@ -9,7 +9,6 @@ import { dashboard as _dashboard } from './dashboard.js'
 import { dialog as _dialog } from './dialog.js'
 import { image as _image } from './image.js'
 import { input as _input } from './input.js'
-import { label as _label } from './label.js'
 import { checkbox as _checkbox } from './checkbox.js'
 import { radioGroup as _radioGroup } from './radioGroup.js'
 import { selectComponent as _selectComponent } from './select.js'
@@ -17,6 +16,7 @@ import { svg as _svg } from './svg.js'
 import { switchComponent as _switchComponent } from './switch.js'
 import { tabs as _tabs } from './tabs.js'
 import { toggle as _toggle } from './toggle.js'
+import { text, title, description, header, label } from './text.js'
 
 export const BASE_CLASS = 'ui-component';
 
@@ -59,7 +59,6 @@ export const dashboard = bootstrap(_dashboard, 'dashboard');
 export const dialog = bootstrap(_dialog, 'dialog');
 export const image = bootstrap(_image, 'image');
 export const input = bootstrap(_input, 'input');
-export const label = bootstrap(_label, 'label');
 export const modal = bootstrap(_dialog, 'modal', { type: 'modal' });
 export const checkbox = bootstrap(_checkbox, 'checkbox');
 export const radioGroup = bootstrap(_radioGroup, 'radioGroup');
@@ -69,3 +68,6 @@ export const svg = bootstrap(_svg, 'svg');
 export const tabs = bootstrap(_tabs, 'tabs');
 export const toggle = bootstrap(_toggle, 'toggle');
 export const tooltip = bootstrap(_dialog, 'tooltip', { type: 'tooltip' });
+
+// Text primitives (no bootstrap needed)
+export { text, title, description, header, label };

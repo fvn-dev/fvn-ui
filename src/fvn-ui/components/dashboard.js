@@ -1,5 +1,6 @@
 import { el, row, col, parseArgs, propsToClasses } from '../dom.js'
 import { button } from './button.js'
+import { header } from './text.js'
 import './dashboard.css'
 
 const MENU_DEFAULTS = { shape: 'pill', variant: 'ghost' };
@@ -98,17 +99,10 @@ export function dashboard(...args) {
     })
   );
 
-  const header = row('between', {
+  const headerEl = row('between', {
     class: ['ui-dashboard__header', 'border-bottom', propsToClasses(props)],
     children: [
-      col({
-        gap: 1,
-        class: 'ui-dashboard__title-wrap',
-        children: [
-          title && el('h1', { class: 'ui-dashboard__title', text: title }),
-          description && el('p', { class: 'ui-dashboard__desc muted', html: description })
-        ]
-      }),
+      header({ title, description, large: true, gap: 1, flex: 1 }),
       row({ gap: 0, class: 'ui-dashboard__menu', children: menuButtons })
     ]
   });
@@ -118,7 +112,7 @@ export function dashboard(...args) {
     class: ['ui-dashboard', rest.class],
     gap: 4,
     children: [
-      header,
+      headerEl,
       el('div', { class: 'ui-dashboard__content', ref: (e) => contentEl = e })
     ]
   });

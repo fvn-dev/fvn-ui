@@ -1,4 +1,5 @@
-import { el, parseArgs, propsToClasses } from '../dom.js'
+import { el, col, parseArgs, propsToClasses } from '../dom.js'
+import { header } from './text.js'
 import './card.css'
 
 /**
@@ -45,16 +46,11 @@ export function card(...args) {
       rest.class
     ],
     children: [
-      (title || description) && el('div', { 
-        class: 'ui-card__header flex flex-col',
-        children: [
-          title && el('div', { class: 'ui-card__title', text: title }),
-          description && el('div', { class: 'ui-card__desc muted small', text: description })
-        ]
-      }), 
-      el('div', { 
-        class: 'ui-card__body flex flex-col gap items-start',
-        ref: (e) => bodyRef = e
+      header({ title, description, class: 'ui-card__header' }),
+      col({ 
+        class: 'ui-card__body', 
+        align: 'start',
+        ref: (e) => bodyRef = e 
       })
     ]
   });

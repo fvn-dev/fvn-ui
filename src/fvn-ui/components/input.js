@@ -1,4 +1,4 @@
-import { el, getCallback, withValue, parseArgs, propsToClasses } from '../dom.js'
+import { el, col, getCallback, withValue, parseArgs, propsToClasses } from '../dom.js'
 import { button } from './button.js'
 import './input.css'
 
@@ -44,8 +44,9 @@ export function input(...args) {
     }
   };
 
-  const root = el('div', parent, {
-    class: ['flex', 'flex-col', 'gap-2', propsToClasses(props), rest.class],
+  const root = col(parent, {
+    gap: 2,
+    class: [propsToClasses(props), rest.class],
     children: [
       label && el('div', { class: 'ui-label ui-label--soft', text: label }),
       el('div', {

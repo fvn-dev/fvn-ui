@@ -1,4 +1,4 @@
-import { el, getCallback, escapeHtml, onOutsideClick, withValue, parseArgs, propsToClasses } from '../dom.js'
+import { el, col, getCallback, escapeHtml, onOutsideClick, withValue, parseArgs, propsToClasses } from '../dom.js'
 import { button } from './button.js'
 import { svg } from './svg.js'
 import './select.css'
@@ -249,9 +249,10 @@ export function selectComponent(...args) {
     }
   };
 
-  const root = el('div', parent, {
+  const root = col(parent, {
     ...rest,
-    class: ['flex', 'flex-col', 'gap-2', propsToClasses(props), rest.class],
+    gap: 2,
+    class: [propsToClasses(props), rest.class],
     children: [
       label && el('div', { class: 'ui-label ui-label--soft', html: label }),
       el('div', {

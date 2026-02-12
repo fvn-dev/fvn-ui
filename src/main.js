@@ -1,6 +1,6 @@
 import './main.css';
 import apiDocs from '../docs/api.json';
-import { dom, el, dashboard, layout, card, input, label, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radioGroup, avatar, colors, collapsible } from './fvn-ui'
+import { dom, el, dashboard, layout, card, input, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radioGroup, avatar, colors, collapsible, text } from './fvn-ui'
 
 function init() {
   dashboard(document.body, {
@@ -22,7 +22,7 @@ function init() {
     title: 'Card component',
     description: `Yeah I'm rollin' down Rodeo wit a shotgun. These people ain't seen a brown skin man since their grandparents bought one.`,
     content: `
-      <div class="flex justify-between">
+      <div class="flex justify-between w-full">
         <label class="ui-component ui-label">Zach</label>
         <a class="small" href="https://github.com/fvn-dev/fvn-ui">Github</a>
       </div>  
@@ -172,7 +172,7 @@ function switchPresentation() {
       color: 'primary',
       checked: true
     }),
-    label('&nbsp;'),
+    text.label('&nbsp;'),
     toggle({ 
       options: ['Off', 'On'], 
     }),
@@ -212,8 +212,8 @@ function radioPresentation() {
 
 function checkAndRadioPresentation() {
   return layout.row({ gap: 10 }, [ 
-    layout.col([label('Checkbox'), checkboxPresentation()]), 
-    layout.col([label('Radio group'), radioPresentation()])
+    layout.col([text.label('Checkbox'), checkboxPresentation()]), 
+    layout.col([text.label('Radio group'), radioPresentation()])
   ]);
 }
 
@@ -382,7 +382,7 @@ function tabsPresentation() {
     };
     
     if (i > 3) {
-      const txt = label({ muted: true, small: true }, `As ${i === 5 ? 'shaded ' : ''}button group`);
+      const txt = text.label({ muted: true, small: true }, `As ${i === 5 ? 'shaded ' : ''}button group`);
       return layout.row({ justify: 'between', width: 'full' }, [
         buttonGroup({
           ...c,
@@ -490,7 +490,7 @@ function docs() {
         params.length && el('div', {
           width: 'full',
           children: [
-            label('Parameters'),
+            text.label('Parameters'),
             el('table', { class: 'docs-table', html: params.map(p => `
               <tr>
                 <td><code>${p.name}</code></td>
@@ -502,13 +502,13 @@ function docs() {
         }),
         returns && el('div', {
           children: [
-            label('Returns'),
+            text.label('Returns'),
             el('span', { class: 'small', text: returns })
           ]
         }),
         examples.length && el('div', {
           children: [
-            label('Examples'),
+            text.label('Examples'),
             el('code', { class: 'demo-code', text: examples.join('\n\n') })
           ]
         })
@@ -516,13 +516,38 @@ function docs() {
     })
   };
 
-  const componentDocs = apiDocs.filter(d => !d.tags?.some(t => t.title === 'category' && t.description === 'Layout'));
-  const layoutDocs = apiDocs.filter(d => d.tags?.some(t => t.title === 'category' && t.description === 'Layout'));
+  const textFunctionNames = ['title', 'description', 'label', 'header'];
+  const componentDocs = apiDocs.filter(d => 
+    d.name
+    && !d.tags?.some(t => t.title === 'category' && t.description === 'Layout')
+    && !textFunctionNames.includes(d.name)
+    && d.name !== 'text'
+  );
+  const layoutDocs = apiDocs.filter(d => 
+    d.name
+    && d.tags?.some(t => t.title === 'category' && t.description === 'Layout')
+    && !textFunctionNames.includes(d.name)
+    && d.name !== 'text'
+  );
+  const textDocs = apiDocs.filter(d => d.name && textFunctionNames.includes(d.name));
+
+  const renderTextGroup = () => {
+    if (!textDocs.length) return null;
+    return collapsible({
+      width: 'full',
+      label: `<b>text</b> <span class="muted small">Text primitives (title, description, label, header)</span>`,
+      content: card({ content: layout.col({ gap: 2 }, textDocs.map(renderDoc)) })
+    });
+  };
 
   return card({ content: layout.col({ gap: 4 }, [
-    label('Components'),
+    text.title('Documentation / JSDoc'),
+    text.label('Components', { muted: true }),
     layout.col({ gap: 2 }, componentDocs.map(renderDoc)),
-    layoutDocs.length && label('Layout'),
-    layoutDocs.length && layout.col({ gap: 2 }, layoutDocs.map(renderDoc))
+    layoutDocs.length && text.label('Layout', { muted: true }),
+    layout.col({ gap: 2 }, [
+      ...layoutDocs.map(renderDoc),
+      renderTextGroup()
+    ].filter(Boolean))
   ].filter(Boolean)) });
 }

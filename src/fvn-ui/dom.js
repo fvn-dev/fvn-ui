@@ -395,17 +395,12 @@ const createLayout = (direction, defaults, ...args) => {
   const opts = parseArgs({ ...LAYOUT_PARSE_OPTIONS, defaults }, ...args);
   
   let { 
-    parent, count, justify, align, items, gap, padding, inline, block, flex, full, children,
+    parent, count, justify, align, gap, padding, inline, block, flex, full, children, width,
     props = {},
     ...rest 
   } = opts;
 
-  // Support both 'align' and 'items' for flex align-items
-  align = align || items;
-
-  // Default gap if not specified (check props for explicit gap)
-  const hasGap = 'gap' in props;
-  gap = hasGap ? undefined : (gap ?? 2);
+  gap = gap ?? 2;
 
   if (full) {
     justify = 'center';
@@ -452,6 +447,7 @@ const createLayout = (direction, defaults, ...args) => {
       `justify-${justify}`,
       !isNaN(gap) && `gap-${gap}`,
       full && 'min-h-screen',
+      width,
       propsToClasses(props),
       rest.class
     ],

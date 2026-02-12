@@ -1,6 +1,7 @@
 import { el, getCallback, parseArgs, propsToClasses } from '../dom.js'
 import { button } from './button.js'
 import { dialog } from './dialog.js'
+import { header } from './text.js'
 
 /**
  * Creates a confirmation dialog with trigger button
@@ -65,13 +66,7 @@ export function confirm(...args) {
     anchor: trigger,
     inverted,
     content: (close) => [
-      el('div', {
-        class: `ui-dialog__inner`,
-        children: [
-          el('h2', { class: `ui-dialog__title`, text: title }),
-          el('p', { class: `ui-dialog__desc small`, text: description })
-        ]
-      }),
+      header({ title, description, class: 'ui-dialog__inner' }),
       el('div', {
         class: `ui-dialog__footer`,
         children: [

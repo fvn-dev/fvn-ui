@@ -28,7 +28,6 @@ export {
   dialog,
   image,
   input,
-  label,
   modal,
   radioGroup,
   selectComponent,
@@ -36,7 +35,13 @@ export {
   switchComponent,
   tabs,
   toggle,
-  tooltip
+  tooltip,
+
+  // Text primitives
+  text,
+  title,
+  description,
+  header
 } from './components/index.js'
 
 document.body.classList.add('fvn-ui')

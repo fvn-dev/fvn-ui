@@ -7,10 +7,6 @@
   width: 100%;
 }
 
-.ui-dashboard__title-wrap {
-  flex: 1;
-}
-
 .ui-dashboard__title {
   margin: 0;
   font-size: 1.15em;

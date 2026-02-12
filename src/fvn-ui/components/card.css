@@ -4,5 +4,3 @@
   color: var(--text);
   box-shadow: var(--shadow-sm);
 }
-.ui-card__title { font-weight: 650; font-size: 1.1em; }
-.ui-card__desc { margin-top: 4px; }
