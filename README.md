@@ -1,5 +1,5 @@
 ## fvn-ui
-Minimal vanilla JS component library with layout helpers. Zero dependencies.
+Minimal vanilla JS component library with layout helpers. Zero dependencies. [Demo](https://fvn-dev.github.io/fvn-ui/).
 
 ```js
 import { layout, button, card } from 'fvn-ui'
