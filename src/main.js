@@ -16,7 +16,7 @@ function init() {
     ],
     views: {
       default: () => exampleTabs(),
-      code: () => card(dom.dash, { content: el('code', { class: 'demo-code', text: codeExample }) }),
+      code: () => card({ content: el('code', { class: 'demo-code', text: codeExample }) }),
       demo: () => examplePresentation()
     }
   });
