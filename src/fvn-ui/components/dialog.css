@@ -34,13 +34,11 @@
   box-shadow: var(--shadow-md);
   padding: var(--space-3);
   opacity: 0;
-  transform: scale(0.96) translateY(4px);
   pointer-events: none;
   transition: opacity .12s ease;
 }
 .ui-popover[data-open="true"] {
   opacity: 1;
-  transform: scale(1) translateY(0);
   pointer-events: auto;
 }
 /* Invisible bridge to cover gap between anchor and tooltip */
@@ -57,21 +55,13 @@
 .ui-popover[data-position="top"][data-open="true"]:before {
   bottom: -12px;
 }
-.ui-popover[data-position="top"] {
-  transform-origin: bottom center;
-}
-.ui-popover[data-position="top"][data-open="true"] {
-  transform: scale(1) translateY(0);
-}
-.ui-popover[data-position="bottom"] {
-  transform-origin: top center;
-}
 
 .ui-popover__arrow {
-  --arrow-space: calc(-5px - var(--space-3));
+  --size: 10px;
+  --offset: calc(var(--size) / -2);
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: var(--size);
+  height: var(--size);
   background: var(--back);
   border: 1px solid var(--border);
   border-right: 0;
@@ -81,9 +71,9 @@
   transition: left .12s ease;
 }
 .ui-popover[data-position="bottom"] .ui-popover__arrow {
-  top: -5px;
+  top: var(--offset);
 }
 .ui-popover[data-position="top"] .ui-popover__arrow {
-  bottom: -5px;
+  bottom: var(--offset);
   transform: translateX(-50%) rotate(-135deg);
 }

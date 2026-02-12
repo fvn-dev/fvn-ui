@@ -200,19 +200,6 @@ export function dialog(...args) {
         root.style.top = 'auto';
       }
       
-      if (arrowEl) {
-        arrowEl.style.left = '50%';
-        if (actualPosition === 'bottom') {
-          arrowEl.style.top = 'var(--arrow-space)';
-          arrowEl.style.bottom = 'auto';
-        } else {
-          arrowEl.style.bottom = 'var(--arrow-space)';
-          arrowEl.style.top = 'auto';
-        }
-        arrowEl.style.transform = actualPosition === 'bottom' 
-          ? 'translateX(-50%) rotate(45deg)' 
-          : 'translateX(-50%) rotate(-135deg)';
-      }
       return;
     }
     
@@ -251,9 +238,6 @@ export function dialog(...args) {
     if (arrowEl) {
       const arrowOffset = anchorCenterX - left;
       arrowEl.style.left = `${arrowOffset}px`;
-      arrowEl.style.transform = actualPosition === 'bottom' 
-        ? 'translateX(-50%) rotate(45deg)' 
-        : 'translateX(-50%) rotate(-135deg)';
     }
   };
 

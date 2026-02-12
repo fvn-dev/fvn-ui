@@ -61,6 +61,11 @@
   cursor: pointer;
 }
 
+/* Nested labels should not intercept clicks */
+.ui-form-item .ui-label {
+  pointer-events: none;
+}
+
 .ui-form-item.disabled {
   opacity: .5;
   cursor: not-allowed;

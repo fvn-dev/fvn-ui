@@ -77,7 +77,7 @@ export const header = (...args) => {
     title: titleText, 
     description: descText, 
     large,
-    props = {}, 
+    gap = 2,
     ...rest 
   } = parseArgs(...args);
   
@@ -85,11 +85,8 @@ export const header = (...args) => {
   
   return col(parent, {
     ...rest,
-    class: [
-      'ui-header', 
-      `gap-${props.gap || 2}`, 
-      propsToClasses(props), rest.class
-    ],
+    gap,
+    class: ['ui-header', rest.class],
     children: [
       titleText && title(titleText, { large }),
       descText && description(descText)

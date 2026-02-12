@@ -22,15 +22,18 @@ export function card(...args) {
     title, 
     description, 
     content,
+    border = true,
+    padding,
+    width,
     props = {},
     ...rest 
   } = parseArgs(...args);
 
-  const hasPadding = 'padding' in props;
+  const hasPadding = padding !== undefined;
   let bodyRef;
 
-  const withBorder = Object.hasOwn(props, 'border') ? props.border : true;
-  const fullWidth = !Object.hasOwn(props, 'width');
+  const withBorder = border;
+  const fullWidth = width === undefined;
 
   const root = el('div', parent, {
     ...rest,
@@ -41,7 +44,8 @@ export function card(...args) {
       'gap', 
       fullWidth && 'w-full',
       withBorder && 'border',
-      !hasPadding && 'pad-8', 
+      !hasPadding && 'pad-8',
+      hasPadding && `pad-${padding}`,
       propsToClasses(props), 
       rest.class
     ],

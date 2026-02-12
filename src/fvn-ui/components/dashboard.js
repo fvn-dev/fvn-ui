@@ -102,7 +102,7 @@ export function dashboard(...args) {
   const headerEl = row('between', {
     class: ['ui-dashboard__header', 'border-bottom', propsToClasses(props)],
     children: [
-      header({ title, description, large: true, gap: 1, flex: 1 }),
+      header({ title, description, gap: 1, flex: 1 }),
       row({ gap: 0, class: 'ui-dashboard__menu', children: menuButtons })
     ]
   });

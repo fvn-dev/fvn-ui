@@ -39,7 +39,7 @@
 import { merge } from './helpers.js'
 
 export const dom = {};
-export const colors = ['primary', 'red', 'blue', 'green', 'pink', 'yellow', 'orange', 'default'];
+export const colors = ['default', 'primary', 'blue', 'green', 'pink', 'red', 'orange', 'yellow'];
 
 // ---- Helpers ----
 
@@ -90,21 +90,33 @@ const CLASS_SHORTHANDS = {
 export const propsToClasses = (props) => {
   if (!props) return [];
   return Object.entries(props)
-    .filter(([, val]) => val) // Skip falsy values
+    .filter(([, val]) => val !== undefined && val !== null && val !== false)
     .map(([key, val]) => {
       const prefix = CLASS_SHORTHANDS[key] || key;
       return val === true ? prefix : `${prefix}-${val}`;
     });
 };
 
-const applyShorthands = (settings, obj) => {
-  settings.props ||= {};
-  for (const key in CLASS_SHORTHANDS) {
-    if (!(key in obj)) continue;
-    settings.props[key] = obj[key];
-    delete obj[key]; // Remove from obj so it doesn't end up in ...rest
-  }
-  merge(settings, obj);
+/**
+ * Convert shorthand config props to CSS classes.
+ * Use this when you want shorthands like gap, padding to become utility classes.
+ * @param {Object} config - The config object with potential shorthands
+ * @param {string[]} [exclude] - Props to exclude (already handled programmatically)
+ * @returns {string[]} Array of CSS class names
+ * @private
+ */
+export const configToClasses = (config, exclude = []) => {
+  if (!config) return [];
+  return Object.entries(config)
+    .filter(([key, val]) => 
+      key in CLASS_SHORTHANDS && 
+      !exclude.includes(key) &&
+      val !== undefined && val !== null && val !== false
+    )
+    .map(([key, val]) => {
+      const prefix = CLASS_SHORTHANDS[key];
+      return val === true ? prefix : `${prefix}-${val}`;
+    });
 };
 
 export const parseArgs = (...args) => {
@@ -147,7 +159,7 @@ export const parseArgs = (...args) => {
       continue;
     }
     if (typeof arg === 'object') {
-      applyShorthands(settings, arg);
+      merge(settings, arg);
     }
   }
   return settings;
@@ -345,16 +357,13 @@ export function el(...args) {
   
   const state = { parent };
   if (config) {
-    // Process CLASS_SHORTHANDS (padding, width, etc.) → props
-    const processed = {};
-    applyShorthands(processed, config);
-    
-    // Convert props to classes and merge into class array
-    if (processed.props && Object.keys(processed.props).length) {
-      processed.class = [processed.class, ...propsToClasses(processed.props)];
+    // Convert shorthand props to classes
+    const shorthandClasses = configToClasses(config);
+    if (shorthandClasses.length) {
+      config = { ...config, class: [config.class, ...shorthandClasses] };
     }
     
-    patch(node, processed, state);
+    patch(node, config, state);
   }
   if (state.parent) {
     state.parent.appendChild(node);
@@ -385,12 +394,9 @@ const createLayout = (direction, defaults, ...args) => {
   const opts = parseArgs({ ...LAYOUT_PARSE_OPTIONS, defaults }, ...args);
   
   let { 
-    parent, count, justify, align, gap, padding, inline, block, flex, full, children, width,
-    props = {},
+    parent, count, justify, align, gap = 2, padding, inline, block, flex, full, children, width,
     ...rest 
   } = opts;
-
-  gap = gap ?? 2;
 
   if (full) {
     justify = 'center';
@@ -437,8 +443,7 @@ const createLayout = (direction, defaults, ...args) => {
       `justify-${justify}`,
       !isNaN(gap) && `gap-${gap}`,
       full && 'min-h-screen',
-      width,
-      propsToClasses(props),
+      width && (width === 'full' ? 'w-full' : `w-${width}`),
       rest.class
     ],
     children

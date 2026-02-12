@@ -38,6 +38,10 @@ export function tabs(...args) {
     shape,
     appendButtons,
     appendContent,
+    border,
+    shade,
+    padding,
+    width,
     props = {},
     asButtonGroup,
     ...rest
@@ -50,10 +54,10 @@ export function tabs(...args) {
   const isCentered = rest.align === 'center' || rest.center;
   const isColorizable = ['border', 'ghost'].includes(variant);
   const buttonVariant = variant === 'border' ? 'outline' : (variant || 'none');
-  const withBorder = rest.border !== false && /outline|border/.test(variant);
-  const withShade = props.shade;
-  const propsClean = { ...props };
-  delete propsClean.shade;
+  const withBorder = border !== false && /outline|border/.test(variant);
+  const withShade = shade;
+  const hasPadding = padding !== undefined;
+  const hasWidth = width !== undefined;
 
   let output;
   let current = value || getItemValue(items[active]) || '';
@@ -66,7 +70,7 @@ export function tabs(...args) {
     }
 
     const out = item.render();
-    const tab = el('div', { class: ['ui-tabs__tab', propsToClasses(propsClean)] });
+    const tab = el('div', { class: 'ui-tabs__tab' });
     
     if (typeof out === 'string') {
       tab.innerHTML = out;
@@ -120,20 +124,18 @@ export function tabs(...args) {
     action();
   };
 
-  const hasWidthClass = 'width' in props;
-
   const root = el('div', parent, {
     ...rest,
     class: [ 
       BASE_CLASS, 
       'ui-tabs', 
       shape && `ui-tabs--${shape}`,
-      !hasWidthClass && 'w-full', 
+      !hasWidth && 'w-full', 
       'flex', 
       'flex-col', 
-      withShade && 'ui-tabs--shade',
       !withBorder && 'gap-2',
-      propsToClasses(propsClean),
+      withShade && 'ui-tabs--shade',
+      propsToClasses(props),
       rest.class
     ],
     children: [
@@ -162,7 +164,11 @@ export function tabs(...args) {
         })
       }),
       !asButtonGroup && el('div', { 
-        class: ['ui-tabs__panel', withBorder && ['border', 'padding'], propsToClasses(propsClean)],
+        class: [
+          'ui-tabs__panel', 
+          withBorder && ['border', 'padding'],
+          hasPadding && `pad-${padding}`
+        ],
         ref: (e) => output = e 
       })
     ]

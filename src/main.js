@@ -73,6 +73,10 @@ function presentation(body) {
       {
         label: 'Dialog',
         render: dialogPresentation
+      },
+      {
+        label: 'Colors',
+        render: colorsPresentation
       }
     ]
   });   
@@ -324,6 +328,7 @@ function dialogPresentation() {
             width: '300px'
           },
           justify: 'center',
+          align: 'center',
           title: 'How do you feel at this very moment?',
           description: 'Be honest!',
           content: button({ flex: 0, label: 'Awesome', shape: 'round', color: 'yellow' })
@@ -379,7 +384,7 @@ function tabsPresentation() {
       center: i % 2 !== 0,
       color: variant === 'border' && 'red',
       shade: i > 1,
-      shape: i === 3 && 'round'
+      shape: i === 3 && 'round',
     };
     
     if (i > 3) {
@@ -387,7 +392,6 @@ function tabsPresentation() {
       return layout.row({ justify: 'between', width: 'full' }, [
         buttonGroup({
           ...c,
-          padding: 2,
           shape: i === 5 && 'round',
           color: i === 4 && 'blue',
           shade: i === 5,
@@ -430,7 +434,7 @@ function tabsPresentation() {
 
     return tabs({
       ...c,
-      padding: 2,
+      padding: 4,
       items: [
         {
           label: 'One',
@@ -449,7 +453,21 @@ function tabsPresentation() {
   }));
 }
 
-// --->
+// ---> 
+
+function colorsPresentation() {
+  return layout.col([
+    layout.row(colors.map(c => el(`<div data-ui-col="${c}" class="color-swatch">${c}</div>`))),
+    text.label('Label'), 
+    text.label('Soft label', { soft: true }),
+    text.title('Title'),
+    text.title('Large title', { large: true }),
+    text.description('Description'),
+
+  ]);
+}
+
+// ---> render docs from api.json
 
 function docs() {
   const getDescription = (doc) => {
@@ -573,14 +591,17 @@ function docs() {
   };
 
   const textFunctionNames = ['title', 'description', 'label', 'header'];
+  const isPrivate = d => d.tags?.some(t => t.title === 'private');
   const componentDocs = apiDocs.filter(d => 
     d.name
+    && !isPrivate(d)
     && !d.tags?.some(t => t.title === 'category' && t.description === 'Layout')
     && !textFunctionNames.includes(d.name)
     && d.name !== 'text'
   );
   const layoutDocs = apiDocs.filter(d => 
     d.name
+    && !isPrivate(d)
     && d.tags?.some(t => t.title === 'category' && t.description === 'Layout')
     && !textFunctionNames.includes(d.name)
     && d.name !== 'text'

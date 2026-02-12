@@ -33,3 +33,17 @@
 .ui-btn .small {
   font-weight: 400;
 }
+.color-swatch {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 75%;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}

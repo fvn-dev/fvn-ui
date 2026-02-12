@@ -506,6 +506,1565 @@
           "children": [
             {
               "type": "text",
+              "value": "Creates a DOM element with flexible argument order"
+            }
+          ]
+        }
+      ]
+    },
+    "tags": [
+      {
+        "title": "param",
+        "description": "HTML tag name or HTML string (e.g. 'div' or '<div class=\"foo\">')",
+        "lineNumber": 2,
+        "type": {
+          "type": "NameExpression",
+          "name": "string"
+        },
+        "name": "tag"
+      },
+      {
+        "title": "param",
+        "description": "Parent element to append to",
+        "lineNumber": 3,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Node"
+          }
+        },
+        "name": "parent"
+      },
+      {
+        "title": "param",
+        "description": "Element configuration",
+        "lineNumber": 4,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Object"
+          }
+        },
+        "name": "config"
+      },
+      {
+        "title": "param",
+        "description": "CSS class(es)",
+        "lineNumber": 5,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "UnionType",
+            "elements": [
+              {
+                "type": "NameExpression",
+                "name": "string"
+              },
+              {
+                "type": "TypeApplication",
+                "expression": {
+                  "type": "NameExpression",
+                  "name": "Array"
+                },
+                "applications": [
+                  {
+                    "type": "NameExpression",
+                    "name": "string"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "name": "config.class"
+      },
+      {
+        "title": "param",
+        "description": "Text content",
+        "lineNumber": 6,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.text"
+      },
+      {
+        "title": "param",
+        "description": "HTML content",
+        "lineNumber": 7,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.html"
+      },
+      {
+        "title": "param",
+        "description": "Inline styles",
+        "lineNumber": 8,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Object"
+          }
+        },
+        "name": "config.style"
+      },
+      {
+        "title": "param",
+        "description": "Data attributes",
+        "lineNumber": 9,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Object"
+          }
+        },
+        "name": "config.data"
+      },
+      {
+        "title": "param",
+        "description": "HTML attributes",
+        "lineNumber": 10,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Object"
+          }
+        },
+        "name": "config.attrs"
+      },
+      {
+        "title": "param",
+        "description": "Child elements",
+        "lineNumber": 11,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "TypeApplication",
+            "expression": {
+              "type": "NameExpression",
+              "name": "Array"
+            },
+            "applications": [
+              {
+                "type": "NameExpression",
+                "name": "Node"
+              }
+            ]
+          }
+        },
+        "name": "config.children"
+      },
+      {
+        "title": "param",
+        "description": "Callback receiving the created element",
+        "lineNumber": 12,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Function"
+          }
+        },
+        "name": "config.ref"
+      },
+      {
+        "title": "param",
+        "description": "Click handler (also onInput, onChange, etc.)",
+        "lineNumber": 13,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Function"
+          }
+        },
+        "name": "config.onClick"
+      },
+      {
+        "title": "returns",
+        "description": "The created element",
+        "lineNumber": 14,
+        "type": {
+          "type": "NameExpression",
+          "name": "HTMLElement"
+        }
+      },
+      {
+        "title": "category",
+        "description": "Layout",
+        "lineNumber": 15
+      },
+      {
+        "title": "example",
+        "description": "el('div', { class: 'card', text: 'Hello' })\nel('button', document.body, { text: 'Click me', onClick: handleClick })\nel('<input type=\"text\">', { placeholder: 'Name' })",
+        "lineNumber": 16
+      }
+    ],
+    "loc": {
+      "start": {
+        "line": 303,
+        "column": 0,
+        "index": 8644
+      },
+      "end": {
+        "line": 323,
+        "column": 3,
+        "index": 9679
+      }
+    },
+    "context": {
+      "loc": {
+        "start": {
+          "line": 324,
+          "column": 0,
+          "index": 9680
+        },
+        "end": {
+          "line": 377,
+          "column": 1,
+          "index": 10765
+        }
+      },
+      "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/dom.js"
+    },
+    "augments": [],
+    "examples": [
+      {
+        "description": "el('div', { class: 'card', text: 'Hello' })\nel('button', document.body, { text: 'Click me', onClick: handleClick })\nel('<input type=\"text\">', { placeholder: 'Name' })"
+      }
+    ],
+    "implements": [],
+    "params": [
+      {
+        "title": "param",
+        "name": "args",
+        "lineNumber": 324,
+        "type": {
+          "type": "RestType"
+        }
+      },
+      {
+        "title": "param",
+        "name": "tag",
+        "lineNumber": 2,
+        "description": {
+          "type": "root",
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "HTML tag name or HTML string (e.g. 'div' or '"
+                },
+                {
+                  "type": "html",
+                  "value": "<div class=\"foo\">"
+                },
+                {
+                  "type": "text",
+                  "value": "')"
+                }
+              ]
+            }
+          ]
+        },
+        "type": {
+          "type": "NameExpression",
+          "name": "string"
+        }
+      },
+      {
+        "title": "param",
+        "name": "parent",
+        "lineNumber": 3,
+        "description": {
+          "type": "root",
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Parent element to append to"
+                }
+              ]
+            }
+          ]
+        },
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Node"
+          }
+        }
+      },
+      {
+        "title": "param",
+        "name": "config",
+        "lineNumber": 4,
+        "description": {
+          "type": "root",
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Element configuration"
+                }
+              ]
+            }
+          ]
+        },
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Object"
+          }
+        },
+        "properties": [
+          {
+            "title": "param",
+            "name": "config.class",
+            "lineNumber": 5,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "CSS class(es)"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "UnionType",
+                "elements": [
+                  {
+                    "type": "NameExpression",
+                    "name": "string"
+                  },
+                  {
+                    "type": "TypeApplication",
+                    "expression": {
+                      "type": "NameExpression",
+                      "name": "Array"
+                    },
+                    "applications": [
+                      {
+                        "type": "NameExpression",
+                        "name": "string"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.text",
+            "lineNumber": 6,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Text content"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "string"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.html",
+            "lineNumber": 7,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "HTML content"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "string"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.style",
+            "lineNumber": 8,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Inline styles"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "Object"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.data",
+            "lineNumber": 9,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Data attributes"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "Object"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.attrs",
+            "lineNumber": 10,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "HTML attributes"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "Object"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.children",
+            "lineNumber": 11,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Child elements"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "TypeApplication",
+                "expression": {
+                  "type": "NameExpression",
+                  "name": "Array"
+                },
+                "applications": [
+                  {
+                    "type": "NameExpression",
+                    "name": "Node"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.ref",
+            "lineNumber": 12,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Callback receiving the created element"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "Function"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.onClick",
+            "lineNumber": 13,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Click handler (also onInput, onChange, etc.)"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "Function"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "properties": [],
+    "returns": [
+      {
+        "description": {
+          "type": "root",
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "The created element"
+                }
+              ]
+            }
+          ]
+        },
+        "title": "returns",
+        "type": {
+          "type": "NameExpression",
+          "name": "HTMLElement"
+        }
+      }
+    ],
+    "sees": [],
+    "throws": [],
+    "todos": [],
+    "yields": [],
+    "name": "el",
+    "kind": "function",
+    "members": {
+      "global": [],
+      "inner": [],
+      "instance": [],
+      "events": [],
+      "static": []
+    },
+    "path": [
+      {
+        "name": "el",
+        "kind": "function"
+      }
+    ],
+    "namespace": "el"
+  },
+  {
+    "description": {
+      "type": "root",
+      "children": [
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "value": "Creates a horizontal flex row layout"
+            }
+          ]
+        }
+      ]
+    },
+    "tags": [
+      {
+        "title": "param",
+        "description": "Parent element to append to",
+        "lineNumber": 2,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Node"
+          }
+        },
+        "name": "parent"
+      },
+      {
+        "title": "param",
+        "description": "Layout configuration",
+        "lineNumber": 3,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Object"
+          }
+        },
+        "name": "config"
+      },
+      {
+        "title": "param",
+        "description": "Child elements (also accepts array as second arg)",
+        "lineNumber": 4,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "TypeApplication",
+            "expression": {
+              "type": "NameExpression",
+              "name": "Array"
+            },
+            "applications": [
+              {
+                "type": "NameExpression",
+                "name": "Node"
+              }
+            ]
+          }
+        },
+        "name": "config.children"
+      },
+      {
+        "title": "param",
+        "description": "Justify content (start, center, end, between, around)",
+        "lineNumber": 5,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.justify",
+        "default": "'start'"
+      },
+      {
+        "title": "param",
+        "description": "Align items (start, center, end, stretch)",
+        "lineNumber": 6,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.align",
+        "default": "'center'"
+      },
+      {
+        "title": "param",
+        "description": "Gap between children (0-10)",
+        "lineNumber": 7,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "number"
+          }
+        },
+        "name": "config.gap",
+        "default": "2"
+      },
+      {
+        "title": "param",
+        "description": "Full viewport height, centered",
+        "lineNumber": 8,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "boolean"
+          }
+        },
+        "name": "config.full"
+      },
+      {
+        "title": "param",
+        "description": "Apply flex-N to all children",
+        "lineNumber": 9,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "number"
+          }
+        },
+        "name": "config.flex"
+      },
+      {
+        "title": "returns",
+        "description": "Flex container element",
+        "lineNumber": 10,
+        "type": {
+          "type": "NameExpression",
+          "name": "HTMLDivElement"
+        }
+      },
+      {
+        "title": "category",
+        "description": "Layout",
+        "lineNumber": 11
+      },
+      {
+        "title": "example",
+        "description": "layout.row([button('One'), button('Two')])\nlayout.row({ gap: 4, justify: 'between' }, [left, right])",
+        "lineNumber": 12
+      }
+    ],
+    "loc": {
+      "start": {
+        "line": 453,
+        "column": 0,
+        "index": 12641
+      },
+      "end": {
+        "line": 468,
+        "column": 3,
+        "index": 13457
+      }
+    },
+    "context": {
+      "loc": {
+        "start": {
+          "line": 469,
+          "column": 0,
+          "index": 13458
+        },
+        "end": {
+          "line": 469,
+          "column": 100,
+          "index": 13558
+        }
+      },
+      "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/dom.js"
+    },
+    "augments": [],
+    "examples": [
+      {
+        "description": "layout.row([button('One'), button('Two')])\nlayout.row({ gap: 4, justify: 'between' }, [left, right])"
+      }
+    ],
+    "implements": [],
+    "params": [
+      {
+        "title": "param",
+        "name": "args",
+        "lineNumber": 469,
+        "type": {
+          "type": "RestType"
+        }
+      },
+      {
+        "title": "param",
+        "name": "parent",
+        "lineNumber": 2,
+        "description": {
+          "type": "root",
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Parent element to append to"
+                }
+              ]
+            }
+          ]
+        },
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Node"
+          }
+        }
+      },
+      {
+        "title": "param",
+        "name": "config",
+        "lineNumber": 3,
+        "description": {
+          "type": "root",
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Layout configuration"
+                }
+              ]
+            }
+          ]
+        },
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Object"
+          }
+        },
+        "properties": [
+          {
+            "title": "param",
+            "name": "config.children",
+            "lineNumber": 4,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Child elements (also accepts array as second arg)"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "TypeApplication",
+                "expression": {
+                  "type": "NameExpression",
+                  "name": "Array"
+                },
+                "applications": [
+                  {
+                    "type": "NameExpression",
+                    "name": "Node"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.justify",
+            "lineNumber": 5,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Justify content (start, center, end, between, around)"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "NameExpression",
+              "name": "string"
+            },
+            "default": "'start'"
+          },
+          {
+            "title": "param",
+            "name": "config.align",
+            "lineNumber": 6,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Align items (start, center, end, stretch)"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "NameExpression",
+              "name": "string"
+            },
+            "default": "'center'"
+          },
+          {
+            "title": "param",
+            "name": "config.gap",
+            "lineNumber": 7,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Gap between children (0-10)"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "NameExpression",
+              "name": "number"
+            },
+            "default": "2"
+          },
+          {
+            "title": "param",
+            "name": "config.full",
+            "lineNumber": 8,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Full viewport height, centered"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "boolean"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.flex",
+            "lineNumber": 9,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Apply flex-N to all children"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "number"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "properties": [],
+    "returns": [
+      {
+        "description": {
+          "type": "root",
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Flex container element"
+                }
+              ]
+            }
+          ]
+        },
+        "title": "returns",
+        "type": {
+          "type": "NameExpression",
+          "name": "HTMLDivElement"
+        }
+      }
+    ],
+    "sees": [],
+    "throws": [],
+    "todos": [],
+    "yields": [],
+    "name": "row",
+    "kind": "constant",
+    "members": {
+      "global": [],
+      "inner": [],
+      "instance": [],
+      "events": [],
+      "static": []
+    },
+    "path": [
+      {
+        "name": "row",
+        "kind": "constant"
+      }
+    ],
+    "namespace": "row"
+  },
+  {
+    "description": {
+      "type": "root",
+      "children": [
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "value": "Creates a vertical flex column layout"
+            }
+          ]
+        }
+      ]
+    },
+    "tags": [
+      {
+        "title": "param",
+        "description": "Parent element to append to",
+        "lineNumber": 2,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Node"
+          }
+        },
+        "name": "parent"
+      },
+      {
+        "title": "param",
+        "description": "Layout configuration",
+        "lineNumber": 3,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Object"
+          }
+        },
+        "name": "config"
+      },
+      {
+        "title": "param",
+        "description": "Child elements (also accepts array as second arg)",
+        "lineNumber": 4,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "TypeApplication",
+            "expression": {
+              "type": "NameExpression",
+              "name": "Array"
+            },
+            "applications": [
+              {
+                "type": "NameExpression",
+                "name": "Node"
+              }
+            ]
+          }
+        },
+        "name": "config.children"
+      },
+      {
+        "title": "param",
+        "description": "Justify content (start, center, end, between, around)",
+        "lineNumber": 5,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.justify",
+        "default": "'start'"
+      },
+      {
+        "title": "param",
+        "description": "Align items (start, center, end, stretch)",
+        "lineNumber": 6,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.align",
+        "default": "'start'"
+      },
+      {
+        "title": "param",
+        "description": "Gap between children (0-10)",
+        "lineNumber": 7,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "number"
+          }
+        },
+        "name": "config.gap",
+        "default": "2"
+      },
+      {
+        "title": "param",
+        "description": "Full viewport height, centered",
+        "lineNumber": 8,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "boolean"
+          }
+        },
+        "name": "config.full"
+      },
+      {
+        "title": "param",
+        "description": "Apply flex-N to all children",
+        "lineNumber": 9,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "number"
+          }
+        },
+        "name": "config.flex"
+      },
+      {
+        "title": "returns",
+        "description": "Flex container element",
+        "lineNumber": 10,
+        "type": {
+          "type": "NameExpression",
+          "name": "HTMLDivElement"
+        }
+      },
+      {
+        "title": "category",
+        "description": "Layout",
+        "lineNumber": 11
+      },
+      {
+        "title": "example",
+        "description": "layout.col([input({ label: 'Name' }), input({ label: 'Email' })])\nlayout.col({ gap: 6, align: 'center' }, [title, content, footer])",
+        "lineNumber": 12
+      }
+    ],
+    "loc": {
+      "start": {
+        "line": 471,
+        "column": 0,
+        "index": 13560
+      },
+      "end": {
+        "line": 486,
+        "column": 3,
+        "index": 14407
+      }
+    },
+    "context": {
+      "loc": {
+        "start": {
+          "line": 487,
+          "column": 0,
+          "index": 14408
+        },
+        "end": {
+          "line": 487,
+          "column": 99,
+          "index": 14507
+        }
+      },
+      "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/dom.js"
+    },
+    "augments": [],
+    "examples": [
+      {
+        "description": "layout.col([input({ label: 'Name' }), input({ label: 'Email' })])\nlayout.col({ gap: 6, align: 'center' }, [title, content, footer])"
+      }
+    ],
+    "implements": [],
+    "params": [
+      {
+        "title": "param",
+        "name": "args",
+        "lineNumber": 487,
+        "type": {
+          "type": "RestType"
+        }
+      },
+      {
+        "title": "param",
+        "name": "parent",
+        "lineNumber": 2,
+        "description": {
+          "type": "root",
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Parent element to append to"
+                }
+              ]
+            }
+          ]
+        },
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Node"
+          }
+        }
+      },
+      {
+        "title": "param",
+        "name": "config",
+        "lineNumber": 3,
+        "description": {
+          "type": "root",
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Layout configuration"
+                }
+              ]
+            }
+          ]
+        },
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Object"
+          }
+        },
+        "properties": [
+          {
+            "title": "param",
+            "name": "config.children",
+            "lineNumber": 4,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Child elements (also accepts array as second arg)"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "TypeApplication",
+                "expression": {
+                  "type": "NameExpression",
+                  "name": "Array"
+                },
+                "applications": [
+                  {
+                    "type": "NameExpression",
+                    "name": "Node"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.justify",
+            "lineNumber": 5,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Justify content (start, center, end, between, around)"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "NameExpression",
+              "name": "string"
+            },
+            "default": "'start'"
+          },
+          {
+            "title": "param",
+            "name": "config.align",
+            "lineNumber": 6,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Align items (start, center, end, stretch)"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "NameExpression",
+              "name": "string"
+            },
+            "default": "'start'"
+          },
+          {
+            "title": "param",
+            "name": "config.gap",
+            "lineNumber": 7,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Gap between children (0-10)"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "NameExpression",
+              "name": "number"
+            },
+            "default": "2"
+          },
+          {
+            "title": "param",
+            "name": "config.full",
+            "lineNumber": 8,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Full viewport height, centered"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "boolean"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.flex",
+            "lineNumber": 9,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Apply flex-N to all children"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "number"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "properties": [],
+    "returns": [
+      {
+        "description": {
+          "type": "root",
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Flex container element"
+                }
+              ]
+            }
+          ]
+        },
+        "title": "returns",
+        "type": {
+          "type": "NameExpression",
+          "name": "HTMLDivElement"
+        }
+      }
+    ],
+    "sees": [],
+    "throws": [],
+    "todos": [],
+    "yields": [],
+    "name": "col",
+    "kind": "constant",
+    "members": {
+      "global": [],
+      "inner": [],
+      "instance": [],
+      "events": [],
+      "static": []
+    },
+    "path": [
+      {
+        "name": "col",
+        "kind": "constant"
+      }
+    ],
+    "namespace": "col"
+  },
+  {
+    "description": {
+      "type": "root",
+      "children": [
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "text",
               "value": "Creates a button element"
             }
           ]
@@ -1378,9 +2937,9 @@
           "index": 816
         },
         "end": {
-          "line": 69,
+          "line": 73,
           "column": 1,
-          "index": 1969
+          "index": 1995
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/card.js"
@@ -1637,1565 +3196,6 @@
       }
     ],
     "namespace": "card"
-  },
-  {
-    "description": {
-      "type": "root",
-      "children": [
-        {
-          "type": "paragraph",
-          "children": [
-            {
-              "type": "text",
-              "value": "Creates a DOM element with flexible argument order"
-            }
-          ]
-        }
-      ]
-    },
-    "tags": [
-      {
-        "title": "param",
-        "description": "HTML tag name or HTML string (e.g. 'div' or '<div class=\"foo\">')",
-        "lineNumber": 2,
-        "type": {
-          "type": "NameExpression",
-          "name": "string"
-        },
-        "name": "tag"
-      },
-      {
-        "title": "param",
-        "description": "Parent element to append to",
-        "lineNumber": 3,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Node"
-          }
-        },
-        "name": "parent"
-      },
-      {
-        "title": "param",
-        "description": "Element configuration",
-        "lineNumber": 4,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Object"
-          }
-        },
-        "name": "config"
-      },
-      {
-        "title": "param",
-        "description": "CSS class(es)",
-        "lineNumber": 5,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "UnionType",
-            "elements": [
-              {
-                "type": "NameExpression",
-                "name": "string"
-              },
-              {
-                "type": "TypeApplication",
-                "expression": {
-                  "type": "NameExpression",
-                  "name": "Array"
-                },
-                "applications": [
-                  {
-                    "type": "NameExpression",
-                    "name": "string"
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        "name": "config.class"
-      },
-      {
-        "title": "param",
-        "description": "Text content",
-        "lineNumber": 6,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.text"
-      },
-      {
-        "title": "param",
-        "description": "HTML content",
-        "lineNumber": 7,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.html"
-      },
-      {
-        "title": "param",
-        "description": "Inline styles",
-        "lineNumber": 8,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Object"
-          }
-        },
-        "name": "config.style"
-      },
-      {
-        "title": "param",
-        "description": "Data attributes",
-        "lineNumber": 9,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Object"
-          }
-        },
-        "name": "config.data"
-      },
-      {
-        "title": "param",
-        "description": "HTML attributes",
-        "lineNumber": 10,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Object"
-          }
-        },
-        "name": "config.attrs"
-      },
-      {
-        "title": "param",
-        "description": "Child elements",
-        "lineNumber": 11,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "TypeApplication",
-            "expression": {
-              "type": "NameExpression",
-              "name": "Array"
-            },
-            "applications": [
-              {
-                "type": "NameExpression",
-                "name": "Node"
-              }
-            ]
-          }
-        },
-        "name": "config.children"
-      },
-      {
-        "title": "param",
-        "description": "Callback receiving the created element",
-        "lineNumber": 12,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Function"
-          }
-        },
-        "name": "config.ref"
-      },
-      {
-        "title": "param",
-        "description": "Click handler (also onInput, onChange, etc.)",
-        "lineNumber": 13,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Function"
-          }
-        },
-        "name": "config.onClick"
-      },
-      {
-        "title": "returns",
-        "description": "The created element",
-        "lineNumber": 14,
-        "type": {
-          "type": "NameExpression",
-          "name": "HTMLElement"
-        }
-      },
-      {
-        "title": "category",
-        "description": "Layout",
-        "lineNumber": 15
-      },
-      {
-        "title": "example",
-        "description": "el('div', { class: 'card', text: 'Hello' })\nel('button', document.body, { text: 'Click me', onClick: handleClick })\nel('<input type=\"text\">', { placeholder: 'Name' })",
-        "lineNumber": 16
-      }
-    ],
-    "loc": {
-      "start": {
-        "line": 291,
-        "column": 0,
-        "index": 8139
-      },
-      "end": {
-        "line": 311,
-        "column": 3,
-        "index": 9174
-      }
-    },
-    "context": {
-      "loc": {
-        "start": {
-          "line": 312,
-          "column": 0,
-          "index": 9175
-        },
-        "end": {
-          "line": 368,
-          "column": 1,
-          "index": 10396
-        }
-      },
-      "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/dom.js"
-    },
-    "augments": [],
-    "examples": [
-      {
-        "description": "el('div', { class: 'card', text: 'Hello' })\nel('button', document.body, { text: 'Click me', onClick: handleClick })\nel('<input type=\"text\">', { placeholder: 'Name' })"
-      }
-    ],
-    "implements": [],
-    "params": [
-      {
-        "title": "param",
-        "name": "args",
-        "lineNumber": 312,
-        "type": {
-          "type": "RestType"
-        }
-      },
-      {
-        "title": "param",
-        "name": "tag",
-        "lineNumber": 2,
-        "description": {
-          "type": "root",
-          "children": [
-            {
-              "type": "paragraph",
-              "children": [
-                {
-                  "type": "text",
-                  "value": "HTML tag name or HTML string (e.g. 'div' or '"
-                },
-                {
-                  "type": "html",
-                  "value": "<div class=\"foo\">"
-                },
-                {
-                  "type": "text",
-                  "value": "')"
-                }
-              ]
-            }
-          ]
-        },
-        "type": {
-          "type": "NameExpression",
-          "name": "string"
-        }
-      },
-      {
-        "title": "param",
-        "name": "parent",
-        "lineNumber": 3,
-        "description": {
-          "type": "root",
-          "children": [
-            {
-              "type": "paragraph",
-              "children": [
-                {
-                  "type": "text",
-                  "value": "Parent element to append to"
-                }
-              ]
-            }
-          ]
-        },
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Node"
-          }
-        }
-      },
-      {
-        "title": "param",
-        "name": "config",
-        "lineNumber": 4,
-        "description": {
-          "type": "root",
-          "children": [
-            {
-              "type": "paragraph",
-              "children": [
-                {
-                  "type": "text",
-                  "value": "Element configuration"
-                }
-              ]
-            }
-          ]
-        },
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Object"
-          }
-        },
-        "properties": [
-          {
-            "title": "param",
-            "name": "config.class",
-            "lineNumber": 5,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "CSS class(es)"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "UnionType",
-                "elements": [
-                  {
-                    "type": "NameExpression",
-                    "name": "string"
-                  },
-                  {
-                    "type": "TypeApplication",
-                    "expression": {
-                      "type": "NameExpression",
-                      "name": "Array"
-                    },
-                    "applications": [
-                      {
-                        "type": "NameExpression",
-                        "name": "string"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.text",
-            "lineNumber": 6,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Text content"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "string"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.html",
-            "lineNumber": 7,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "HTML content"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "string"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.style",
-            "lineNumber": 8,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Inline styles"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "Object"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.data",
-            "lineNumber": 9,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Data attributes"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "Object"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.attrs",
-            "lineNumber": 10,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "HTML attributes"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "Object"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.children",
-            "lineNumber": 11,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Child elements"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "TypeApplication",
-                "expression": {
-                  "type": "NameExpression",
-                  "name": "Array"
-                },
-                "applications": [
-                  {
-                    "type": "NameExpression",
-                    "name": "Node"
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.ref",
-            "lineNumber": 12,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Callback receiving the created element"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "Function"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.onClick",
-            "lineNumber": 13,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Click handler (also onInput, onChange, etc.)"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "Function"
-              }
-            }
-          }
-        ]
-      }
-    ],
-    "properties": [],
-    "returns": [
-      {
-        "description": {
-          "type": "root",
-          "children": [
-            {
-              "type": "paragraph",
-              "children": [
-                {
-                  "type": "text",
-                  "value": "The created element"
-                }
-              ]
-            }
-          ]
-        },
-        "title": "returns",
-        "type": {
-          "type": "NameExpression",
-          "name": "HTMLElement"
-        }
-      }
-    ],
-    "sees": [],
-    "throws": [],
-    "todos": [],
-    "yields": [],
-    "name": "el",
-    "kind": "function",
-    "members": {
-      "global": [],
-      "inner": [],
-      "instance": [],
-      "events": [],
-      "static": []
-    },
-    "path": [
-      {
-        "name": "el",
-        "kind": "function"
-      }
-    ],
-    "namespace": "el"
-  },
-  {
-    "description": {
-      "type": "root",
-      "children": [
-        {
-          "type": "paragraph",
-          "children": [
-            {
-              "type": "text",
-              "value": "Creates a horizontal flex row layout"
-            }
-          ]
-        }
-      ]
-    },
-    "tags": [
-      {
-        "title": "param",
-        "description": "Parent element to append to",
-        "lineNumber": 2,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Node"
-          }
-        },
-        "name": "parent"
-      },
-      {
-        "title": "param",
-        "description": "Layout configuration",
-        "lineNumber": 3,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Object"
-          }
-        },
-        "name": "config"
-      },
-      {
-        "title": "param",
-        "description": "Child elements (also accepts array as second arg)",
-        "lineNumber": 4,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "TypeApplication",
-            "expression": {
-              "type": "NameExpression",
-              "name": "Array"
-            },
-            "applications": [
-              {
-                "type": "NameExpression",
-                "name": "Node"
-              }
-            ]
-          }
-        },
-        "name": "config.children"
-      },
-      {
-        "title": "param",
-        "description": "Justify content (start, center, end, between, around)",
-        "lineNumber": 5,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.justify",
-        "default": "'start'"
-      },
-      {
-        "title": "param",
-        "description": "Align items (start, center, end, stretch)",
-        "lineNumber": 6,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.align",
-        "default": "'center'"
-      },
-      {
-        "title": "param",
-        "description": "Gap between children (0-10)",
-        "lineNumber": 7,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "number"
-          }
-        },
-        "name": "config.gap",
-        "default": "2"
-      },
-      {
-        "title": "param",
-        "description": "Full viewport height, centered",
-        "lineNumber": 8,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "boolean"
-          }
-        },
-        "name": "config.full"
-      },
-      {
-        "title": "param",
-        "description": "Apply flex-N to all children",
-        "lineNumber": 9,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "number"
-          }
-        },
-        "name": "config.flex"
-      },
-      {
-        "title": "returns",
-        "description": "Flex container element",
-        "lineNumber": 10,
-        "type": {
-          "type": "NameExpression",
-          "name": "HTMLDivElement"
-        }
-      },
-      {
-        "title": "category",
-        "description": "Layout",
-        "lineNumber": 11
-      },
-      {
-        "title": "example",
-        "description": "layout.row([button('One'), button('Two')])\nlayout.row({ gap: 4, justify: 'between' }, [left, right])",
-        "lineNumber": 12
-      }
-    ],
-    "loc": {
-      "start": {
-        "line": 448,
-        "column": 0,
-        "index": 12284
-      },
-      "end": {
-        "line": 463,
-        "column": 3,
-        "index": 13100
-      }
-    },
-    "context": {
-      "loc": {
-        "start": {
-          "line": 464,
-          "column": 0,
-          "index": 13101
-        },
-        "end": {
-          "line": 464,
-          "column": 100,
-          "index": 13201
-        }
-      },
-      "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/dom.js"
-    },
-    "augments": [],
-    "examples": [
-      {
-        "description": "layout.row([button('One'), button('Two')])\nlayout.row({ gap: 4, justify: 'between' }, [left, right])"
-      }
-    ],
-    "implements": [],
-    "params": [
-      {
-        "title": "param",
-        "name": "args",
-        "lineNumber": 464,
-        "type": {
-          "type": "RestType"
-        }
-      },
-      {
-        "title": "param",
-        "name": "parent",
-        "lineNumber": 2,
-        "description": {
-          "type": "root",
-          "children": [
-            {
-              "type": "paragraph",
-              "children": [
-                {
-                  "type": "text",
-                  "value": "Parent element to append to"
-                }
-              ]
-            }
-          ]
-        },
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Node"
-          }
-        }
-      },
-      {
-        "title": "param",
-        "name": "config",
-        "lineNumber": 3,
-        "description": {
-          "type": "root",
-          "children": [
-            {
-              "type": "paragraph",
-              "children": [
-                {
-                  "type": "text",
-                  "value": "Layout configuration"
-                }
-              ]
-            }
-          ]
-        },
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Object"
-          }
-        },
-        "properties": [
-          {
-            "title": "param",
-            "name": "config.children",
-            "lineNumber": 4,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Child elements (also accepts array as second arg)"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "TypeApplication",
-                "expression": {
-                  "type": "NameExpression",
-                  "name": "Array"
-                },
-                "applications": [
-                  {
-                    "type": "NameExpression",
-                    "name": "Node"
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.justify",
-            "lineNumber": 5,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Justify content (start, center, end, between, around)"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "NameExpression",
-              "name": "string"
-            },
-            "default": "'start'"
-          },
-          {
-            "title": "param",
-            "name": "config.align",
-            "lineNumber": 6,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Align items (start, center, end, stretch)"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "NameExpression",
-              "name": "string"
-            },
-            "default": "'center'"
-          },
-          {
-            "title": "param",
-            "name": "config.gap",
-            "lineNumber": 7,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Gap between children (0-10)"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "NameExpression",
-              "name": "number"
-            },
-            "default": "2"
-          },
-          {
-            "title": "param",
-            "name": "config.full",
-            "lineNumber": 8,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Full viewport height, centered"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "boolean"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.flex",
-            "lineNumber": 9,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Apply flex-N to all children"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "number"
-              }
-            }
-          }
-        ]
-      }
-    ],
-    "properties": [],
-    "returns": [
-      {
-        "description": {
-          "type": "root",
-          "children": [
-            {
-              "type": "paragraph",
-              "children": [
-                {
-                  "type": "text",
-                  "value": "Flex container element"
-                }
-              ]
-            }
-          ]
-        },
-        "title": "returns",
-        "type": {
-          "type": "NameExpression",
-          "name": "HTMLDivElement"
-        }
-      }
-    ],
-    "sees": [],
-    "throws": [],
-    "todos": [],
-    "yields": [],
-    "name": "row",
-    "kind": "constant",
-    "members": {
-      "global": [],
-      "inner": [],
-      "instance": [],
-      "events": [],
-      "static": []
-    },
-    "path": [
-      {
-        "name": "row",
-        "kind": "constant"
-      }
-    ],
-    "namespace": "row"
-  },
-  {
-    "description": {
-      "type": "root",
-      "children": [
-        {
-          "type": "paragraph",
-          "children": [
-            {
-              "type": "text",
-              "value": "Creates a vertical flex column layout"
-            }
-          ]
-        }
-      ]
-    },
-    "tags": [
-      {
-        "title": "param",
-        "description": "Parent element to append to",
-        "lineNumber": 2,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Node"
-          }
-        },
-        "name": "parent"
-      },
-      {
-        "title": "param",
-        "description": "Layout configuration",
-        "lineNumber": 3,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Object"
-          }
-        },
-        "name": "config"
-      },
-      {
-        "title": "param",
-        "description": "Child elements (also accepts array as second arg)",
-        "lineNumber": 4,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "TypeApplication",
-            "expression": {
-              "type": "NameExpression",
-              "name": "Array"
-            },
-            "applications": [
-              {
-                "type": "NameExpression",
-                "name": "Node"
-              }
-            ]
-          }
-        },
-        "name": "config.children"
-      },
-      {
-        "title": "param",
-        "description": "Justify content (start, center, end, between, around)",
-        "lineNumber": 5,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.justify",
-        "default": "'start'"
-      },
-      {
-        "title": "param",
-        "description": "Align items (start, center, end, stretch)",
-        "lineNumber": 6,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.align",
-        "default": "'start'"
-      },
-      {
-        "title": "param",
-        "description": "Gap between children (0-10)",
-        "lineNumber": 7,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "number"
-          }
-        },
-        "name": "config.gap",
-        "default": "2"
-      },
-      {
-        "title": "param",
-        "description": "Full viewport height, centered",
-        "lineNumber": 8,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "boolean"
-          }
-        },
-        "name": "config.full"
-      },
-      {
-        "title": "param",
-        "description": "Apply flex-N to all children",
-        "lineNumber": 9,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "number"
-          }
-        },
-        "name": "config.flex"
-      },
-      {
-        "title": "returns",
-        "description": "Flex container element",
-        "lineNumber": 10,
-        "type": {
-          "type": "NameExpression",
-          "name": "HTMLDivElement"
-        }
-      },
-      {
-        "title": "category",
-        "description": "Layout",
-        "lineNumber": 11
-      },
-      {
-        "title": "example",
-        "description": "layout.col([input({ label: 'Name' }), input({ label: 'Email' })])\nlayout.col({ gap: 6, align: 'center' }, [title, content, footer])",
-        "lineNumber": 12
-      }
-    ],
-    "loc": {
-      "start": {
-        "line": 466,
-        "column": 0,
-        "index": 13203
-      },
-      "end": {
-        "line": 481,
-        "column": 3,
-        "index": 14050
-      }
-    },
-    "context": {
-      "loc": {
-        "start": {
-          "line": 482,
-          "column": 0,
-          "index": 14051
-        },
-        "end": {
-          "line": 482,
-          "column": 99,
-          "index": 14150
-        }
-      },
-      "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/dom.js"
-    },
-    "augments": [],
-    "examples": [
-      {
-        "description": "layout.col([input({ label: 'Name' }), input({ label: 'Email' })])\nlayout.col({ gap: 6, align: 'center' }, [title, content, footer])"
-      }
-    ],
-    "implements": [],
-    "params": [
-      {
-        "title": "param",
-        "name": "args",
-        "lineNumber": 482,
-        "type": {
-          "type": "RestType"
-        }
-      },
-      {
-        "title": "param",
-        "name": "parent",
-        "lineNumber": 2,
-        "description": {
-          "type": "root",
-          "children": [
-            {
-              "type": "paragraph",
-              "children": [
-                {
-                  "type": "text",
-                  "value": "Parent element to append to"
-                }
-              ]
-            }
-          ]
-        },
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Node"
-          }
-        }
-      },
-      {
-        "title": "param",
-        "name": "config",
-        "lineNumber": 3,
-        "description": {
-          "type": "root",
-          "children": [
-            {
-              "type": "paragraph",
-              "children": [
-                {
-                  "type": "text",
-                  "value": "Layout configuration"
-                }
-              ]
-            }
-          ]
-        },
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Object"
-          }
-        },
-        "properties": [
-          {
-            "title": "param",
-            "name": "config.children",
-            "lineNumber": 4,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Child elements (also accepts array as second arg)"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "TypeApplication",
-                "expression": {
-                  "type": "NameExpression",
-                  "name": "Array"
-                },
-                "applications": [
-                  {
-                    "type": "NameExpression",
-                    "name": "Node"
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.justify",
-            "lineNumber": 5,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Justify content (start, center, end, between, around)"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "NameExpression",
-              "name": "string"
-            },
-            "default": "'start'"
-          },
-          {
-            "title": "param",
-            "name": "config.align",
-            "lineNumber": 6,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Align items (start, center, end, stretch)"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "NameExpression",
-              "name": "string"
-            },
-            "default": "'start'"
-          },
-          {
-            "title": "param",
-            "name": "config.gap",
-            "lineNumber": 7,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Gap between children (0-10)"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "NameExpression",
-              "name": "number"
-            },
-            "default": "2"
-          },
-          {
-            "title": "param",
-            "name": "config.full",
-            "lineNumber": 8,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Full viewport height, centered"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "boolean"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.flex",
-            "lineNumber": 9,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Apply flex-N to all children"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "number"
-              }
-            }
-          }
-        ]
-      }
-    ],
-    "properties": [],
-    "returns": [
-      {
-        "description": {
-          "type": "root",
-          "children": [
-            {
-              "type": "paragraph",
-              "children": [
-                {
-                  "type": "text",
-                  "value": "Flex container element"
-                }
-              ]
-            }
-          ]
-        },
-        "title": "returns",
-        "type": {
-          "type": "NameExpression",
-          "name": "HTMLDivElement"
-        }
-      }
-    ],
-    "sees": [],
-    "throws": [],
-    "todos": [],
-    "yields": [],
-    "name": "col",
-    "kind": "constant",
-    "members": {
-      "global": [],
-      "inner": [],
-      "instance": [],
-      "events": [],
-      "static": []
-    },
-    "path": [
-      {
-        "name": "col",
-        "kind": "constant"
-      }
-    ],
-    "namespace": "col"
   },
   {
     "description": {
@@ -5057,7 +5057,7 @@
         "end": {
           "line": 129,
           "column": 1,
-          "index": 3294
+          "index": 3281
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/dashboard.js"
@@ -5576,9 +5576,9 @@
           "index": 1493
         },
         "end": {
-          "line": 316,
+          "line": 300,
           "column": 1,
-          "index": 10358
+          "index": 9729
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/dialog.js"
@@ -8442,9 +8442,9 @@
           "index": 1234
         },
         "end": {
-          "line": 178,
+          "line": 184,
           "column": 1,
-          "index": 5216
+          "index": 5236
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/tabs.js"
@@ -9725,9 +9725,9 @@
           "index": 2323
         },
         "end": {
-          "line": 98,
+          "line": 95,
           "column": 2,
-          "index": 2834
+          "index": 2765
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/text.js"
