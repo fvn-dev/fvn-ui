@@ -2,3 +2,8 @@
   max-width: 1000px;
   margin: 0 auto;
 }
+.demo-code {
+  font-family: monospace;
+  font-size: 11px;;
+  white-space: pre-wrap;
+}

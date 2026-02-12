@@ -2,26 +2,37 @@ import './main.css';
 import { dom, el, dashboard, layout, card, input, label, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radioGroup, avatar, colors } from './fvn-ui'
 import { collapsible } from './fvn-ui/components/collapsible';
 
-dashboard(document.body, {
-  id: 'dash',
-  title: 'FVN-UI beta',
-  description: 'Diverse junk',
-  menu: [
-    { icon: 'rabbit', action: () => document.body.classList.toggle('shaded') },
-    { icon: 'moon', action: () => document.documentElement.classList.toggle('dark') },
-    { icon: 'dots', view: 'demo' }
-  ],
-  views: {
-    default: () => exampleTabs(),
-    demo: () => examplePresentation()
-  }
-});
+function init() {
+  dashboard(document.body, {
+    id: 'dash',
+    title: 'FVN-UI beta',
+    description: 'Diverse junk',
+    menu: [
+      { icon: 'code', view: 'code' },
+      { icon: 'rabbit', action: () => document.body.classList.toggle('shaded') },
+      { icon: 'moon', action: () => document.documentElement.classList.toggle('dark') },
+      { icon: 'dots', view: 'demo' }
+    ],
+    views: {
+      default: () => exampleTabs(),
+      code: () => card(dom.dash, { content: el('code', { class: 'demo-code', text: init.toString() }) }),
+      demo: () => examplePresentation()
+    }
+  });
 
-card(dom.dash, {  
-  title: 'Card component',
-  description: `Yeah I'm rollin' down Rodeo wit a shotgun. These people ain't seen a brown skin man since their grandparents bought one.`,
-  content: layout.col({ gap: 4 }, [label('Zach'), el('a', { small: true, href: 'https://github.com/fvn-dev/fvn-ui', text: 'Github', style: { marginLeft: 'auto'} })])
-})
+  card(dom.dash, {  
+    title: 'Card component',
+    description: `Yeah I'm rollin' down Rodeo wit a shotgun. These people ain't seen a brown skin man since their grandparents bought one.`,
+    content: `
+      <div class="flex justify-between">
+        <label class="ui-component ui-label">Zach</label>
+        <a class="small" href="https://github.com/fvn-dev/fvn-ui">Github</a>
+      </div>  
+    `
+  });
+}
+
+init();
 
 // --->
 
