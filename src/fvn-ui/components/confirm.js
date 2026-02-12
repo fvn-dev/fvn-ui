@@ -13,7 +13,7 @@ import { header } from './text.js'
  * @param {string} [config.cancel='Cancel'] - Cancel button text
  * @param {'modal'|'tooltip'} [config.type='modal'] - Dialog type
  * @param {string} [config.icon] - Trigger button icon
- * @param {'pill'} [config.shape] - Trigger button shape
+ * @param {'round'} [config.shape] - Trigger button shape
  * @param {'primary'|'red'|'green'|'blue'} [config.color] - Color for both trigger and confirm buttons
  * @param {'primary'|'red'|'green'|'blue'} [config.triggerColor] - Override color for trigger button
  * @param {'primary'|'red'|'green'|'blue'} [config.confirmColor] - Override color for confirm button

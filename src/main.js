@@ -110,16 +110,16 @@ function buttonPresentation() {
   const b = layout.row([
     button({ label: 'Colored', color: 'red' }),
     button({ label: 'Colored outline', variant: 'outline', color: 'primary' }),
-    button({ label: 'Ghost pill', shape: 'pill', variant: 'ghost', color: 'yellow' }),
-    button({ label: 'Primary pill', shape: 'pill',color: 'primary' }),
-    button({ label: 'Loading', shape: 'pill', variant: 'secondary', className: 'loading' }),
+    button({ label: 'Ghost round', shape: 'round', variant: 'ghost', color: 'yellow' }),
+    button({ label: 'Primary round', shape: 'round',color: 'primary' }),
+    button({ label: 'Loading', shape: 'round', variant: 'secondary', className: 'loading' }),
   ]);
   const c = layout.row([
     button({ icon: 'settings', label: 'Settings' }),
-    button({ icon: 'search', label: 'Search', shape: 'pill', variant: 'secondary' }),
+    button({ icon: 'search', label: 'Search', shape: 'round', variant: 'secondary' }),
     button({ icon: 'settings', variant: 'outline' }),
-    button({ icon: 'settings', shape: 'pill', color: 'red', variant: 'outline' }),
-    button({ icon: 'settings', shape: 'pill', variant: 'ghost' })
+    button({ icon: 'settings', shape: 'round', color: 'red', variant: 'outline' }),
+    button({ icon: 'settings', shape: 'round', variant: 'ghost' })
   ]);
   const d = layout.row([
     button({ label: 'Random', color: colors }),
@@ -127,7 +127,7 @@ function buttonPresentation() {
     button({ label: 'Yellow', color: 'yellow' }),
     button({ label: 'Orange', color: 'orange' }),
     button({ label: 'Blue', color: 'blue', variant: 'ghost' }),
-    button({ label: 'Pink', color: 'pink', shape: 'pill' })
+    button({ label: 'Pink', color: 'pink', shape: 'round' })
   ]);
   
   return tabs({
@@ -158,7 +158,7 @@ function buttonPresentation() {
 // --->
 
 function switchPresentation() {
-  return layout.col([
+  return layout.col({ gap: 3 }, [
     switchComponent({
       label: 'Switch default'
     }),
@@ -326,7 +326,7 @@ function dialogPresentation() {
           justify: 'center',
           title: 'How do you feel at this very moment?',
           description: 'Be honest!',
-          content: button({ flex: 0, label: 'Awesome', shape: 'pill', color: 'yellow' })
+          content: button({ flex: 0, label: 'Awesome', shape: 'round', color: 'yellow' })
         })
       }),      
     })      
@@ -379,7 +379,7 @@ function tabsPresentation() {
       center: i % 2 !== 0,
       color: variant === 'border' && 'red',
       shade: i > 1,
-      shape: i === 3 && 'pill'
+      shape: i === 3 && 'round'
     };
     
     if (i > 3) {
@@ -388,7 +388,7 @@ function tabsPresentation() {
         buttonGroup({
           ...c,
           padding: 2,
-          shape: i === 5 && 'pill',
+          shape: i === 5 && 'round',
           color: i === 4 && 'blue',
           shade: i === 5,
           width: 'auto',
@@ -457,13 +457,68 @@ function docs() {
     return doc.description.children[0].children[0].value;
   };
 
+  const formatType = (typeObj) => {
+    if (!typeObj) return 'any';
+    
+    // Simple named type: string, boolean, Function, etc.
+    if (typeObj.type === 'NameExpression') {
+      return typeObj.name;
+    }
+    
+    // String literal: 'round'
+    if (typeObj.type === 'StringLiteralType') {
+      return `'${typeObj.value}'`;
+    }
+    
+    // Union type: 'a'|'b'|'c' - check if it's a colors union
+    if (typeObj.type === 'UnionType') {
+      const values = typeObj.elements
+        .filter(e => e.type === 'StringLiteralType')
+        .map(e => e.value);
+      
+      // Check if this looks like a colors union (has at least 3 color names)
+      const colorMatches = values.filter(v => colors.includes(v));
+      if (colorMatches.length >= 3) {
+        // It's a colors type - return reference
+        const extras = typeObj.elements.filter(e => e.type !== 'StringLiteralType');
+        if (extras.length) {
+          return `colors | ${extras.map(formatType).join(' | ')}`;
+        }
+        return 'colors';
+      }
+      
+      return typeObj.elements.map(formatType).join(' | ');
+    }
+    
+    // Optional type: unwrap and recurse
+    if (typeObj.type === 'OptionalType') {
+      return formatType(typeObj.expression);
+    }
+    
+    // Array/generic: Array<string>
+    if (typeObj.type === 'TypeApplication') {
+      const base = formatType(typeObj.expression);
+      const args = typeObj.applications?.map(formatType).join(', ') || '';
+      return `${base}<${args}>`;
+    }
+    
+    // Object with properties: {value: string, label: string}
+    if (typeObj.type === 'RecordType') {
+      const fields = typeObj.fields?.map(f => `${f.key}: ${formatType(f.value)}`).join(', ') || '';
+      return `{${fields}}`;
+    }
+    
+    // Fallback to name if available
+    return typeObj.name || 'any';
+  };
+
   const getParams = (doc) => {
     return doc.tags
       ?.filter(t => t.title === 'param')
       .map(t => ({
         name: t.name,
         description: t.description || '',
-        type: t.type?.name || t.type?.expression?.name || 'any',
+        type: formatType(t.type),
         optional: t.type?.type === 'OptionalType'
       })) || [];
   };
@@ -494,7 +549,7 @@ function docs() {
             text.label('Parameters'),
             el('table', { class: 'docs-table', html: params.map(p => `
               <tr>
-                <td><code>${p.name}</code></td>
+                <td data-ui-col="red">${p.name}</td>
                 <td class="muted small">${p.type}${p.optional ? '?' : ''}</td>
                 <td class="small">${p.description}</td>
               </tr>
@@ -541,6 +596,20 @@ function docs() {
     });
   };
 
+  const renderConstants = () => {
+    return el('div', {
+      children: [
+        el('table', { class: 'docs-table', html: `
+          <tr>
+            <td data-ui-col="red">colors</td>
+            <td class="muted small">string[]</td>
+            <td class="small">${colors.map(c => `'${c}'`).join(', ')}</td>
+          </tr>
+        ` })
+      ]
+    });
+  };
+
   return card({ content: layout.col({ gap: 4 }, [
     text.title('Documentation / JSDoc'),
     text.label('Components', { muted: true }),
@@ -549,6 +618,8 @@ function docs() {
     layout.col({ gap: 2 }, [
       ...layoutDocs.map(renderDoc),
       renderTextGroup()
-    ].filter(Boolean))
+    ].filter(Boolean)),
+    text.label('Constants', { muted: true }),
+    renderConstants()
   ].filter(Boolean)) });
 }

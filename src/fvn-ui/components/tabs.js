@@ -18,7 +18,7 @@ const getItemValue = (item) => {
  * @param {string} [config.value] - Initially active tab value
  * @param {'default'|'outline'|'border'|'minimal'|'ghost'} [config.variant] - Tab style
  * @param {'primary'|'red'|'green'|'blue'} [config.color] - Tab color
- * @param {'pill'} [config.shape] - Tab button shape
+ * @param {'round'} [config.shape] - Tab button shape
  * @param {boolean} [config.center] - Center tabs
  * @param {boolean} [config.shade] - Shaded background
  * @param {Function} [config.onChange] - Called with (value, item)

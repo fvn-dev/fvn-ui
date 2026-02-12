@@ -73,7 +73,7 @@ Use `props: false` to disable defaults (e.g., `border: false` on card).
 ```js
 button({ label: 'Save', variant: 'primary' })
 button({ label: 'Delete', color: 'red', icon: 'trash' })
-button({ icon: 'settings', variant: 'ghost', shape: 'pill' })
+button({ icon: 'settings', variant: 'ghost', shape: 'round' })
 ```
 
 | Prop | Values |
@@ -81,7 +81,7 @@ button({ icon: 'settings', variant: 'ghost', shape: 'pill' })
 | `label` / `text` | Button text |
 | `variant` | `'default'` `'primary'` `'secondary'` `'outline'` `'ghost'` `'minimal'` |
 | `color` | `'primary'` `'red'` `'green'` `'blue'` `'pink'` `'yellow'` `'orange'` |
-| `shape` | `'pill'` |
+| `shape` | `'round'` |
 | `icon` | Icon name from svg.js |
 | `size` | `'small'` `'medium'` `'large'` |
 | `disabled` | boolean |
@@ -188,7 +188,7 @@ tabs({
 | `variant` | `'default'` `'outline'` `'border'` `'minimal'` `'ghost'` |
 | `active` | Index of initially active tab |
 | `color` | Tab color |
-| `shape` | `'pill'` |
+| `shape` | `'round'` |
 
 ---
 

@@ -3,7 +3,7 @@ import { button } from './button.js'
 import { header } from './text.js'
 import './dashboard.css'
 
-const MENU_DEFAULTS = { shape: 'pill', variant: 'ghost' };
+const MENU_DEFAULTS = { shape: 'round', variant: 'ghost' };
 
 /**
  * Creates a dashboard layout with header, menu, and view system
@@ -65,7 +65,7 @@ export function dashboard(...args) {
       button(contentEl, {
         icon: 'x',
         variant: 'ghost',
-        shape: 'pill',
+        shape: 'round',
         class: 'ui-dashboard__close',
         onClick: () => navigate(initialKey)
       });

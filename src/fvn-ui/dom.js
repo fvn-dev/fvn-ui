@@ -107,20 +107,10 @@ const applyShorthands = (settings, obj) => {
   merge(settings, obj);
 };
 
-/**
- * Parse component arguments in any order.
- * @param {Object} options - Parsing options
- * @param {Object} options.defaults - Default values
- * @param {'text'|'justify'} options.stringAs - How to interpret string args
- * @param {'merge'|'children'} options.arrayAs - How to interpret array args
- * @param {boolean} options.numberAs - Property name for number args (e.g., 'count')
- * @param {...any} args - Arguments to parse
- */
 export const parseArgs = (...args) => {
-  // Check if first arg is options object with parsing config
   const firstIsOptions = args[0]?.defaults !== undefined 
-                         || args[0]?.stringAs !== undefined 
-                         || args[0]?.arrayAs !== undefined;
+    || args[0]?.stringAs !== undefined 
+    || args[0]?.arrayAs !== undefined;
   
   const options = firstIsOptions ? args.shift() : {};
   const { 

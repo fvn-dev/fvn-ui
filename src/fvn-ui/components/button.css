@@ -37,7 +37,7 @@
 .ui-btn--sub {
   --bg: transparent;
 }
-.ui-btn--pill {
+.ui-btn--round {
    --input-padding: calc(var(--space) * .75) calc(var(--space) * 1.75);
   border-radius: 999px;
   gap: var(--space-3);

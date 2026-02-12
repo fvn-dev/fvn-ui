@@ -32,10 +32,10 @@
 
 /* --- */
 
-.ui-tabs--pill .ui-tabs--default {
+.ui-tabs--round .ui-tabs--default {
   border-radius: 999px;
 }
-.ui-tabs--pill .ui-tabs--default .ui-btn {
+.ui-tabs--round .ui-tabs--default .ui-btn {
   --input-padding: calc(var(--space) * .5) calc(var(--space) * 1.5);
   --bg: transparent;
 }

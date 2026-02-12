@@ -14,14 +14,22 @@
   display: block;
 }
 .docs-table {
+  font-family: monospace;
+  font-size: 12px;
   width: 100%;
   border-collapse: collapse;
 }
 .docs-table td {
   padding: 4px 8px 4px 0;
-  vertical-align: top;
+  color: var(--bg, var(--text));
+}
+.docs-table tr:not(:only-child) {
+  border-bottom: 1px dashed var(--border);
 }
 .docs-table code {
   font-size: 12px;
   color: var(--primary);
+}
+.ui-btn .small {
+  font-weight: 400;
 }

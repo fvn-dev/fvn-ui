@@ -9,7 +9,7 @@ import './button.css'
  * @param {string} [config.text] - Button text (alias: label)
  * @param {string} [config.icon] - Icon name from svg.js
  * @param {'default'|'primary'|'secondary'|'outline'|'ghost'|'minimal'} [config.variant='default']
- * @param {'pill'} [config.shape] - Button shape
+ * @param {'round'} [config.shape] - Button shape
  * @param {'small'|'medium'|'large'} [config.size] - Button size
  * @param {'primary'|'red'|'green'|'blue'|'pink'|'yellow'|'orange'|string[]} [config.color] - Color or array for random
  * @param {boolean} [config.disabled] - Disabled state
@@ -20,7 +20,7 @@ import './button.css'
  * @example
  * button({ label: 'Save', variant: 'primary' })
  * button({ label: 'Delete', color: 'red', icon: 'trash' })
- * button({ icon: 'settings', variant: 'ghost', shape: 'pill' })
+ * button({ icon: 'settings', variant: 'ghost', shape: 'round' })
  */
 export function button(...args) {
   const {
