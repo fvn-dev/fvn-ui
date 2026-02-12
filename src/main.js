@@ -631,10 +631,10 @@ function docs() {
     });
   };
 
-  return card({ content: layout.col({ gap: 4 }, [
+  return card({ content: layout.col({ gap: 4, width: 'full' }, [
     text.title('Documentation / JSDoc'),
     text.label('Components', { muted: true }),
-    layout.col({ gap: 2 }, componentDocs.map(renderDoc)),
+    layout.col({ gap: 2, width: 'full' }, componentDocs.map(renderDoc)),
     layoutDocs.length && text.label('Layout', { muted: true }),
     layout.col({ gap: 2 }, [
       ...layoutDocs.map(renderDoc),

@@ -42,7 +42,7 @@ export function button(...args) {
   const isCore = /primary|secondary/.test(variant);
   const isSub = /outline|ghost/.test(variant);
   const isMinimal = /minimal|stripped|none/.test(variant);
-  const filled = !isSub && !isMinimal;
+  const isFilled = !isSub && !isMinimal;
   
   const colorArray = Array.isArray(color) ? color : null;
   const pickColor = () => colorArray 
@@ -51,7 +51,7 @@ export function button(...args) {
   
   const initialColor = pickColor();
   const colorVal = isCore ? variant : (initialColor || 'default');
-  const uiCol = filled ? colorVal : (initialColor && `sub-${initialColor}`);
+  const uiCol = isFilled ? colorVal : (initialColor && `sub-${initialColor}`);
 
   const btn = el('button', parent, {
     ...rest,
@@ -60,7 +60,7 @@ export function button(...args) {
     class: [
       'ui-btn',
       variant !== 'default' && `ui-btn--${variant}`,
-      filled && 'ui-btn--filled',
+      isFilled && 'ui-btn--filled',
       isSub && 'ui-btn--sub',
       isSub && `ui-btn--hover${initialColor ? '-sub' : ''}`,
       icon && !label && 'ui-ratio--square',
@@ -96,7 +96,7 @@ export function button(...args) {
   if (colorArray) {
     btn.addEventListener('click', () => {
       const newColor = pickColor();
-      btn.dataset.uiCol = filled 
+      btn.dataset.uiCol = isFilled 
         ? (isCore ? variant : (newColor || 'default'))
         : (newColor && `sub-${newColor}`);
     });
