@@ -62,7 +62,8 @@
     "build:all": "npm run build && npm run build:browser",
     "doc": "documentation build src/fvn-ui/**/*.js -f json -o docs/api.json",
     "lint": "eslint src/",
-    "lint:fix": "eslint src/ --fix"
+    "lint:fix": "eslint src/ --fix",
+    "publish:alpha": "npm publish --tag alpha --registry https://registry.npmjs.org/ --//registry.npmjs.org/:_authToken=$(cat .npm-publish-token)"    
   },
   "devDependencies": {
     "documentation": "^14.0.3",
