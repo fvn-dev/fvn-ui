@@ -26,11 +26,11 @@ function init() {
 
   card(dom.dash, {  
     title: 'Card component',
-    description: `Yeah I'm rollin' down Rodeo wit a shotgun. These people ain't seen a brown skin man since their grandparents bought one.`,
+    description: `Look at the <a href="https://github.com/fvn-dev/fvn-ui/blob/main/src/main.js#L12" target="_blank">source code</a> for this page to see examples of how to use the components`,
     width: 'full',
     content: `
       <div class="flex justify-between w-full">
-        <label class="ui-component ui-label">Zach</label>
+        <label class="ui-component ui-label">fvn-dev</label>
         <a class="small" href="https://github.com/fvn-dev/fvn-ui" target="_blank">Github</a>
       </div>  
     `
@@ -384,6 +384,7 @@ function tabsPresentation() {
       color: variant === 'border' && 'red',
       shade: i > 1,
       shape: i === 3 && 'round',
+      padding: 6
     };
     
     if (i > 3) {
