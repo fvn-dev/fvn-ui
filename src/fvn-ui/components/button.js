@@ -2,6 +2,8 @@ import { el, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import { svg } from './svg.js'
 import './button.css'
 
+const bem = bemFactory('btn');
+
 /**
  * Creates a button element
  * @param {Object} config
@@ -22,9 +24,6 @@ import './button.css'
  * button({ label: 'Delete', color: 'red', icon: 'trash' })
  * button({ icon: 'settings', variant: 'ghost', shape: 'round' })
  */
-
-const bem = bemFactory('btn');
-
 export function button(...args) {
   const {
     parent,

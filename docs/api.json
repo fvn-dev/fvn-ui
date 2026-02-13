@@ -782,27 +782,27 @@
     ],
     "loc": {
       "start": {
-        "line": 5,
+        "line": 7,
         "column": 0,
-        "index": 125
+        "index": 157
       },
       "end": {
-        "line": 24,
+        "line": 26,
         "column": 3,
-        "index": 1247
+        "index": 1279
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 26,
+          "line": 27,
           "column": 0,
-          "index": 1249
+          "index": 1280
         },
         "end": {
-          "line": 26,
-          "column": 30,
-          "index": 1279
+          "line": 135,
+          "column": 1,
+          "index": 4035
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/button.js"
@@ -815,6 +815,14 @@
     ],
     "implements": [],
     "params": [
+      {
+        "title": "param",
+        "name": "args",
+        "lineNumber": 27,
+        "type": {
+          "type": "RestType"
+        }
+      },
       {
         "title": "param",
         "name": "config",
@@ -1223,8 +1231,8 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "bem",
-    "kind": "constant",
+    "name": "button",
+    "kind": "function",
     "members": {
       "global": [],
       "inner": [],
@@ -1234,11 +1242,11 @@
     },
     "path": [
       {
-        "name": "bem",
-        "kind": "constant"
+        "name": "button",
+        "kind": "function"
       }
     ],
-    "namespace": "bem"
+    "namespace": "button"
   },
   {
     "description": {
