@@ -1,6 +1,8 @@
 ## fvn-ui
 Minimal vanilla JS component library with layout helpers. Zero dependencies.
 
+> **🤖 AI/LLM Users**: See [AGENTS.md](./AGENTS.md) for quick reference or [LLM.md](./LLM.md) for complete documentation.
+
 ### Quick Start
 
 **Via [CDN](https://unpkg.com/fvn-ui/dist/ui.js)**
@@ -67,6 +69,93 @@ import { el, row, col, layout } from 'fvn-ui'
 layout.row({ gap: 4 }, [ button({ label: 'A' }), button({ label: 'B' }) ])
 layout.col(parent, { gap: 2, align: 'center', children: [el('div', { onclick })] })
 ```
+
+### AI Assistant Setup
+
+When using AI coding assistants with fvn-ui, copy the docs to your project for better discoverability.
+
+#### Quick Setup (all tools)
+```bash
+# Copy documentation to project root
+cp node_modules/fvn-ui/AGENTS.md .
+cp node_modules/fvn-ui/LLM.md .
+```
+
+#### Tool-Specific Rules
+
+<details>
+<summary><strong>GitHub Copilot (VS Code)</strong></summary>
+
+**Option 1: Repository instructions (recommended)**
+```bash
+mkdir -p .github && cp node_modules/fvn-ui/RULES.md .github/copilot-instructions.md
+```
+
+**Option 2: VS Code settings** (Cmd/Ctrl+Shift+P → "Preferences: Open User Settings (JSON)")
+```json
+{
+  "github.copilot.chat.codeGeneration.instructions": [
+    { "file": "AGENTS.md" },
+    { "file": "LLM.md" }
+  ]
+}
+```
+
+Copilot also auto-discovers `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` in project root.
+
+</details>
+
+<details>
+<summary><strong>Cursor</strong></summary>
+
+**Option 1: Project rules (recommended)**
+```bash
+mkdir -p .cursor/rules && cp node_modules/fvn-ui/RULES.md .cursor/rules/fvn-ui.md
+```
+
+**Option 2: Legacy `.cursorrules`** (still supported, will be deprecated)
+```bash
+cp node_modules/fvn-ui/RULES.md .cursorrules
+```
+
+**Option 3: User rules** (Cursor Settings → Rules → add global rules)
+
+Cursor also auto-discovers `AGENTS.md` in project root and subdirectories.
+
+</details>
+
+<details>
+<summary><strong>Windsurf</strong></summary>
+
+**Option 1: Workspace rules (recommended)**
+```bash
+mkdir -p .windsurf/rules && cp node_modules/fvn-ui/RULES.md .windsurf/rules/fvn-ui.md
+```
+
+**Option 2: Global rules** (applies to all projects)
+Create/edit `~/.windsurf/global_rules.md` and paste contents of RULES.md.
+
+</details>
+
+<details>
+<summary><strong>Claude (Anthropic)</strong></summary>
+
+```bash
+cp node_modules/fvn-ui/RULES.md CLAUDE.md
+```
+
+Claude looks for `CLAUDE.md` in project root.
+
+</details>
+
+<details>
+<summary><strong>Other AI Tools</strong></summary>
+
+Most AI tools look for `AGENTS.md` in the project root (already copied above).
+If your tool supports custom instructions, point it to `LLM.md` for complete documentation.
+
+</details>
+| **Other** | `cp node_modules/fvn-ui/RULES.md AGENTS.md` (may already exist) |
 
 ### Documentation
 

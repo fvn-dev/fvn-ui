@@ -1,3 +1,11 @@
+/*
+  TODO
+    - Add clamping functionality to number input component? custom arrows
+    - "copy text" icon option for input/textarea
+    - keyboard element ([enter]) to display where available (eg. input)
+    - prefix/ postfix elements for input (eg. currency symbol, units, https:// etc.)
+*/
+
 /**
  * fvn-ui — Minimalist vanilla JS component library
  * Requires a bundler that handles CSS imports (Vite, Webpack, etc.)

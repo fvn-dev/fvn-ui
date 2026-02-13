@@ -38,7 +38,10 @@
   },
   "files": [
     "src/fvn-ui",
-    "dist/ui.js"
+    "dist/ui.js",
+    "AGENTS.md",
+    "LLM.md",
+    "RULES.md"
   ],
   "keywords": [
     "ui",
