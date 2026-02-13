@@ -8,16 +8,16 @@
 }
 .ui-input::placeholder { color: var(--muted); }
 
-.ui-input-wrap {
+.ui-input__wrap {
   position: relative;
   display: flex;
   align-items: center;
   width: 100%;
 }
-.ui-input-wrap .ui-input {
+.ui-input__wrap .ui-input {
   padding-right: 40px;
 }
-.ui-input-wrap .ui-btn {
+.ui-input__wrap .ui-btn {
   position: absolute;
   top: 0;
   right: 0;
@@ -25,6 +25,6 @@
   padding: var(--input-padding);
   border-radius: 0 var(--radius) var(--radius) 0;
 }
-.ui-input-wrap.has-value .ui-btn {
+.ui-input__wrap.has-value .ui-btn {
   background: var(--hover);
 }

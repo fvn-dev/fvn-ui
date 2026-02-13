@@ -492,9 +492,9 @@ function docs() {
         // It's a colors type - return reference
         const extras = typeObj.elements.filter(e => e.type !== 'StringLiteralType');
         if (extras.length) {
-          return `colors | ${extras.map(formatType).join(' | ')}`;
+          return `color | ${extras.map(formatType).join(' | ')}`;
         }
-        return 'colors';
+        return 'color';
       }
       
       return typeObj.elements.map(formatType).join(' | ');
