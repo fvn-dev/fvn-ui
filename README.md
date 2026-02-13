@@ -5,6 +5,15 @@ Minimal vanilla JS component library with layout helpers. Zero dependencies. See
 import { layout, button, card } from 'fvn-ui'
 ```
 
+Or use the `ui` namespace for cleaner access (also avoids reserved words like `switch`):
+```js
+import { ui } from 'fvn-ui'
+
+ui.button({ label: 'Save' })
+ui.switch({ label: 'Dark mode' })
+ui.select({ options: [...] })
+```
+
 Tree-shakeable imports:
 ```js
 import 'fvn-ui/style.css'
@@ -21,9 +30,9 @@ import { card } from 'fvn-ui/card'
 | `dialog` / `modal` / `tooltip` | Modal dialogs and popovers |
 | `confirm` | Confirmation dialog with trigger button |
 | `input` | Text input with label and validation |
-| `checkbox` / `switchComponent` / `toggle` | Boolean inputs |
+| `checkbox` / `switch` / `toggle` | Boolean inputs (use `ui.switch()` or `switchComponent`) |
 | `radio` | Radio button group |
-| `selectComponent` | Dropdown with filter and multiselect |
+| `select` | Dropdown with filter and multiselect (use `ui.select()` or `selectComponent`) |
 | `tabs` | Tabbed content |
 | `collapsible` | Expandable sections |
 | `dashboard` | View management with navigation |

@@ -11,6 +11,22 @@ A minimalist vanilla JS component library. No framework, no build complexity. Us
 
 ---
 
+## Import Styles
+
+```js
+// Individual imports (tree-shakeable)
+import { button, card, layout } from 'fvn-ui'
+
+// Namespaced import (cleaner DX, avoids reserved words)
+import { ui } from 'fvn-ui'
+
+ui.button({ label: 'Save' })
+ui.switch({ label: 'Dark mode' })  // vs switchComponent
+ui.select({ options: [...] })       // vs selectComponent
+```
+
+---
+
 ## Core: `el(tag, config)`
 
 Creates DOM elements. The foundation of everything.

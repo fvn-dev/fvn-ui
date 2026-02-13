@@ -44,6 +44,14 @@ export {
   header
 } from './components/index.js'
 
+// Namespaced export for cleaner DX: ui.button(), ui.switch(), etc.
+import * as components from './components/index.js'
+export const ui = {
+  ...components,
+  select: components.selectComponent,
+  switch: components.switchComponent
+};
+
 document.body.classList.add('fvn-ui')
 
 if (matchMedia('(prefers-color-scheme: dark)').matches) {
