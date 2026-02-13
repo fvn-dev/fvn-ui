@@ -70,4 +70,4 @@ layout.col(parent, { gap: 2, align: 'center', children: [el('div', { onclick })]
 
 ### Documentation
 
-Each component has JSDoc with examples. See source files in `src/fvn-ui/components/` or [example page](https://fvn-dev.github.io/fvn-ui/).
+Each component has JSDoc with examples. See source files in `src/fvn-ui/components/` or [example page](https://fvn-dev.github.io/fvn-ui/index.html).
