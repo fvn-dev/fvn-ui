@@ -155,7 +155,6 @@ Most AI tools look for `AGENTS.md` in the project root (already copied above).
 If your tool supports custom instructions, point it to `LLM.md` for complete documentation.
 
 </details>
-| **Other** | `cp node_modules/fvn-ui/RULES.md AGENTS.md` (may already exist) |
 
 ### Documentation
 
