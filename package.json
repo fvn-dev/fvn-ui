@@ -1,6 +1,6 @@
 {
   "name": "fvn-ui",
-  "version": "0.1.0-alpha.9",
+  "version": "0.1.0-alpha.10",
   "description": "Minimalist vanilla JS component library",
   "type": "module",
   "sideEffects": [
@@ -19,6 +19,7 @@
     "./style.css": "./src/fvn-ui/style.css",
     "./button": "./src/fvn-ui/components/button.js",
     "./card": "./src/fvn-ui/components/card.js",
+    "./editable": "./src/fvn-ui/components/editable.js",
     "./dialog": "./src/fvn-ui/components/dialog.js",
     "./input": "./src/fvn-ui/components/input.js",
     "./select": "./src/fvn-ui/components/select.js",

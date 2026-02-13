@@ -5,6 +5,7 @@ import { avatar as _avatar } from './avatar.js'
 import { button as _button } from './button.js'
 import { card as _card } from './card.js'
 import { collapsible as _collapsible } from './collapsible.js'
+import { editable as _editable } from './editable.js'
 import { dashboard as _dashboard } from './dashboard.js'
 import { dialog as _dialog } from './dialog.js'
 import { image as _image } from './image.js'
@@ -55,6 +56,7 @@ export const buttonGroup = bootstrap(_tabs, 'buttonGroup', { asButtonGroup: true
 export const card = bootstrap(_card, 'card');
 export const collapsible = bootstrap(_collapsible, 'collapsible');
 export const confirm = bootstrap(_confirm, 'confirm');
+export const editable = bootstrap(_editable, 'editable');
 export const dashboard = bootstrap(_dashboard, 'dashboard');
 export const dialog = bootstrap(_dialog, 'dialog');
 export const image = bootstrap(_image, 'image');

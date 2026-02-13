@@ -40,6 +40,7 @@ import { merge } from './helpers.js'
 
 export const dom = {};
 export const colors = ['default', 'primary', 'blue', 'green', 'pink', 'red', 'orange', 'yellow'];
+export const noSpellcheck = { spellcheck: false, autocorrect: 'off', autocapitalize: 'off' };
 
 // ---- Helpers ----
 
@@ -286,7 +287,13 @@ export const patch = (node, source, state = {}) => {
       continue;
     }
 
-    // Default: assign directly to element
+    // Data attributes (data-*)
+    if (key.startsWith('data-')) {
+      node.setAttribute(key, String(val));
+      continue;
+    }
+
+    // Default: assign directly to element (works for contenteditable, tabindex, etc.)
     node[key] = val;
   }
 

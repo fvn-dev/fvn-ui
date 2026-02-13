@@ -1,0 +1,53 @@
+.ui-editable {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--input-padding);
+  color: var(--text);
+  background: var(--back);
+  width: 100%;
+  font: inherit;
+  min-height: 1.5em;
+  outline: none;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.ui-editable.ui-plain {
+  border: none;
+  padding: 0;
+}
+
+/* Placeholder via :empty and data attribute */
+.ui-editable:empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+/* Ensure minimum clickable area even when "empty" */
+.ui-editable::after {
+  content: '\200B'; /* zero-width space - ensures element never truly collapses */
+  display: inline;
+}
+
+/* Size variants */
+.ui-editable--size-large {
+  padding: calc(var(--input-padding) * 1.5);
+  font-size: 1.1em;
+}
+
+/* Single line mode */
+.ui-editable--single-line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Wrapper for label + editable */
+.ui-editable__wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+}

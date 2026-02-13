@@ -1,4 +1,4 @@
-import { el, col, getCallback, withValue, parseArgs, configToClasses, bemFactory } from '../dom.js'
+import { el, col, getCallback, withValue, parseArgs, configToClasses, bemFactory, noSpellcheck } from '../dom.js'
 import { button } from './button.js'
 import { label as textLabel } from './text.js'
 import './input.css'
@@ -69,6 +69,7 @@ export function input(...args) {
           el(inputTag, {
             ...rest,
             ...inputAttrs,
+            ...noSpellcheck,
             class: [bem(), submitCallback && bem('submit'), 'ui-border', rest.class],
             ref: (e) => {
               inputEl = e;

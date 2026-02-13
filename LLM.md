@@ -309,6 +309,60 @@ input({ label: 'Bio', rows: 4, placeholder: 'Tell us about yourself' })
 
 ---
 
+### `editable({ label, placeholder, onChange })`
+
+Rich text editable div with input-like behavior. **Solves common editable quirks.**
+
+```js
+// Multiline by default
+editable({ placeholder: 'Type here...' })
+
+// With label and change handler
+editable({ 
+  label: 'Notes', 
+  placeholder: 'Add your notes...',
+  onChange: ({ value, html }) => save(value)
+})
+
+// Single line mode (rows: 1 or multiline: false)
+editable({ 
+  label: 'Title',
+  rows: 1,
+  onSubmit: ({ value }) => rename(value)
+})
+
+// Multiline with min-height (rows sets height)
+editable({ label: 'Bio', rows: 5 })
+
+// Plain text only (strips formatting on paste)
+editable({ label: 'Code', plainText: true })
+
+// Inline style rendering (no border/ padding)
+editable({ label: 'Code', plain: true })
+```
+
+| Prop | Description |
+|------|-------------|
+| `label` | Input label |
+| `placeholder` | Shown when empty (via CSS :empty) |
+| `value` | Initial HTML content |
+| `rows` | `1` = single line, `> 1` = multiline with min-height |
+| `multiline` | `false` = single line (same as `rows: 1`) |
+| `plainText` | Strip formatting on paste |
+| `onChange` | `({ value, html, element }) => {}` |
+| `onInput` | Called on every keystroke |
+| `onSubmit` | Called on Enter (single line only) |
+| `onFocus/onBlur` | Focus events |
+
+**Features:**
+- Placeholder disappears when content is entered (`:empty` CSS)
+- Always has minimum clickable height (zero-width space trick)
+- `.value` getter/setter for text content
+- `.html` getter/setter for HTML content
+- Same `rows`/`multiline` API as `input()`
+
+---
+
 ### `switchComponent({ label, checked, onChange })`
 
 **For: settings, preferences, on/off toggles**
@@ -732,6 +786,7 @@ ui.confirm({
 | Button | `ui.button({ label: 'Click', variant: 'primary' })` |
 | Input | `ui.input({ label: 'Name', placeholder: 'Enter...' })` |
 | Textarea | `ui.input({ label: 'Bio', rows: 4 })` |
+| editable | `ui.editable({ label: 'Notes', placeholder: '...' })` |
 | Number | `ui.input({ label: 'Age', type: 'number', min: 0 })` |
 | Switch | `ui.switch({ label: 'Enable', onChange: fn })` |
 | Checkbox | `ui.checkbox({ label: 'Accept terms' })` |

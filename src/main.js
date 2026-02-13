@@ -1,7 +1,7 @@
 import './main.css';
 import apiDocs from '../docs/api.json';
 import { version } from '../package.json';
-import { dom, el, dashboard, layout, card, input, textarea, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radio, avatar, colors, collapsible, text } from './fvn-ui'
+import { dom, el, editable, dashboard, layout, card, input, textarea, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radio, avatar, colors, collapsible, text } from './fvn-ui'
 
 function init() {
   const darkmodeIcons = [ 'moon', 'sun' ];
@@ -294,7 +294,13 @@ function inputPresentation() {
       max: 7,
       clamp: true, // todo! implement clamping in the component
       placeholder: 3
-    }),    
+    }),   
+    editable({ 
+      label: 'Contenteditable { plain: true }',
+      placeholder: 'Faux text input...',
+      rows: 1,
+      plain: true
+    }) 
   ]);
 }
 

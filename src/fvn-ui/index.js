@@ -3,7 +3,7 @@
     - Add clamping functionality to number input component? custom arrows
     - "copy text" icon option for input/textarea
     - keyboard element ([enter]) to display where available (eg. input)
-    - prefix/ postfix elements for input (eg. currency symbol, units, https:// etc.)
+    - prefix/ postfix elements for input (eg. currency symbol, units, https:// etc.) https://swr.vercel.app/
 */
 
 /**
@@ -26,6 +26,7 @@ export {
   confirm,
   dashboard,
   dialog,
+  editable,
   image,
   input,
   modal,

@@ -288,6 +288,7 @@ body.fvn-ui {
 }
 
 /* ---- Focus Ring ---- */
+.ui-editable:not(.ui-plain):focus-visible,
 .ui-btn:focus-visible,
 .ui-input:focus-visible,
 .ui-select:focus-visible,
