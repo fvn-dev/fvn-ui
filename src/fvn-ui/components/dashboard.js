@@ -101,7 +101,7 @@ export function dashboard(...args) {
   );
 
   const headerEl = row('between', {
-    class: [bem.el('header'), 'border-bottom', configToClasses(props)],
+    class: [bem.el('header'), props.border !== false && 'border-bottom', configToClasses(props)],
     children: [
       header({ title, description, gap: 1, flex: 1 }),
       row({ gap: 0, class: bem.el('menu'), children: menuButtons })
