@@ -29,7 +29,7 @@ function init() {
     content: `
       <div class="flex justify-between w-full">
         <label class="ui-component ui-label">Zach</label>
-        <a class="small" href="https://github.com/fvn-dev/fvn-ui">Github</a>
+        <a class="small" href="https://github.com/fvn-dev/fvn-ui" target="_blank">Github</a>
       </div>  
     `
   });

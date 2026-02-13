@@ -2,7 +2,7 @@
 Minimal vanilla JS component library with layout helpers. Zero dependencies. See [demo](https://fvn-dev.github.io/fvn-ui/).
 
 ```js
-import { layout, button, card } from 'fvn-ui'
+import { layout, button, switchComponent } from 'fvn-ui'
 ```
 
 Or use the `ui` namespace for cleaner access (also avoids reserved words like `switch`):
@@ -11,7 +11,7 @@ import { ui } from 'fvn-ui'
 
 ui.button({ label: 'Save' })
 ui.switch({ label: 'Dark mode' })
-ui.select({ options: [...] })
+ui.layout.row([ ... ])
 ```
 
 Tree-shakeable imports:

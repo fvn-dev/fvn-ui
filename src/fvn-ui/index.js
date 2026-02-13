@@ -46,10 +46,12 @@ export {
 
 // Namespaced export for cleaner DX: ui.button(), ui.switch(), etc.
 import * as components from './components/index.js'
+import { layout } from './dom.js'
 export const ui = {
   ...components,
   select: components.selectComponent,
-  switch: components.switchComponent
+  switch: components.switchComponent,
+  layout
 };
 
 document.body.classList.add('fvn-ui')
