@@ -1,10 +1,12 @@
 {
   "name": "fvn-ui",
-  "version": "0.1.0-alpha.3",
+  "version": "0.1.0-alpha.4",
   "description": "Minimalist vanilla JS component library",
   "type": "module",
   "sideEffects": [
-    "**/*.css"
+    "**/*.css",
+    "./src/fvn-ui/index.js",
+    "./src/fvn-ui/components/*.js"
   ],
   "engines": {
     "node": ">=18"
