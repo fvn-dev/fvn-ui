@@ -551,7 +551,7 @@ function docs() {
 
     return collapsible({
       width: 'full',
-      label: `<b>${doc.name}</b> <span class="muted small">${getDescription(doc)}</span>`,
+      label: `<b>${doc.name.replace('Component', '')}</b> <span class="muted small">${getDescription(doc)}</span>`,
       content: card({ content: layout.col({ gap: 4 }, [
         params.length && el('div', {
           width: 'full',
