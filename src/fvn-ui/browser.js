@@ -5,12 +5,11 @@
  */
 
 // Import everything from the main module
-import * as fvnUI from './index.js'
+import * as ui from './index.js'
 
 // Expose to global scope
 if (typeof window !== 'undefined') {
-  window.fvnUI = fvnUI
-  window.ui = fvnUI.ui
+  window.ui = ui
 }
 
-export default fvnUI
+export default ui

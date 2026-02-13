@@ -3,18 +3,18 @@ Minimal vanilla JS component library with layout helpers. Zero dependencies.
 
 ### Quick Start
 
-**Via CDN (no bundler needed):**
+**Via [CDN](https://unpkg.com/fvn-ui/dist/ui.js)**
 ```html
-<script src="https://unpkg.com/fvn-ui/dist/fvn-ui.js"></script>
+<script src="https://unpkg.com/fvn-ui/dist/ui.js"></script>
 <script>
-  const { button, card, input, row, col } = fvnUI;
-  document.body.append(
-    card({ title: 'Hello' }, button({ label: 'Click me' }))
-  );
+  // direct
+  ui.card()
+  // or granular
+  const { card } = window.ui;
 </script>
 ```
 
-**Via npm (with bundler):**
+**Via [NPM](https://www.npmjs.com/package/fvn-ui)**
 ```bash
 npm install fvn-ui
 ```

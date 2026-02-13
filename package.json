@@ -13,7 +13,7 @@
   "module": "./src/fvn-ui/index.js",
   "exports": {
     ".": "./src/fvn-ui/index.js",
-    "./browser": "./dist/fvn-ui.js",
+    "./browser": "./dist/ui.js",
     "./style.css": "./src/fvn-ui/style.css",
     "./button": "./src/fvn-ui/components/button.js",
     "./card": "./src/fvn-ui/components/card.js",
@@ -36,7 +36,7 @@
   },
   "files": [
     "src/fvn-ui",
-    "dist/fvn-ui.js"
+    "dist/ui.js"
   ],
   "keywords": [
     "ui",

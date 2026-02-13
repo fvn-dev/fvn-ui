@@ -43,7 +43,7 @@ export default defineConfig({
       entry: resolve(__dirname, 'src/fvn-ui/browser.js'),
       name: 'fvnUI',
       formats: ['iife'],
-      fileName: () => 'fvn-ui.js'
+      fileName: () => 'ui.js'
     },
     cssCodeSplit: false,
     minify: 'esbuild'
