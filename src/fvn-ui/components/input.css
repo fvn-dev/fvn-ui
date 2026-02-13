@@ -5,6 +5,8 @@
   color: var(--text);
   background: var(--back);
   width: 100%;
+  font: inherit;
+  resize: vertical;
 }
 .ui-input::placeholder { color: var(--muted); }
 
@@ -14,14 +16,14 @@
   align-items: center;
   width: 100%;
 }
-.ui-input__wrap .ui-input {
+.ui-input__wrap .ui-input--submit {
   padding-right: 40px;
 }
 .ui-input__wrap .ui-btn {
   position: absolute;
-  top: 0;
-  right: 0;
-  height: 100%;
+  top: 1px;
+  right: 1px;
+  height: calc(100% - 2px);
   padding: var(--input-padding);
   border-radius: 0 var(--radius) var(--radius) 0;
 }

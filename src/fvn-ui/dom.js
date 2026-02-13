@@ -67,8 +67,8 @@ export const withValue = (element, getter, setter) => {
   return element;
 };
 
-export const getCallback = (preferred, obj) =>
-  obj[preferred] || obj[preferred.toLowerCase()] || obj.callback || obj.cb;
+export const getCallback = (preferred, obj, skipFallback) =>
+  obj[preferred] || obj[preferred.toLowerCase()] || (!skipFallback && (obj.callback || obj.cb));
 
 // --->
 

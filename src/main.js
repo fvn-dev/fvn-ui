@@ -1,7 +1,7 @@
 import './main.css';
 import apiDocs from '../docs/api.json';
 import { version } from '../package.json';
-import { dom, el, dashboard, layout, card, input, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radio, avatar, colors, collapsible, text } from './fvn-ui'
+import { dom, el, dashboard, layout, card, input, textarea, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radio, avatar, colors, collapsible, text } from './fvn-ui'
 
 function init() {
   const darkmodeIcons = [ 'moon', 'sun' ];
@@ -255,11 +255,11 @@ function inputPresentation() {
     layout.row({ width: 'full' }, [
       input({
         label: 'Standard',
-        placeholder: 'Textinput'
+        placeholder: 'Text input'
       }),
       input({
         label: 'Submit',
-        placeholder: 'Textinput with submit',
+        placeholder: 'Text input with submit',
         flex: 1,
         onsubmit() {
           this.style.borderColor = 'var(--primary)';
@@ -270,7 +270,7 @@ function inputPresentation() {
     layout.row({ width: 'full' }, [
       input({
         label: 'Size large',
-        placeholder: 'Textinput',
+        placeholder: 'Text input',
         size: 'large',
         flex: 1,
         onsubmit() {
@@ -278,7 +278,23 @@ function inputPresentation() {
           setTimeout(() => this.style.borderColor = '', 2000);
         }
       })
-    ]),    
+    ]), 
+    layout.row({ width: 'full' }, [
+      textarea({
+        label: 'Textarea',
+        placeholder: 'Textarea input',
+        flex: 1
+      })
+    ]),
+    input({
+      label: 'Number',
+      type: 'number',
+      width: 'full',
+      min: 3,
+      max: 7,
+      clamp: true, // todo! implement clamping in the component
+      placeholder: 3
+    }),    
   ]);
 }
 

@@ -26,6 +26,7 @@ export {
   svg,
   switchComponent,
   tabs,
+  textarea,
   toggle,
   tooltip,
 

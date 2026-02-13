@@ -6,19 +6,21 @@ import './input.css'
 const bem = bemFactory('input');
 
 /**
- * Creates a text input with optional label and submit handling
+ * Creates a text input or textarea with optional label and submit handling
  * @param {Object} config
  * @param {string} [config.label] - Input label
  * @param {string} [config.placeholder] - Placeholder text
  * @param {string} [config.value] - Initial value
  * @param {'text'|'email'|'password'|'number'} [config.type='text'] - Input type
  * @param {'default'|'large'} [config.size='default'] - Input size
- * @param {Function} [config.onSubmit] - Called on Enter key with value
+ * @param {number} [config.rows] - If set, renders a textarea with this many rows
+ * @param {Function} [config.onSubmit] - Called on Enter key with value (input only)
  * @param {string} [config.id] - Registers to dom.input[id] and dom[id]
  * @returns {HTMLDivElement} Input wrapper with .value getter/setter
  * @example
  * input({ label: 'Email', placeholder: 'you@example.com' })
  * input({ label: 'Search', onSubmit: (val) => search(val) })
+ * input({ label: 'Bio', rows: 4, placeholder: 'Tell us about yourself...' })
  */
 export function input(...args) {
   const {
@@ -26,6 +28,7 @@ export function input(...args) {
     id,
     type = 'text',
     size = 'default',
+    rows,
     icon,
     value,
     label,
@@ -35,7 +38,9 @@ export function input(...args) {
     ...rest
   } = parseArgs(...args);
 
+  const isTextarea = rows != null;
   const cb = getCallback('onSubmit', rest);
+  const submitCallback = !isTextarea && getCallback('onSubmit', rest, true);
   let wrapEl, inputEl;
 
   const submit = () => cb?.call(inputEl, inputEl.value);
@@ -47,6 +52,11 @@ export function input(...args) {
     }
   };
 
+  const inputTag = isTextarea ? 'textarea' : 'input';
+  const inputAttrs = isTextarea
+    ? { rows, id, placeholder, attrs }
+    : { type, id, value, placeholder, attrs };
+
   const root = col(parent, {
     gap: 2,
     class: [configToClasses(props), rest.class],
@@ -56,14 +66,17 @@ export function input(...args) {
         class: [bem.el('wrap'), bem.core('size', size)],
         ref: (e) => wrapEl = e,
         children: [
-          el('input', {
+          el(inputTag, {
             ...rest,
-            class: [bem(), 'ui-border', rest.class],
-            type, id, value, placeholder, attrs,
-            ref: (e) => inputEl = e,
+            ...inputAttrs,
+            class: [bem(), submitCallback && bem('submit'), 'ui-border', rest.class],
+            ref: (e) => {
+              inputEl = e;
+              if (isTextarea && value) e.textContent = value;
+            },
             onKeyup: cb && onKeyup
           }),
-          cb && button({
+          submitCallback && button({
             icon: icon || 'enter',
             muted: true,
             variant: 'ghost',

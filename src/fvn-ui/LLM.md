@@ -123,11 +123,12 @@ card({ title: 'Note', content: 'Plain text content', border: false })
 
 ---
 
-### `input({ label, placeholder, onSubmit })`
+### `input({ label, placeholder, onSubmit, rows })`
 
 ```js
 input({ label: 'Email', placeholder: 'you@example.com' })
 input({ label: 'Search', onSubmit: (value) => search(value) })
+input({ label: 'Bio', rows: 4, placeholder: 'Tell us about yourself...' })
 ```
 
 | Prop | Description |
@@ -136,7 +137,8 @@ input({ label: 'Search', onSubmit: (value) => search(value) })
 | `placeholder` | Placeholder text |
 | `value` | Initial value |
 | `size` | `'default'` `'large'` |
-| `onSubmit` | Called on Enter key |
+| `rows` | If set, renders a `<textarea>` with this many rows |
+| `onSubmit` | Called on Enter key (input only, not textarea) |
 
 ---
 

@@ -66,6 +66,7 @@ export const selectComponent = bootstrap(_selectComponent, 'select');
 export const switchComponent = bootstrap(_switchComponent, 'switch');
 export const svg = bootstrap(_svg, 'svg');
 export const tabs = bootstrap(_tabs, 'tabs');
+export const textarea = bootstrap(_input, 'textarea', { rows: 4 });
 export const toggle = bootstrap(_toggle, 'toggle');
 export const tooltip = bootstrap(_dialog, 'tooltip', { type: 'tooltip' });
 

@@ -47,7 +47,7 @@ import { card } from 'fvn-ui/card'
 | `card` | Container with title, description, content |
 | `dialog` / `modal` / `tooltip` | Modal dialogs and popovers |
 | `confirm` | Confirmation dialog with trigger button |
-| `input` | Text input with label and validation |
+| `input` / `textarea` | Text input with label and validation |
 | `checkbox` / `switch` / `toggle` | Boolean inputs (use `ui.switch()` or `switchComponent`) |
 | `radio` | Radio button group |
 | `select` | Dropdown with filter and multiselect (use `ui.select()` or `selectComponent`) |
