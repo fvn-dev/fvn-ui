@@ -43,7 +43,9 @@ export const ui = {
   ...components,
   select: components.selectComponent,
   switch: components.switchComponent,
-  layout
+  layout,
+  dom,
+  colors
 };
 
 document.body.classList.add('fvn-ui');
