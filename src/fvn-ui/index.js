@@ -45,3 +45,7 @@ export {
 } from './components/index.js'
 
 document.body.classList.add('fvn-ui')
+
+if (matchMedia('(prefers-color-scheme: dark)').matches) {
+  document.documentElement.classList.add('dark');
+}

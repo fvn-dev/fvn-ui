@@ -3,14 +3,19 @@ import apiDocs from '../docs/api.json';
 import { dom, el, dashboard, layout, card, input, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radio, avatar, colors, collapsible, text } from './fvn-ui'
 
 function init() {
+  const darkmodeIcons = [ 'moon', 'sun' ];
+  if (matchMedia('(prefers-color-scheme: dark)').matches) {
+    darkmodeIcons.reverse();
+  }
+
   dashboard(document.body, {
     id: 'dash',
     title: 'FVN-UI beta',
     description: 'Diverse junk',
     menu: [
       { icon: 'doc', view: 'doc' },
-      { icon: 'rabbit', action: () => document.body.classList.toggle('shaded') },
-      { icon: [ 'moon', 'sun' ], action: () => document.documentElement.classList.toggle('dark') }
+      { icon: [ 'rabbit', 'bird' ], action: () => document.body.classList.toggle('shaded') },
+      { icon: darkmodeIcons, action: () => document.documentElement.classList.toggle('dark') }
     ],
     views: {
       default: () => presentation(),
