@@ -104,8 +104,17 @@
   align-items: center;
   justify-content: center;
 }
-.ui-btn__icon svg {
+.ui-btn__icon > svg {
   position: absolute;
+}
+.ui-btn__icon > span {
+  position: relative;
+}
+.ui-btn__icon > span > svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .ui-btn.loading {

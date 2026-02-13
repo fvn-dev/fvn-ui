@@ -7,7 +7,7 @@ import './button.css'
  * @param {Object} config
  * @param {string} [config.label] - Button text (alias: text)
  * @param {string} [config.text] - Button text (alias: label)
- * @param {string} [config.icon] - Icon name from svg.js
+ * @param {string|string[]} [config.icon] - Icon name or array of names to cycle through
  * @param {'default'|'primary'|'secondary'|'outline'|'ghost'|'minimal'} [config.variant='default']
  * @param {'round'} [config.shape] - Button shape
  * @param {'small'|'medium'|'large'} [config.size] - Button size
@@ -56,6 +56,9 @@ export function button(...args) {
   const colorVal = isCore ? variant : (initialColor || 'default');
   const uiCol = isFilled ? colorVal : (initialColor && `sub-${initialColor}`);
 
+  const icons = Array.isArray(icon) ? icon : (icon ? [icon] : []);
+  const iconRefs = [];
+
   const btn = el('button', parent, {
     ...rest,
     type,
@@ -66,7 +69,7 @@ export function button(...args) {
       isFilled && bem('filled'),
       isSub && bem('sub'),
       isSub && `${bem('hover')}${initialColor ? '-sub' : ''}`,
-      icon && !label && bem('square'),
+      icons.length && !label && bem('square'),
       shape && !isMinimal && bem(shape),
       size && bem.core('size', size),
       muted && bem('muted'),
@@ -76,7 +79,14 @@ export function button(...args) {
     attrs,
     data: { ...dataset, uiCol },
     children: [
-      icon && el('div', { class: bem.el('icon'), html: svg(icon) }),
+      icons.length && el('div', { 
+        class: bem.el('icon'), 
+        children: icons.map((name, i) => el('span', { 
+          class: i > 0 && 'ui-hidden',
+          html: svg(name),
+          ref: e => iconRefs[i] = e
+        }))
+      }),
       label && el('div', { html: label })
     ],
     setLabel(text, duration = 5000) {
@@ -95,12 +105,30 @@ export function button(...args) {
     }
   });
 
+  const clickHandlers = [];
+
   if (isColorArray) {
-    btn.addEventListener('click', () => {
+    clickHandlers.push(() => {
       const newColor = pickColor();
       btn.dataset.uiCol = isFilled 
         ? (isCore ? variant : (newColor || 'default'))
         : (newColor && `sub-${newColor}`);
+    });
+  }
+
+  if (icons.length > 1) {
+    let idx = 0;
+    clickHandlers.push(() => {
+      iconRefs[idx].classList.add('ui-hidden');
+      idx = (idx + 1) % icons.length;
+      iconRefs[idx].classList.remove('ui-hidden');
+    });
+  }
+
+  if (clickHandlers.length) {
+    btn.addEventListener('click', () => {
+      if (btn.disabled) return;
+      clickHandlers.forEach(h => h());
     });
   }
 

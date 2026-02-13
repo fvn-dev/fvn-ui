@@ -10,7 +10,7 @@ function init() {
     menu: [
       { icon: 'doc', view: 'doc' },
       { icon: 'rabbit', action: () => document.body.classList.toggle('shaded') },
-      { icon: 'moon', action: () => document.documentElement.classList.toggle('dark') }
+      { icon: [ 'moon', 'sun' ], action: () => document.documentElement.classList.toggle('dark') }
     ],
     views: {
       default: () => presentation(),
@@ -72,7 +72,7 @@ function presentation(body) {
       },
       {
         label: 'Misc',
-        render: colorsPresentation
+        render: miscPresentation
       }
     ]
   });   
@@ -447,15 +447,13 @@ function tabsPresentation() {
 
 // ---> 
 
-function colorsPresentation() {
-  return layout.col([
+function miscPresentation() {
+  return layout.col({ gap: 6 }, [
     layout.row(colors.map(c => el(`<div data-ui-col="${c}" class="color-swatch">${c}</div>`))),
+    text.header({ title: 'Large header', description: 'With a description', large: true }),
+    text.header({ title: 'Normal header', description: 'with a description' }),
     text.label('Label'), 
     text.label('Soft label', { soft: true }),
-    text.title('Title'),
-    text.title('Large title', { large: true }),
-    text.description('Description'),
-
   ]);
 }
 

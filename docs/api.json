@@ -178,27 +178,27 @@
     ],
     "loc": {
       "start": {
-        "line": 16,
+        "line": 18,
         "column": 0,
-        "index": 364
+        "index": 412
       },
       "end": {
-        "line": 30,
+        "line": 32,
         "column": 3,
-        "index": 1163
+        "index": 1211
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 31,
+          "line": 33,
           "column": 0,
-          "index": 1164
+          "index": 1212
         },
         "end": {
-          "line": 67,
+          "line": 68,
           "column": 1,
-          "index": 2196
+          "index": 2193
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/avatar.js"
@@ -214,7 +214,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 31,
+        "lineNumber": 33,
         "type": {
           "type": "RestType"
         }
@@ -506,6 +506,749 @@
           "children": [
             {
               "type": "text",
+              "value": "Creates a button element"
+            }
+          ]
+        }
+      ]
+    },
+    "tags": [
+      {
+        "title": "param",
+        "description": null,
+        "lineNumber": 2,
+        "type": {
+          "type": "NameExpression",
+          "name": "Object"
+        },
+        "name": "config"
+      },
+      {
+        "title": "param",
+        "description": "Button text (alias: text)",
+        "lineNumber": 3,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.label"
+      },
+      {
+        "title": "param",
+        "description": "Button text (alias: label)",
+        "lineNumber": 4,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.text"
+      },
+      {
+        "title": "param",
+        "description": "Icon name or array of names to cycle through",
+        "lineNumber": 5,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "UnionType",
+            "elements": [
+              {
+                "type": "NameExpression",
+                "name": "string"
+              },
+              {
+                "type": "TypeApplication",
+                "expression": {
+                  "type": "NameExpression",
+                  "name": "Array"
+                },
+                "applications": [
+                  {
+                    "type": "NameExpression",
+                    "name": "string"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "name": "config.icon"
+      },
+      {
+        "title": "param",
+        "description": null,
+        "lineNumber": 6,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "UnionType",
+            "elements": [
+              {
+                "type": "StringLiteralType",
+                "value": "default"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "primary"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "secondary"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "outline"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "ghost"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "minimal"
+              }
+            ]
+          }
+        },
+        "name": "config.variant",
+        "default": "'default'"
+      },
+      {
+        "title": "param",
+        "description": "Button shape",
+        "lineNumber": 7,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "StringLiteralType",
+            "value": "round"
+          }
+        },
+        "name": "config.shape"
+      },
+      {
+        "title": "param",
+        "description": "Button size",
+        "lineNumber": 8,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "UnionType",
+            "elements": [
+              {
+                "type": "StringLiteralType",
+                "value": "small"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "medium"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "large"
+              }
+            ]
+          }
+        },
+        "name": "config.size"
+      },
+      {
+        "title": "param",
+        "description": "Color or array for random",
+        "lineNumber": 9,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "UnionType",
+            "elements": [
+              {
+                "type": "StringLiteralType",
+                "value": "primary"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "red"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "green"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "blue"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "pink"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "yellow"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "orange"
+              },
+              {
+                "type": "TypeApplication",
+                "expression": {
+                  "type": "NameExpression",
+                  "name": "Array"
+                },
+                "applications": [
+                  {
+                    "type": "NameExpression",
+                    "name": "string"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "name": "config.color"
+      },
+      {
+        "title": "param",
+        "description": "Disabled state",
+        "lineNumber": 10,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "boolean"
+          }
+        },
+        "name": "config.disabled"
+      },
+      {
+        "title": "param",
+        "description": "Muted appearance",
+        "lineNumber": 11,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "boolean"
+          }
+        },
+        "name": "config.muted"
+      },
+      {
+        "title": "param",
+        "description": "Click handler",
+        "lineNumber": 12,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Function"
+          }
+        },
+        "name": "config.onClick"
+      },
+      {
+        "title": "param",
+        "description": "Registers to dom.button[id] and dom[id]",
+        "lineNumber": 13,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.id"
+      },
+      {
+        "title": "returns",
+        "description": "Button element with toggleLoading() and setLabel() methods",
+        "lineNumber": 14,
+        "type": {
+          "type": "NameExpression",
+          "name": "HTMLButtonElement"
+        }
+      },
+      {
+        "title": "example",
+        "description": "button({ label: 'Save', variant: 'primary' })\nbutton({ label: 'Delete', color: 'red', icon: 'trash' })\nbutton({ icon: 'settings', variant: 'ghost', shape: 'round' })",
+        "lineNumber": 15
+      }
+    ],
+    "loc": {
+      "start": {
+        "line": 5,
+        "column": 0,
+        "index": 125
+      },
+      "end": {
+        "line": 24,
+        "column": 3,
+        "index": 1247
+      }
+    },
+    "context": {
+      "loc": {
+        "start": {
+          "line": 26,
+          "column": 0,
+          "index": 1249
+        },
+        "end": {
+          "line": 26,
+          "column": 30,
+          "index": 1279
+        }
+      },
+      "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/button.js"
+    },
+    "augments": [],
+    "examples": [
+      {
+        "description": "button({ label: 'Save', variant: 'primary' })\nbutton({ label: 'Delete', color: 'red', icon: 'trash' })\nbutton({ icon: 'settings', variant: 'ghost', shape: 'round' })"
+      }
+    ],
+    "implements": [],
+    "params": [
+      {
+        "title": "param",
+        "name": "config",
+        "lineNumber": 2,
+        "type": {
+          "type": "NameExpression",
+          "name": "Object"
+        },
+        "properties": [
+          {
+            "title": "param",
+            "name": "config.label",
+            "lineNumber": 3,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Button text (alias: text)"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "string"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.text",
+            "lineNumber": 4,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Button text (alias: label)"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "string"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.icon",
+            "lineNumber": 5,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Icon name or array of names to cycle through"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "UnionType",
+                "elements": [
+                  {
+                    "type": "NameExpression",
+                    "name": "string"
+                  },
+                  {
+                    "type": "TypeApplication",
+                    "expression": {
+                      "type": "NameExpression",
+                      "name": "Array"
+                    },
+                    "applications": [
+                      {
+                        "type": "NameExpression",
+                        "name": "string"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.variant",
+            "lineNumber": 6,
+            "type": {
+              "type": "UnionType",
+              "elements": [
+                {
+                  "type": "StringLiteralType",
+                  "value": "default"
+                },
+                {
+                  "type": "StringLiteralType",
+                  "value": "primary"
+                },
+                {
+                  "type": "StringLiteralType",
+                  "value": "secondary"
+                },
+                {
+                  "type": "StringLiteralType",
+                  "value": "outline"
+                },
+                {
+                  "type": "StringLiteralType",
+                  "value": "ghost"
+                },
+                {
+                  "type": "StringLiteralType",
+                  "value": "minimal"
+                }
+              ]
+            },
+            "default": "'default'"
+          },
+          {
+            "title": "param",
+            "name": "config.shape",
+            "lineNumber": 7,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Button shape"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "StringLiteralType",
+                "value": "round"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.size",
+            "lineNumber": 8,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Button size"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "UnionType",
+                "elements": [
+                  {
+                    "type": "StringLiteralType",
+                    "value": "small"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "medium"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "large"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.color",
+            "lineNumber": 9,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Color or array for random"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "UnionType",
+                "elements": [
+                  {
+                    "type": "StringLiteralType",
+                    "value": "primary"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "red"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "green"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "blue"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "pink"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "yellow"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "orange"
+                  },
+                  {
+                    "type": "TypeApplication",
+                    "expression": {
+                      "type": "NameExpression",
+                      "name": "Array"
+                    },
+                    "applications": [
+                      {
+                        "type": "NameExpression",
+                        "name": "string"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.disabled",
+            "lineNumber": 10,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Disabled state"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "boolean"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.muted",
+            "lineNumber": 11,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Muted appearance"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "boolean"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.onClick",
+            "lineNumber": 12,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Click handler"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "Function"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.id",
+            "lineNumber": 13,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Registers to dom.button[id] and dom[id]"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "string"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "properties": [],
+    "returns": [
+      {
+        "description": {
+          "type": "root",
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Button element with toggleLoading() and setLabel() methods"
+                }
+              ]
+            }
+          ]
+        },
+        "title": "returns",
+        "type": {
+          "type": "NameExpression",
+          "name": "HTMLButtonElement"
+        }
+      }
+    ],
+    "sees": [],
+    "throws": [],
+    "todos": [],
+    "yields": [],
+    "name": "bem",
+    "kind": "constant",
+    "members": {
+      "global": [],
+      "inner": [],
+      "instance": [],
+      "events": [],
+      "static": []
+    },
+    "path": [
+      {
+        "name": "bem",
+        "kind": "constant"
+      }
+    ],
+    "namespace": "bem"
+  },
+  {
+    "description": {
+      "type": "root",
+      "children": [
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "text",
               "value": "Creates a DOM element with flexible argument order"
             }
           ]
@@ -715,27 +1458,27 @@
     ],
     "loc": {
       "start": {
-        "line": 303,
+        "line": 302,
         "column": 0,
-        "index": 8644
+        "index": 8442
       },
       "end": {
-        "line": 323,
+        "line": 322,
         "column": 3,
-        "index": 9679
+        "index": 9477
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 324,
+          "line": 323,
           "column": 0,
-          "index": 9680
+          "index": 9478
         },
         "end": {
-          "line": 377,
+          "line": 376,
           "column": 1,
-          "index": 10765
+          "index": 10563
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/dom.js"
@@ -751,7 +1494,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 324,
+        "lineNumber": 323,
         "type": {
           "type": "RestType"
         }
@@ -1302,27 +2045,27 @@
     ],
     "loc": {
       "start": {
-        "line": 453,
+        "line": 452,
         "column": 0,
-        "index": 12641
+        "index": 12439
       },
       "end": {
-        "line": 468,
+        "line": 467,
         "column": 3,
-        "index": 13457
+        "index": 13255
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 469,
+          "line": 468,
           "column": 0,
-          "index": 13458
+          "index": 13256
         },
         "end": {
-          "line": 469,
+          "line": 468,
           "column": 100,
-          "index": 13558
+          "index": 13356
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/dom.js"
@@ -1338,7 +2081,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 469,
+        "lineNumber": 468,
         "type": {
           "type": "RestType"
         }
@@ -1756,27 +2499,27 @@
     ],
     "loc": {
       "start": {
-        "line": 471,
+        "line": 470,
         "column": 0,
-        "index": 13560
+        "index": 13358
       },
       "end": {
-        "line": 486,
+        "line": 485,
         "column": 3,
-        "index": 14407
+        "index": 14205
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 487,
+          "line": 486,
           "column": 0,
-          "index": 14408
+          "index": 14206
         },
         "end": {
-          "line": 487,
+          "line": 486,
           "column": 99,
-          "index": 14507
+          "index": 14305
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/dom.js"
@@ -1792,7 +2535,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 487,
+        "lineNumber": 486,
         "type": {
           "type": "RestType"
         }
@@ -2065,721 +2808,6 @@
           "children": [
             {
               "type": "text",
-              "value": "Creates a button element"
-            }
-          ]
-        }
-      ]
-    },
-    "tags": [
-      {
-        "title": "param",
-        "description": null,
-        "lineNumber": 2,
-        "type": {
-          "type": "NameExpression",
-          "name": "Object"
-        },
-        "name": "config"
-      },
-      {
-        "title": "param",
-        "description": "Button text (alias: text)",
-        "lineNumber": 3,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.label"
-      },
-      {
-        "title": "param",
-        "description": "Button text (alias: label)",
-        "lineNumber": 4,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.text"
-      },
-      {
-        "title": "param",
-        "description": "Icon name from svg.js",
-        "lineNumber": 5,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.icon"
-      },
-      {
-        "title": "param",
-        "description": null,
-        "lineNumber": 6,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "UnionType",
-            "elements": [
-              {
-                "type": "StringLiteralType",
-                "value": "default"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "primary"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "secondary"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "outline"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "ghost"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "minimal"
-              }
-            ]
-          }
-        },
-        "name": "config.variant",
-        "default": "'default'"
-      },
-      {
-        "title": "param",
-        "description": "Button shape",
-        "lineNumber": 7,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "StringLiteralType",
-            "value": "round"
-          }
-        },
-        "name": "config.shape"
-      },
-      {
-        "title": "param",
-        "description": "Button size",
-        "lineNumber": 8,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "UnionType",
-            "elements": [
-              {
-                "type": "StringLiteralType",
-                "value": "small"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "medium"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "large"
-              }
-            ]
-          }
-        },
-        "name": "config.size"
-      },
-      {
-        "title": "param",
-        "description": "Color or array for random",
-        "lineNumber": 9,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "UnionType",
-            "elements": [
-              {
-                "type": "StringLiteralType",
-                "value": "primary"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "red"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "green"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "blue"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "pink"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "yellow"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "orange"
-              },
-              {
-                "type": "TypeApplication",
-                "expression": {
-                  "type": "NameExpression",
-                  "name": "Array"
-                },
-                "applications": [
-                  {
-                    "type": "NameExpression",
-                    "name": "string"
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        "name": "config.color"
-      },
-      {
-        "title": "param",
-        "description": "Disabled state",
-        "lineNumber": 10,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "boolean"
-          }
-        },
-        "name": "config.disabled"
-      },
-      {
-        "title": "param",
-        "description": "Muted appearance",
-        "lineNumber": 11,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "boolean"
-          }
-        },
-        "name": "config.muted"
-      },
-      {
-        "title": "param",
-        "description": "Click handler",
-        "lineNumber": 12,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Function"
-          }
-        },
-        "name": "config.onClick"
-      },
-      {
-        "title": "param",
-        "description": "Registers to dom.button[id] and dom[id]",
-        "lineNumber": 13,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.id"
-      },
-      {
-        "title": "returns",
-        "description": "Button element with toggleLoading() and setLabel() methods",
-        "lineNumber": 14,
-        "type": {
-          "type": "NameExpression",
-          "name": "HTMLButtonElement"
-        }
-      },
-      {
-        "title": "example",
-        "description": "button({ label: 'Save', variant: 'primary' })\nbutton({ label: 'Delete', color: 'red', icon: 'trash' })\nbutton({ icon: 'settings', variant: 'ghost', shape: 'round' })",
-        "lineNumber": 15
-      }
-    ],
-    "loc": {
-      "start": {
-        "line": 5,
-        "column": 0,
-        "index": 112
-      },
-      "end": {
-        "line": 24,
-        "column": 3,
-        "index": 1202
-      }
-    },
-    "context": {
-      "loc": {
-        "start": {
-          "line": 25,
-          "column": 0,
-          "index": 1203
-        },
-        "end": {
-          "line": 107,
-          "column": 1,
-          "index": 3386
-        }
-      },
-      "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/button.js"
-    },
-    "augments": [],
-    "examples": [
-      {
-        "description": "button({ label: 'Save', variant: 'primary' })\nbutton({ label: 'Delete', color: 'red', icon: 'trash' })\nbutton({ icon: 'settings', variant: 'ghost', shape: 'round' })"
-      }
-    ],
-    "implements": [],
-    "params": [
-      {
-        "title": "param",
-        "name": "args",
-        "lineNumber": 25,
-        "type": {
-          "type": "RestType"
-        }
-      },
-      {
-        "title": "param",
-        "name": "config",
-        "lineNumber": 2,
-        "type": {
-          "type": "NameExpression",
-          "name": "Object"
-        },
-        "properties": [
-          {
-            "title": "param",
-            "name": "config.label",
-            "lineNumber": 3,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Button text (alias: text)"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "string"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.text",
-            "lineNumber": 4,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Button text (alias: label)"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "string"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.icon",
-            "lineNumber": 5,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Icon name from svg.js"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "string"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.variant",
-            "lineNumber": 6,
-            "type": {
-              "type": "UnionType",
-              "elements": [
-                {
-                  "type": "StringLiteralType",
-                  "value": "default"
-                },
-                {
-                  "type": "StringLiteralType",
-                  "value": "primary"
-                },
-                {
-                  "type": "StringLiteralType",
-                  "value": "secondary"
-                },
-                {
-                  "type": "StringLiteralType",
-                  "value": "outline"
-                },
-                {
-                  "type": "StringLiteralType",
-                  "value": "ghost"
-                },
-                {
-                  "type": "StringLiteralType",
-                  "value": "minimal"
-                }
-              ]
-            },
-            "default": "'default'"
-          },
-          {
-            "title": "param",
-            "name": "config.shape",
-            "lineNumber": 7,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Button shape"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "StringLiteralType",
-                "value": "round"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.size",
-            "lineNumber": 8,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Button size"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "UnionType",
-                "elements": [
-                  {
-                    "type": "StringLiteralType",
-                    "value": "small"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "medium"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "large"
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.color",
-            "lineNumber": 9,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Color or array for random"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "UnionType",
-                "elements": [
-                  {
-                    "type": "StringLiteralType",
-                    "value": "primary"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "red"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "green"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "blue"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "pink"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "yellow"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "orange"
-                  },
-                  {
-                    "type": "TypeApplication",
-                    "expression": {
-                      "type": "NameExpression",
-                      "name": "Array"
-                    },
-                    "applications": [
-                      {
-                        "type": "NameExpression",
-                        "name": "string"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.disabled",
-            "lineNumber": 10,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Disabled state"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "boolean"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.muted",
-            "lineNumber": 11,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Muted appearance"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "boolean"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.onClick",
-            "lineNumber": 12,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Click handler"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "Function"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.id",
-            "lineNumber": 13,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Registers to dom.button[id] and dom[id]"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "string"
-              }
-            }
-          }
-        ]
-      }
-    ],
-    "properties": [],
-    "returns": [
-      {
-        "description": {
-          "type": "root",
-          "children": [
-            {
-              "type": "paragraph",
-              "children": [
-                {
-                  "type": "text",
-                  "value": "Button element with toggleLoading() and setLabel() methods"
-                }
-              ]
-            }
-          ]
-        },
-        "title": "returns",
-        "type": {
-          "type": "NameExpression",
-          "name": "HTMLButtonElement"
-        }
-      }
-    ],
-    "sees": [],
-    "throws": [],
-    "todos": [],
-    "yields": [],
-    "name": "button",
-    "kind": "function",
-    "members": {
-      "global": [],
-      "inner": [],
-      "instance": [],
-      "events": [],
-      "static": []
-    },
-    "path": [
-      {
-        "name": "button",
-        "kind": "function"
-      }
-    ],
-    "namespace": "button"
-  },
-  {
-    "description": {
-      "type": "root",
-      "children": [
-        {
-          "type": "paragraph",
-          "children": [
-            {
-              "type": "text",
               "value": "Creates a card container with optional header"
             }
           ]
@@ -2919,27 +2947,27 @@
     ],
     "loc": {
       "start": {
-        "line": 5,
+        "line": 7,
         "column": 0,
-        "index": 119
+        "index": 165
       },
       "end": {
-        "line": 18,
+        "line": 20,
         "column": 3,
-        "index": 815
+        "index": 861
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 19,
+          "line": 21,
           "column": 0,
-          "index": 816
+          "index": 862
         },
         "end": {
-          "line": 73,
+          "line": 74,
           "column": 1,
-          "index": 1995
+          "index": 2019
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/card.js"
@@ -2955,7 +2983,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 19,
+        "lineNumber": 21,
         "type": {
           "type": "RestType"
         }
@@ -3349,27 +3377,27 @@
     ],
     "loc": {
       "start": {
-        "line": 7,
+        "line": 9,
         "column": 0,
-        "index": 205
+        "index": 255
       },
       "end": {
-        "line": 21,
+        "line": 23,
         "column": 3,
-        "index": 920
+        "index": 970
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 22,
+          "line": 24,
           "column": 0,
-          "index": 921
+          "index": 971
         },
         "end": {
-          "line": 80,
+          "line": 81,
           "column": 1,
-          "index": 2329
+          "index": 2358
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/checkbox.js"
@@ -3385,7 +3413,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 22,
+        "lineNumber": 24,
         "type": {
           "type": "RestType"
         }
@@ -3771,27 +3799,27 @@
     ],
     "loc": {
       "start": {
-        "line": 6,
+        "line": 8,
         "column": 0,
-        "index": 183
+        "index": 236
       },
       "end": {
-        "line": 19,
+        "line": 21,
         "column": 3,
-        "index": 886
+        "index": 939
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 20,
+          "line": 22,
           "column": 0,
-          "index": 887
+          "index": 940
         },
         "end": {
-          "line": 70,
+          "line": 71,
           "column": 1,
-          "index": 2042
+          "index": 2057
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/collapsible.js"
@@ -3807,7 +3835,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 20,
+        "lineNumber": 22,
         "type": {
           "type": "RestType"
         }
@@ -4352,27 +4380,27 @@
     ],
     "loc": {
       "start": {
-        "line": 6,
+        "line": 8,
         "column": 0,
-        "index": 181
+        "index": 229
       },
       "end": {
-        "line": 28,
+        "line": 30,
         "column": 3,
-        "index": 1685
+        "index": 1733
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 29,
+          "line": 31,
           "column": 0,
-          "index": 1686
+          "index": 1734
         },
         "end": {
-          "line": 107,
+          "line": 108,
           "column": 1,
-          "index": 3547
+          "index": 3573
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/confirm.js"
@@ -4388,7 +4416,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 29,
+        "lineNumber": 31,
         "type": {
           "type": "RestType"
         }
@@ -5037,27 +5065,27 @@
     ],
     "loc": {
       "start": {
-        "line": 8,
+        "line": 9,
         "column": 0,
-        "index": 227
+        "index": 277
       },
       "end": {
-        "line": 24,
+        "line": 25,
         "column": 3,
-        "index": 1077
+        "index": 1127
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 25,
+          "line": 26,
           "column": 0,
-          "index": 1078
+          "index": 1128
         },
         "end": {
           "line": 129,
           "column": 1,
-          "index": 3281
+          "index": 3282
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/dashboard.js"
@@ -5073,7 +5101,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 25,
+        "lineNumber": 26,
         "type": {
           "type": "RestType"
         }
@@ -5558,27 +5586,27 @@
     ],
     "loc": {
       "start": {
-        "line": 6,
+        "line": 8,
         "column": 0,
-        "index": 171
+        "index": 256
       },
       "end": {
-        "line": 28,
+        "line": 30,
         "column": 3,
-        "index": 1492
+        "index": 1577
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 29,
+          "line": 31,
           "column": 0,
-          "index": 1493
+          "index": 1578
         },
         "end": {
-          "line": 300,
+          "line": 301,
           "column": 1,
-          "index": 9729
+          "index": 9784
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/dialog.js"
@@ -5594,7 +5622,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 29,
+        "lineNumber": 31,
         "type": {
           "type": "RestType"
         }
@@ -6148,27 +6176,27 @@
     ],
     "loc": {
       "start": {
-        "line": 23,
+        "line": 25,
         "column": 0,
-        "index": 512
+        "index": 559
       },
       "end": {
-        "line": 34,
+        "line": 36,
         "column": 3,
-        "index": 1000
+        "index": 1047
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 35,
+          "line": 37,
           "column": 0,
-          "index": 1001
+          "index": 1048
         },
         "end": {
-          "line": 68,
+          "line": 69,
           "column": 1,
-          "index": 1770
+          "index": 1794
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/image.js"
@@ -6184,7 +6212,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 35,
+        "lineNumber": 37,
         "type": {
           "type": "RestType"
         }
@@ -6505,27 +6533,27 @@
     ],
     "loc": {
       "start": {
-        "line": 6,
+        "line": 8,
         "column": 0,
-        "index": 193
+        "index": 240
       },
       "end": {
-        "line": 20,
+        "line": 22,
         "column": 3,
-        "index": 943
+        "index": 990
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 21,
+          "line": 23,
           "column": 0,
-          "index": 944
+          "index": 991
         },
         "end": {
-          "line": 79,
+          "line": 80,
           "column": 1,
-          "index": 2298
+          "index": 2332
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/input.js"
@@ -6541,7 +6569,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 21,
+        "lineNumber": 23,
         "type": {
           "type": "RestType"
         }
@@ -6969,27 +6997,27 @@
     ],
     "loc": {
       "start": {
-        "line": 6,
+        "line": 8,
         "column": 0,
-        "index": 176
+        "index": 218
       },
       "end": {
-        "line": 19,
+        "line": 21,
         "column": 3,
-        "index": 937
+        "index": 974
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 20,
+          "line": 22,
           "column": 0,
-          "index": 938
+          "index": 975
         },
         "end": {
-          "line": 97,
+          "line": 98,
           "column": 1,
-          "index": 3462
+          "index": 3465
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/radio.js"
@@ -7005,7 +7033,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 20,
+        "lineNumber": 22,
         "type": {
           "type": "RestType"
         }
@@ -7452,27 +7480,27 @@
     ],
     "loc": {
       "start": {
-        "line": 7,
+        "line": 9,
         "column": 0,
-        "index": 239
+        "index": 287
       },
       "end": {
-        "line": 27,
+        "line": 29,
         "column": 3,
-        "index": 1662
+        "index": 1710
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 28,
+          "line": 30,
           "column": 0,
-          "index": 1663
+          "index": 1711
         },
         "end": {
-          "line": 364,
+          "line": 365,
           "column": 1,
-          "index": 11472
+          "index": 11483
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/select.js"
@@ -7488,7 +7516,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 28,
+        "lineNumber": 30,
         "type": {
           "type": "RestType"
         }
@@ -7950,27 +7978,27 @@
     ],
     "loc": {
       "start": {
-        "line": 5,
+        "line": 7,
         "column": 0,
-        "index": 152
+        "index": 200
       },
       "end": {
-        "line": 18,
+        "line": 20,
         "column": 3,
-        "index": 869
+        "index": 917
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 19,
+          "line": 21,
           "column": 0,
-          "index": 870
+          "index": 918
         },
         "end": {
-          "line": 83,
+          "line": 84,
           "column": 1,
-          "index": 2258
+          "index": 2278
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/switch.js"
@@ -7986,7 +8014,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 19,
+        "lineNumber": 21,
         "type": {
           "type": "RestType"
         }
@@ -8424,27 +8452,27 @@
     ],
     "loc": {
       "start": {
-        "line": 13,
+        "line": 15,
         "column": 0,
-        "index": 328
+        "index": 374
       },
       "end": {
-        "line": 29,
+        "line": 31,
         "column": 3,
-        "index": 1233
+        "index": 1279
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 30,
+          "line": 32,
           "column": 0,
-          "index": 1234
+          "index": 1280
         },
         "end": {
-          "line": 184,
+          "line": 185,
           "column": 1,
-          "index": 5236
+          "index": 5237
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/tabs.js"
@@ -8460,7 +8488,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 30,
+        "lineNumber": 32,
         "type": {
           "type": "RestType"
         }
@@ -8871,12 +8899,12 @@
       "start": {
         "line": 4,
         "column": 0,
-        "index": 84
+        "index": 85
       },
       "end": {
         "line": 12,
         "column": 3,
-        "index": 385
+        "index": 386
       }
     },
     "context": {
@@ -8884,12 +8912,12 @@
         "start": {
           "line": 13,
           "column": 0,
-          "index": 386
+          "index": 387
         },
         "end": {
           "line": 22,
           "column": 2,
-          "index": 705
+          "index": 694
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/text.js"
@@ -9121,12 +9149,12 @@
       "start": {
         "line": 24,
         "column": 0,
-        "index": 707
+        "index": 696
       },
       "end": {
         "line": 32,
         "column": 3,
-        "index": 988
+        "index": 977
       }
     },
     "context": {
@@ -9134,12 +9162,12 @@
         "start": {
           "line": 33,
           "column": 0,
-          "index": 989
+          "index": 978
         },
         "end": {
           "line": 41,
           "column": 2,
-          "index": 1290
+          "index": 1267
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/text.js"
@@ -9397,12 +9425,12 @@
       "start": {
         "line": 43,
         "column": 0,
-        "index": 1292
+        "index": 1269
       },
       "end": {
         "line": 53,
         "column": 3,
-        "index": 1664
+        "index": 1641
       }
     },
     "context": {
@@ -9410,12 +9438,12 @@
         "start": {
           "line": 54,
           "column": 0,
-          "index": 1665
+          "index": 1642
         },
         "end": {
           "line": 62,
           "column": 2,
-          "index": 1960
+          "index": 1925
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/text.js"
@@ -9709,12 +9737,12 @@
       "start": {
         "line": 64,
         "column": 0,
-        "index": 1962
+        "index": 1927
       },
       "end": {
         "line": 73,
         "column": 3,
-        "index": 2322
+        "index": 2287
       }
     },
     "context": {
@@ -9722,12 +9750,12 @@
         "start": {
           "line": 74,
           "column": 0,
-          "index": 2323
+          "index": 2288
         },
         "end": {
           "line": 95,
           "column": 2,
-          "index": 2765
+          "index": 2730
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/text.js"
@@ -10048,27 +10076,27 @@
     ],
     "loc": {
       "start": {
-        "line": 4,
+        "line": 6,
         "column": 0,
-        "index": 105
+        "index": 153
       },
       "end": {
-        "line": 17,
+        "line": 19,
         "column": 3,
-        "index": 864
+        "index": 912
       }
     },
     "context": {
       "loc": {
         "start": {
-          "line": 18,
+          "line": 20,
           "column": 0,
-          "index": 865
+          "index": 913
         },
         "end": {
-          "line": 58,
+          "line": 59,
           "column": 1,
-          "index": 1697
+          "index": 1723
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/toggle.js"
@@ -10084,7 +10112,7 @@
       {
         "title": "param",
         "name": "args",
-        "lineNumber": 18,
+        "lineNumber": 20,
         "type": {
           "type": "RestType"
         }

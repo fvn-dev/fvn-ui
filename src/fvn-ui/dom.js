@@ -108,9 +108,9 @@ export const configToClasses = (config, exclude = []) => {
   if (!config) return [];
   return Object.entries(config)
     .filter(([key, val]) => 
-      key in CLASS_SHORTHANDS && 
-      !exclude.includes(key) &&
-      val !== undefined && val !== null && val !== false
+      key in CLASS_SHORTHANDS 
+      && !exclude.includes(key)
+      && val !== undefined && val !== null && val !== false
     )
     .map(([key, val]) => {
       const prefix = CLASS_SHORTHANDS[key];

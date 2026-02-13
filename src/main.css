@@ -36,10 +36,11 @@
 .color-swatch {
   width: 80px;
   height: 80px;
-  border-radius: var(--radius);
+  border-radius: 50%; 
   background: var(--bg);
   color: var(--fg);
   font-size: 75%;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1px;
   display: flex;
