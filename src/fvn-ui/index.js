@@ -38,7 +38,7 @@ export {
 
 // Namespaced export for cleaner DX: ui.button(), ui.switch(), etc.
 import * as components from './components/index.js'
-import { layout } from './dom.js'
+import { layout, dom, colors } from './dom.js'
 export const ui = {
   ...components,
   select: components.selectComponent,
