@@ -1,5 +1,6 @@
 import './main.css';
 import apiDocs from '../docs/api.json';
+import { version } from '../package.json';
 import { dom, el, dashboard, layout, card, input, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radio, avatar, colors, collapsible, text } from './fvn-ui'
 
 function init() {
@@ -10,8 +11,8 @@ function init() {
 
   dashboard(document.body, {
     id: 'dash',
-    title: 'FVN-UI beta',
-    description: 'Diverse junk',
+    title: 'FVN-UI',
+    description: `v${version}`,
     menu: [
       { icon: 'doc', view: 'doc' },
       { icon: [ 'rabbit', 'bird' ], action: () => document.body.classList.toggle('shaded') },
