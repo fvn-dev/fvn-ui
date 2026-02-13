@@ -1,5 +1,5 @@
 ## fvn-ui
-Minimal vanilla JS component library with layout helpers. Zero dependencies. See [demo](https://fvn-dev.github.io/fvn-ui/).
+Minimal vanilla JS component library with layout helpers. Zero dependencies.
 
 ```js
 import { layout, button, switchComponent } from 'fvn-ui'
@@ -52,4 +52,4 @@ layout.col(parent, { gap: 2, align: 'center', children: [el('div', { onclick })]
 
 ### Documentation
 
-Each component has JSDoc with examples. See source files in `src/fvn-ui/components/`.
+Each component has JSDoc with examples. See source files in `src/fvn-ui/components/` or [example page](https://fvn-dev.github.io/fvn-ui/).
