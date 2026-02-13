@@ -1,8 +1,11 @@
 {
   "name": "fvn-ui",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.1",
   "description": "Minimalist vanilla JS component library",
   "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "engines": {
     "node": ">=18"
   },
@@ -41,7 +44,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/fvn-ui"
+    "url": "https://github.com/fvn-dev/fvn-ui"
   },
   "scripts": {
     "dev": "vite",

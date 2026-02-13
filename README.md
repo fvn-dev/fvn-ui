@@ -1,6 +1,8 @@
 ## fvn-ui
 Minimal vanilla JS component library with layout helpers. Zero dependencies.
 
+> **Note:** Requires a bundler that handles CSS imports (Vite, Webpack, Parcel, etc.)
+
 ```js
 import { layout, button, switchComponent } from 'fvn-ui'
 ```

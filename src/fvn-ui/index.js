@@ -1,12 +1,6 @@
-/*
-  todo! 
-    • collapsible with "card" 
-    • toggle with "card"
-
-*/
-
 /**
  * fvn-ui — Minimalist vanilla JS component library
+ * Requires a bundler that handles CSS imports (Vite, Webpack, etc.)
  * @see ./LLM.md for usage reference
  */
 import './style.css'
@@ -52,7 +46,7 @@ export const ui = {
   layout
 };
 
-document.body.classList.add('fvn-ui')
+document.body.classList.add('fvn-ui');
 
 if (matchMedia('(prefers-color-scheme: dark)').matches) {
   document.documentElement.classList.add('dark');
