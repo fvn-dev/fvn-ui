@@ -16,7 +16,7 @@
     el.create.div({ class: 'foo' })              // tag proxy
 
   Config options:
-    class | className | classList  - string | array | object → adds classes
+    class                          - string | array | object → adds classes
     text                           - string → sets textContent (safe)
     html                           - string → sets innerHTML (trusted only)
     data | dataset                 - object → data-* attributes
@@ -216,12 +216,8 @@ const patchHandlers = {
 };
 
 export const patch = (node, source, state = {}) => {
-  // Collect and apply all class sources
-  const classes = [
-    ...toClassList(source.classList),
-    ...toClassList(source.className),
-    ...toClassList(source.class)
-  ];
+  // Apply classes (supports string, array, or object)
+  const classes = toClassList(source.class);
   for (const c of classes) {
     node.classList.add(c);
   }
@@ -314,7 +310,7 @@ const template = document.createElement('template');
  * @param {string} tag - HTML tag name or HTML string (e.g. 'div' or '<div class="foo">')
  * @param {Node} [parent] - Parent element to append to
  * @param {Object} [config] - Element configuration
- * @param {string|string[]} [config.class] - CSS class(es)
+ * @param {string|string[]|Object} [config.class] - CSS class(es) - string, array, or object (truthy keys)
  * @param {string} [config.text] - Text content
  * @param {string} [config.html] - HTML content
  * @param {Object} [config.style] - Inline styles
@@ -424,16 +420,13 @@ const createLayout = (direction, defaults, ...args) => {
 
   // Generate placeholder children if count provided
   if (!children && count > 0) {
-    const space = padding || inline || block;
-    const spacePrefix = (padding && 'pad') || (inline && 'inline') || (block && 'block');
-    
     children = Array.from({ length: count }, (_, i) => 
       el('div', { 
         class: [
           'flex',
           isRow && 'align-center',
           !isRow && 'flex-col',
-          space && `${spacePrefix}-${space}`,
+          // space && `${spacePrefix}-${space}`,
           !isNaN(gap) && `gap-${gap}`,
           Number.isInteger(flex) && `flex-${flex}`,
           isRow && count === 2 && (i === count - 1 ? 'justify-end' : 'justify-start')
@@ -441,6 +434,9 @@ const createLayout = (direction, defaults, ...args) => {
       })
     );
   }
+
+  const space = padding ?? inline ?? block;
+  const spacePrefix = padding != null ? 'pad' : inline != null ? 'inline' : block != null ? 'block' : null;
 
   return el('div', parent, {
     ...rest,
@@ -450,6 +446,7 @@ const createLayout = (direction, defaults, ...args) => {
       !isRow && 'flex-col',
       `align-${flex ? 'stretch' : align}`,
       `justify-${justify}`,
+      spacePrefix && `${spacePrefix}-${space}`,
       !isNaN(gap) && `gap-${gap}`,
       full && 'min-h-screen',
       width && (width === 'full' ? 'w-full' : `w-${width}`),

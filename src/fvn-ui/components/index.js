@@ -18,7 +18,7 @@ import { tabs as _tabs } from './tabs.js'
 import { toggle as _toggle } from './toggle.js'
 import { text, title, description, header, label } from './text.js'
 
-export const BASE_CLASS = 'ui-component';
+const BASE_CLASS = 'ui-component';
 
 const slugify = (str) => String(str || '')
   .toLowerCase()
@@ -28,7 +28,7 @@ const slugify = (str) => String(str || '')
 const bootstrap = (componentFn, componentName, customConfig) => (...args) => {
   const idx = args.findIndex((a) => a && typeof a === 'object' && !(a instanceof Node) && !Array.isArray(a));
   const obj = idx !== -1 ? args[idx] : (args.push({}), args.at(-1));
-  (obj.classList ||= []).unshift(BASE_CLASS);
+  obj.class = [BASE_CLASS, obj.class];
   
   if (customConfig) {
     Object.assign(obj, customConfig);

@@ -1,5 +1,4 @@
 import { el, getCallback, withValue, parseArgs, configToClasses, bemFactory } from '../dom.js'
-import { BASE_CLASS } from './index.js'
 import { button } from './button.js'
 import './tabs.css'
 
@@ -56,10 +55,7 @@ export function tabs(...args) {
   const isCentered = rest.align === 'center' || rest.center;
   const isColorizable = ['border', 'ghost'].includes(variant);
   const buttonVariant = variant === 'border' ? 'outline' : (variant || 'none');
-  const withBorder = border !== false && /outline|border/.test(variant);
-  const withShade = shade;
-  const hasPadding = padding !== undefined;
-  const hasWidth = width !== undefined;
+  const withBorder = border !== false && !shade;
 
   let output;
   let current = value || getItemValue(items[active]) || '';
@@ -129,14 +125,13 @@ export function tabs(...args) {
   const root = el('div', parent, {
     ...rest,
     class: [ 
-      BASE_CLASS, 
       bem(), 
       shape && bem(shape),
-      !hasWidth && 'w-full', 
+      `w-${width || 'full'}`, 
       'flex', 
       'flex-col', 
       !withBorder && 'gap-2',
-      withShade && bem('shade'),
+      shade && bem('shade'),
       configToClasses(props, ['shade']),
       rest.class
     ],
@@ -168,8 +163,8 @@ export function tabs(...args) {
       !asButtonGroup && el('div', { 
         class: [
           bem.el('panel'), 
-          withBorder && ['border', 'padding'],
-          hasPadding && `pad-${padding}`
+          withBorder && 'border',
+          Number.isInteger(padding) ? `pad-${padding}` : (withBorder || shade) && 'pad'
         ],
         ref: (e) => output = e 
       })

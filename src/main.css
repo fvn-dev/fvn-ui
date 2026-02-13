@@ -1,3 +1,7 @@
+html { scrollbar-width: none; } /* Firefox */
+body { -ms-overflow-style: none; } /* IE and Edge */
+body::-webkit-scrollbar, body::-webkit-scrollbar-button { display: none; } /* Chrome */
+
 .ui-dashboard {
   max-width: 1000px;
   margin: 0 auto;

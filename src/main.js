@@ -432,7 +432,6 @@ function tabsPresentation() {
 
     return tabs({
       ...c,
-      padding: 4,
       items: [
         {
           label: 'One',

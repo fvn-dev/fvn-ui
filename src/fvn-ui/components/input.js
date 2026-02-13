@@ -57,11 +57,11 @@ export function input(...args) {
         ref: (e) => wrapEl = e,
         children: [
           el('input', {
-            class: [bem(), 'ui-border'],
+            ...rest,
+            class: [bem(), 'ui-border', rest.class],
             type, id, value, placeholder, attrs,
             ref: (e) => inputEl = e,
-            onKeyup: cb && onKeyup,
-            ...rest
+            onKeyup: cb && onKeyup
           }),
           cb && button({
             icon: icon || 'enter',

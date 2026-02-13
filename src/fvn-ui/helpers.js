@@ -3,6 +3,12 @@ export const merge = (target, ...sources) => {
     for (const [key, val] of Object.entries(source)) {
       const existing = target[key];
 
+      // Special handling for 'class' - always merge, never replace
+      if (key === 'class') {
+        target.class = [existing, val];
+        continue;
+      }
+
       // Merge arrays
       if (Array.isArray(existing) && Array.isArray(val)) {
         existing.push(...val);

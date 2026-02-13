@@ -14,8 +14,6 @@ import './style.css'
 export { dom, colors, el, row, col, layout } from './dom.js'
 export { template, processTemplates, autoProcess } from './template.js'
 
-export { BASE_CLASS } from './components/index.js'
-
 export {
   avatar,
   button,
