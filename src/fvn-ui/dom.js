@@ -70,6 +70,16 @@ export const withValue = (element, getter, setter) => {
 export const getCallback = (preferred, obj) =>
   obj[preferred] || obj[preferred.toLowerCase()] || obj.callback || obj.cb;
 
+// --->
+
+export const bemFactory = name => {
+  const base = `ui-${name}`;
+  const fn = mod => mod ? `${base}--${mod}` : base;
+  fn.el = sub => `${base}__${sub}`;
+  fn.core = (n, v) => `ui-${n}--${v}`;
+  return fn;
+};
+
 // ---- parseArgs for components ----
 
 const CLASS_SHORTHANDS = { 

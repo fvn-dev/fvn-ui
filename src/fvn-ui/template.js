@@ -1,7 +1,7 @@
 import { layout } from './dom.js'
 import { 
   avatar, button, card, checkbox, collapsible, confirm, 
-  dialog, image, input, label, radioGroup, selectComponent, 
+  dialog, image, input, label, radio, selectComponent, 
   switchComponent, tabs 
 } from './components/index.js'
 
@@ -19,7 +19,7 @@ const COMPONENTS = {
   'ui-image': (props) => image(props),
   'ui-input': (props) => input(props),
   'ui-label': (props) => label(props),
-  'ui-radio': (props) => radioGroup(props),
+  'ui-radio': (props) => radio(props),
   'ui-select': (props) => selectComponent(props),
   'ui-switch': (props) => switchComponent(props),
   'ui-tabs': (props) => tabs(props),

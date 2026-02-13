@@ -26,7 +26,7 @@
     "./dashboard": "./src/fvn-ui/components/dashboard.js",
     "./image": "./src/fvn-ui/components/image.js",
     "./label": "./src/fvn-ui/components/label.js",
-    "./radioGroup": "./src/fvn-ui/components/radioGroup.js",
+    "./radio": "./src/fvn-ui/components/radio.js",
     "./svg": "./src/fvn-ui/components/svg.js",
     "./dom": "./src/fvn-ui/dom.js"
   },

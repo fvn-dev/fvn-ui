@@ -27,7 +27,7 @@
   --space-9: calc(var(--core) * 4);
   --space-10: calc(var(--core) * 5);
   --space: calc(var(--core) * .85);
-  --padding: var(--space-10);
+  --padding: var(--space-8);
 
   /* Presets */
   --input-padding: calc(var(--space) * .75) var(--space);

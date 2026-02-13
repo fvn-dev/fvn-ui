@@ -1,6 +1,6 @@
 import './main.css';
 import apiDocs from '../docs/api.json';
-import { dom, el, dashboard, layout, card, input, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radioGroup, avatar, colors, collapsible, text } from './fvn-ui'
+import { dom, el, dashboard, layout, card, input, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radio, avatar, colors, collapsible, text } from './fvn-ui'
 
 function init() {
   dashboard(document.body, {
@@ -43,10 +43,6 @@ function presentation(body) {
         render: buttonPresentation
       },
       {
-        label: 'Switch',
-        render: switchPresentation
-      },
-      {
         label: 'Select',
         render: selectPresentation
       },
@@ -55,27 +51,27 @@ function presentation(body) {
         render: inputPresentation
       },
       {
-        label: 'Check / Radio',
-        render: checkAndRadioPresentation
-      },
-      {
-        label: 'Avatar',
-        render: avatarPresentation
-      },
-      {
-        label: 'Collapsible',
-        render: collapsibleresentation
-      },
+        label: 'Check / Switch/ Toggle',
+        render: togglesPresentation
+      },      
       {
         label: 'Tabs',
         render: tabsPresentation
-      },      
+      },    
       {
         label: 'Dialog',
         render: dialogPresentation
       },
       {
-        label: 'Colors',
+        label: 'Collapsible',
+        render: collapsibleresentation
+      },                    
+      {
+        label: 'Avatar',
+        render: avatarPresentation
+      },
+      {
+        label: 'Misc',
         render: colorsPresentation
       }
     ]
@@ -161,30 +157,35 @@ function buttonPresentation() {
 
 // --->
 
-function switchPresentation() {
-  return layout.col({ gap: 3 }, [
-    switchComponent({
-      label: 'Switch default'
-    }),
-    switchComponent({
-      label: 'Switch red',
-      color: 'red',
-      checked: true
-    }),
-    switchComponent({
-      label: 'Switch primary',
-      color: 'primary',
-      checked: true
-    }),
-    text.label('&nbsp;'),
-    toggle({ 
-      options: ['Off', 'On'], 
-    }),
-    toggle({ 
-      options: ['With', 'Color'], 
-      color: 'primary',
-      checked: true
-    })       
+function togglesPresentation() {
+  return layout.row({ justify: 'between', gap: 8 }, [
+    layout.col([text.label('Checkbox', { soft: true }), checkboxPresentation()]), 
+    layout.col([radioPresentation()]),    
+    layout.col({ gap: 3 }, [
+      switchComponent({
+        label: 'Switch default'
+      }),
+      switchComponent({
+        label: 'Switch red',
+        color: 'red',
+        checked: true
+      }),
+      switchComponent({
+        label: 'Switch primary',
+        color: 'primary',
+        checked: true
+      })
+    ]),
+    layout.col({ gap: 3 }, [
+      toggle({ 
+        options: ['Off', 'On'], 
+      }),
+      toggle({ 
+        options: ['With', 'Color'], 
+        color: 'primary',
+        checked: true
+      })       
+    ])
   ]);
 }
 
@@ -204,21 +205,12 @@ function checkboxPresentation() {
 
 function radioPresentation() {
   return layout.col([
-    radioGroup({
+    radio({
       label: 'Radio group',
       value: 0,
       color: 'primary',
       items: exampleOptions.slice(0, 4)
     })
-  ]);
-}
-
-// --->
-
-function checkAndRadioPresentation() {
-  return layout.row({ gap: 10 }, [ 
-    layout.col([text.label('Checkbox', { soft: true }), checkboxPresentation()]), 
-    layout.col([radioPresentation()])
   ]);
 }
 

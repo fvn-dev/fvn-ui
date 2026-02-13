@@ -1,8 +1,10 @@
-import { el, col, getCallback, escapeHtml, onOutsideClick, withValue, parseArgs, configToClasses } from '../dom.js'
+import { el, col, getCallback, escapeHtml, onOutsideClick, withValue, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import { button } from './button.js'
 import { text } from './text.js'
 import { svg } from './svg.js'
 import './select.css'
+
+const bem = bemFactory('select');
 
 /**
  * Creates a custom select dropdown
@@ -59,7 +61,7 @@ export function selectComponent(...args) {
   let highlightedIndex = -1;
 
   const getIndexByValue = (v) => items.findIndex((it) => String(it.value) === String(v));
-  const wrapPlaceholder = (s) => `<span class="ui-select__placeholder">${escapeHtml(s)}</span>`;
+  const wrapPlaceholder = (s) => `<span class="${bem.el('placeholder')}">${escapeHtml(s)}</span>`;
   
   const getSelectedItems = () => multiselect 
     ? items.filter(it => selected.has(String(it.value)))
@@ -107,14 +109,14 @@ export function selectComponent(...args) {
       listEl.appendChild(
         el('button', {
           type: 'button',
-          class: 'ui-select__item',
+          class: bem.el('item'),
           attrs: { role: 'option', 'aria-selected': isSelected },
           data: { value: it.value },
           disabled: it.disabled,
           hidden: !matchesFilter,
           children: [
             el('span', { text: it.label }),
-            isSelected && el('span', { class: 'ui-select__check', html: svg('check') })
+            isSelected && el('span', { class: bem.el('check'), html: svg('check') })
           ],
           onClick: (e) => {
             if (it.disabled) return;
@@ -191,7 +193,7 @@ export function selectComponent(...args) {
   };
 
   const focusHighlighted = () => {
-    const opts = listEl.querySelectorAll('.ui-select__item:not([hidden])');
+    const opts = listEl.querySelectorAll(`.${bem.el('item')}:not([hidden])`);
     if (!opts.length) {
       return;
     }
@@ -207,7 +209,7 @@ export function selectComponent(...args) {
   };
 
   const moveHighlight = (delta) => {
-    const opts = listEl.querySelectorAll('.ui-select__item:not([hidden])');
+    const opts = listEl.querySelectorAll(`.${bem.el('item')}:not([hidden])`);
     if (!opts.length) {
       return;
     }
@@ -225,7 +227,7 @@ export function selectComponent(...args) {
       ArrowDown: () => moveHighlight(1),
       ArrowUp: () => moveHighlight(-1),
       Enter: () => {
-        const btn = listEl.querySelectorAll('.ui-select__item:not([hidden])')[highlightedIndex];
+        const btn = listEl.querySelectorAll(`.${bem.el('item')}:not([hidden])`)[highlightedIndex];
         if (!btn?.disabled) {
           btn.click();
         }
@@ -256,23 +258,23 @@ export function selectComponent(...args) {
     children: [
       label && text.label({ text: label, soft: true }),
       el('div', {
-        class: ['ui-select', multiselect && 'ui-select--multi'],
+        class: [bem(), multiselect && bem('multi')],
         data: { open: false },
         ref: (e) => selectEl = e,
         children: [
           el('button', {
             type: 'button',
-            class: 'ui-select__trigger ui-border',
+            class: [bem.el('trigger'), 'ui-border'],
             attrs: { 'aria-haspopup': 'listbox', 'aria-expanded': false },
             ref: (e) => triggerEl = e,
             onClick: () => setOpen(!isOpen),
             onKeydown: onTriggerKeydown,
             children: [
-              el('span', { class: 'ui-select__value', ref: (e) => valueEl = e }),
-              el('span', { class: 'ui-select__actions', children: [
+              el('span', { class: bem.el('value'), ref: (e) => valueEl = e }),
+              el('span', { class: bem.el('actions'), children: [
                 button({ icon: 'chevronDown', variant: 'stripped', muted: true }),
                 multiselect && el('span', { 
-                  class: 'ui-select__badge',
+                  class: bem.el('badge'),
                   ref: (e) => badgeEl = e,
                   hidden: true,
                   onClick: clearAll
@@ -281,18 +283,18 @@ export function selectComponent(...args) {
             ]
           }),
           el('div', {
-            class: 'ui-select__popover ui-border',
+            class: [bem.el('popover'), 'ui-border'],
             children: [
               showFilter && el('input', {
                 type: 'text',
-                class: 'ui-select__filter',
+                class: bem.el('filter'),
                 placeholder: filterPlaceholder,
                 ref: (e) => filterEl = e,
                 onInput: onFilter,
                 onClick: (e) => e.stopPropagation()
               }),
               el('div', {
-                class: 'ui-select__list',
+                class: bem.el('list'),
                 attrs: { role: 'listbox', tabindex: -1 },
                 ref: (e) => listEl = e
               })

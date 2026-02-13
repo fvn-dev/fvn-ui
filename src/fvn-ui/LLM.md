@@ -142,10 +142,10 @@ checkbox({ label: 'Premium', color: 'blue', checked: true })
 
 ---
 
-### `radioGroup({ items, value, color, onChange })`
+### `radio({ items, value, color, onChange })`
 
 ```js
-radioGroup({
+radio({
   value: 'apple',
   items: [
     { value: 'apple', label: 'Apple' },

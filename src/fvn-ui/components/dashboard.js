@@ -1,8 +1,9 @@
-import { el, row, col, parseArgs, configToClasses } from '../dom.js'
+import { el, row, col, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import { button } from './button.js'
 import { header } from './text.js'
 import './dashboard.css'
 
+const bem = bemFactory('dashboard');
 const MENU_DEFAULTS = { shape: 'round', variant: 'ghost' };
 
 /**
@@ -65,7 +66,7 @@ export function dashboard(...args) {
         icon: 'x',
         variant: 'ghost',
         shape: 'round',
-        class: 'ui-dashboard__close',
+        class: bem.el('close'),
         onClick: () => navigate(initialKey)
       });
     }
@@ -99,20 +100,20 @@ export function dashboard(...args) {
   );
 
   const headerEl = row('between', {
-    class: ['ui-dashboard__header', 'border-bottom', configToClasses(rest)],
+    class: [bem.el('header'), 'border-bottom', configToClasses(rest)],
     children: [
       header({ title, description, gap: 1, flex: 1 }),
-      row({ gap: 0, class: 'ui-dashboard__menu', children: menuButtons })
+      row({ gap: 0, class: bem.el('menu'), children: menuButtons })
     ]
   });
 
   const root = col(parent, {
     ...rest,
-    class: ['ui-dashboard', rest.class],
+    class: [bem(), rest.class],
     gap: 4,
     children: [
       headerEl,
-      el('div', { class: 'ui-dashboard__content', ref: (e) => contentEl = e })
+      el('div', { class: bem.el('content'), ref: (e) => contentEl = e })
     ]
   });
 

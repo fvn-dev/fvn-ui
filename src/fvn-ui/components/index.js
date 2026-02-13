@@ -10,7 +10,7 @@ import { dialog as _dialog } from './dialog.js'
 import { image as _image } from './image.js'
 import { input as _input } from './input.js'
 import { checkbox as _checkbox } from './checkbox.js'
-import { radioGroup as _radioGroup } from './radioGroup.js'
+import { radio as _radio } from './radio.js'
 import { selectComponent as _selectComponent } from './select.js'
 import { svg as _svg } from './svg.js'
 import { switchComponent as _switchComponent } from './switch.js'
@@ -61,7 +61,7 @@ export const image = bootstrap(_image, 'image');
 export const input = bootstrap(_input, 'input');
 export const modal = bootstrap(_dialog, 'modal', { type: 'modal' });
 export const checkbox = bootstrap(_checkbox, 'checkbox');
-export const radioGroup = bootstrap(_radioGroup, 'radioGroup');
+export const radio = bootstrap(_radio, 'radio');
 export const selectComponent = bootstrap(_selectComponent, 'select');
 export const switchComponent = bootstrap(_switchComponent, 'switch');
 export const svg = bootstrap(_svg, 'svg');

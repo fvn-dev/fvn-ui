@@ -1,4 +1,4 @@
-import { el, parseArgs, configToClasses } from '../dom.js'
+import { el, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import { svg } from './svg.js'
 import './button.css'
 
@@ -22,6 +22,9 @@ import './button.css'
  * button({ label: 'Delete', color: 'red', icon: 'trash' })
  * button({ icon: 'settings', variant: 'ghost', shape: 'round' })
  */
+
+const bem = bemFactory('btn');
+
 export function button(...args) {
   const {
     parent,
@@ -44,9 +47,9 @@ export function button(...args) {
   const isMinimal = /minimal|stripped|none/.test(variant);
   const isFilled = !isSub && !isMinimal;
   
-  const colorArray = Array.isArray(color) ? color : null;
-  const pickColor = () => colorArray 
-    ? colorArray[Math.floor(Math.random() * colorArray.length)] 
+  const isColorArray = Array.isArray(color);
+  const pickColor = () => isColorArray 
+    ? color[Math.floor(Math.random() * color.length)] 
     : color;
   
   const initialColor = pickColor();
@@ -58,22 +61,22 @@ export function button(...args) {
     type,
     disabled,
     class: [
-      'ui-btn',
-      variant !== 'default' && `ui-btn--${variant}`,
-      isFilled && 'ui-btn--filled',
-      isSub && 'ui-btn--sub',
-      isSub && `ui-btn--hover${initialColor ? '-sub' : ''}`,
-      icon && !label && 'ui-ratio--square',
-      shape && !isMinimal && `ui-btn--${shape}`,
-      size && `ui-size--${size}`,
-      muted && 'ui-btn--muted',
+      bem(),
+      variant !== 'default' && bem(variant),
+      isFilled && bem('filled'),
+      isSub && bem('sub'),
+      isSub && `${bem('hover')}${initialColor ? '-sub' : ''}`,
+      icon && !label && bem('square'),
+      shape && !isMinimal && bem(shape),
+      size && bem.core('size', size),
+      muted && bem('muted'),
       configToClasses(rest),
       rest.class
     ],
     attrs,
     data: { ...dataset, uiCol },
     children: [
-      icon && el('div', { class: 'ui-btn__icon', html: svg(icon) }),
+      icon && el('div', { class: bem.el('icon'), html: svg(icon) }),
       label && el('div', { html: label })
     ],
     setLabel(text, duration = 5000) {
@@ -92,8 +95,7 @@ export function button(...args) {
     }
   });
 
-  // Random color on click if color is an array
-  if (colorArray) {
+  if (isColorArray) {
     btn.addEventListener('click', () => {
       const newColor = pickColor();
       btn.dataset.uiCol = isFilled 

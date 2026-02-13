@@ -1,7 +1,9 @@
-import { el, parseArgs, configToClasses } from '../dom.js'
+import { el, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import { image } from './image.js'
 import './text.css'
 import './avatar.css'
+
+const bem = bemFactory('avatar');
 
 const getInitials = (name) => {
   if (!name) {
@@ -44,18 +46,18 @@ export function avatar(...args) {
 
   return el('div', parent, {
     ...rest,
-    class: ['ui-avatar', variant !== 'square' && 'ui-avatar--round', size && `ui-avatar--${size}`, configToClasses(rest), rest.class],
+    class: [bem(), variant !== 'square' && bem('round'), size && bem('size', size), configToClasses(rest), rest.class],
     children: [
       el('div', {
-        class: 'ui-avatar__box',
+        class: bem.el('box'),
         data: { uiCol: color || (src ? null : 'primary') },
         children: [
-          src ? image({ src, alt: name || '', class: 'ui-avatar__image' }) : null,
-          !src && initials && el('span', { class: 'ui-avatar__fallback', text: initials })
+          src ? image({ src, alt: name || '', class: bem.el('image') }) : null,
+          !src && initials && el('span', { class: bem.el('fallback'), text: initials })
         ]
       }),
       (name || description) && el('div', {
-        class: 'ui-avatar__info',
+        class: bem.el('info'),
         children: [
           name && el('span', { class: 'ui-name', text: name }),
           description && el('span', { class: 'ui-subtitle', text: description })

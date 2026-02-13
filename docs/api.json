@@ -6963,7 +6963,7 @@
       },
       {
         "title": "example",
-        "description": "radioGroup({ value: 'apple', items: [{ value: 'apple', label: 'Apple' }, { value: 'banana', label: 'Banana' }] })",
+        "description": "radio({ value: 'apple', items: [{ value: 'apple', label: 'Apple' }, { value: 'banana', label: 'Banana' }] })",
         "lineNumber": 11
       }
     ],
@@ -6992,12 +6992,12 @@
           "index": 3462
         }
       },
-      "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/radioGroup.js"
+      "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/radio.js"
     },
     "augments": [],
     "examples": [
       {
-        "description": "radioGroup({ value: 'apple', items: [{ value: 'apple', label: 'Apple' }, { value: 'banana', label: 'Banana' }] })"
+        "description": "radio({ value: 'apple', items: [{ value: 'apple', label: 'Apple' }, { value: 'banana', label: 'Banana' }] })"
       }
     ],
     "implements": [],
@@ -7234,7 +7234,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "radioGroup",
+    "name": "radio",
     "kind": "function",
     "members": {
       "global": [],
@@ -7245,11 +7245,11 @@
     },
     "path": [
       {
-        "name": "radioGroup",
+        "name": "radio",
         "kind": "function"
       }
     ],
-    "namespace": "radioGroup"
+    "namespace": "radio"
   },
   {
     "description": {

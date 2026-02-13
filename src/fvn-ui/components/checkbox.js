@@ -1,8 +1,10 @@
-import { el, getCallback, withValue, parseArgs, configToClasses } from '../dom.js'
+import { el, getCallback, withValue, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import { svg } from './svg.js'
 import { label as textLabel } from './text.js'
 import './form.css'
 import './checkbox.css'
+
+const bem = bemFactory('checkbox');
 
 /**
  * Creates a checkbox input
@@ -54,7 +56,7 @@ export function checkbox(...args) {
 
   const root = el('label', parent, {
     ...rest,
-    class: ['ui-checkbox ui-form-item', disabled && 'disabled', configToClasses(rest), rest.class],
+    class: [bem(), 'ui-form-item', disabled && 'disabled', configToClasses(rest), rest.class],
     data: { state: getStateStr() },
     children: [
       el('input', {

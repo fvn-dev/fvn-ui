@@ -1,7 +1,9 @@
-import { el, col, getCallback, withValue, parseArgs, configToClasses } from '../dom.js'
+import { el, col, getCallback, withValue, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import { button } from './button.js'
 import { label as textLabel } from './text.js'
 import './input.css'
+
+const bem = bemFactory('input');
 
 /**
  * Creates a text input with optional label and submit handling
@@ -50,11 +52,11 @@ export function input(...args) {
     children: [
       label && textLabel({ text: label, soft: true }),
       el('div', {
-        class: ['ui-input-wrap', `ui-size--${size}`],
+        class: [bem.el('wrap'), bem.core('size', size)],
         ref: (e) => wrapEl = e,
         children: [
           el('input', {
-            class: 'ui-input ui-border',
+            class: [bem(), 'ui-border'],
             type, id, value, placeholder, attrs,
             ref: (e) => inputEl = e,
             onKeyup: cb && onKeyup,

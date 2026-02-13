@@ -1,6 +1,8 @@
-import { el, getCallback, parseArgs, onOutsideClick, configToClasses } from '../dom.js'
+import { el, getCallback, parseArgs, onOutsideClick, configToClasses, bemFactory } from '../dom.js'
 import './dialog.css'
 
+const bem = bemFactory('dialog');
+const bemPop = bemFactory('popover');
 const dialogCache = new WeakMap(); // cache toggled dialogs
 
 /**
@@ -241,7 +243,7 @@ export function dialog(...args) {
   };
 
   const contentEl = el('div', {
-    class: 'ui-dialog__content',
+    class: bem.el('content'),
     children: content 
       ? typeof content === 'function' 
         ? content(close) 
@@ -254,7 +256,7 @@ export function dialog(...args) {
   if (isModal) {
     root = el('dialog', parent, {
       ...rest,
-      class: ['ui-dialog', 'ui-dialog-component', configToClasses(rest), rest.class],
+      class: [bem(), 'ui-dialog-component', configToClasses(rest), rest.class],
       onClick: (e) => {
         const r = root.getBoundingClientRect();
         const inDialog = r.top <= e.clientY && e.clientY <= r.bottom
@@ -268,11 +270,11 @@ export function dialog(...args) {
   } else {
     root = el('div', parent, {
       ...rest,
-      class: ['ui-popover', 'ui-dialog-component', configToClasses(rest), rest.class],
+      class: [bemPop(), 'ui-dialog-component', configToClasses(rest), rest.class],
       data: { open: 'false', position },
       style: _isChildOfAnchor ? { position: 'absolute' } : undefined,
       children: [
-        arrow && el('div', { class: 'ui-popover__arrow', ref: (e) => arrowEl = e }),
+        arrow && el('div', { class: bemPop.el('arrow'), ref: (e) => arrowEl = e }),
         contentEl
       ]
     });

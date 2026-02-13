@@ -29,7 +29,7 @@ export {
   image,
   input,
   modal,
-  radioGroup,
+  radio,
   selectComponent,
   svg,
   switchComponent,

@@ -1,7 +1,9 @@
-import { el, col, getCallback, withValue, parseArgs, configToClasses } from '../dom.js'
+import { el, col, getCallback, withValue, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import { button } from './button.js'
 import { svg } from './svg.js'
 import './collapsible.css'
+
+const bem = bemFactory('collapsible');
 
 /**
  * Creates a collapsible/accordion section
@@ -45,11 +47,11 @@ export function collapsible(...args) {
 
   const root = el('div', parent, {
     ...rest,
-    class: ['ui-collapsible', disabled && 'disabled', configToClasses(rest), rest.class],
+    class: [bem(), disabled && 'disabled', configToClasses(rest), rest.class],
     data: { open: state },
     children: [
       button({
-        class: 'ui-collapsible__trigger',
+        class: bem.el('trigger'),
         variant: 'none',
         disabled,
         icon: state ? 'chevronDown' : 'chevronRight',
@@ -57,7 +59,7 @@ export function collapsible(...args) {
         onclick: toggle,
         ref: (btn) => iconEl = btn.querySelector('.ui-btn__icon')
       }),
-      col({ class: 'ui-collapsible__content block-2' }, [content])
+      col({ class: [bem.el('content'), 'block-2'] }, [content])
     ]
   });
 

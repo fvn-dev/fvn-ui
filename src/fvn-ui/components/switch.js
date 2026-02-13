@@ -1,6 +1,8 @@
-import { el, getCallback, withValue, parseArgs, configToClasses } from '../dom.js'
+import { el, getCallback, withValue, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import { label as textLabel } from './text.js'
 import './switch.css'
+
+const bem = bemFactory('switch');
 
 /**
  * Creates a toggle switch
@@ -55,17 +57,17 @@ export function switchComponent(...args) {
 
   const root = el('div', parent, {
     ...rest,
-    class: ['ui-switch', configToClasses(rest), rest.class],
+    class: [bem(), configToClasses(rest), rest.class],
     data: { checked: state, uiCol: color },
     children: [
       el('button', {
         type: 'button',
-        class: 'ui-switch__button',
+        class: bem.el('button'),
         attrs: { role: 'switch', 'aria-checked': state },
         id,
         disabled,
         ref: (e) => btnEl = e,
-        children: [el('span', { class: 'ui-switch__thumb' })],
+        children: [el('span', { class: bem.el('thumb') })],
         onClick: toggle,
         onKeydown
       }),

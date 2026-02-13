@@ -1,5 +1,7 @@
-import { el, getCallback, withValue, parseArgs, configToClasses } from '../dom.js'
+import { el, getCallback, withValue, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import './toggle.css'
+
+const bem = bemFactory('toggle');
 
 /**
  * Creates a semantic toggle with two labeled options
@@ -42,7 +44,7 @@ export function toggle(...args) {
 
   const root = el('nav', parent, {
     ...rest,
-    class: ['ui-toggle', configToClasses(rest), rest.class],
+    class: [bem(), configToClasses(rest), rest.class],
     data: { checked: state, uiCol: color },
     disabled,
     id,

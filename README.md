@@ -22,7 +22,7 @@ import { card } from 'fvn-ui/card'
 | `confirm` | Confirmation dialog with trigger button |
 | `input` | Text input with label and validation |
 | `checkbox` / `switchComponent` / `toggle` | Boolean inputs |
-| `radioGroup` | Radio button group |
+| `radio` | Radio button group |
 | `selectComponent` | Dropdown with filter and multiselect |
 | `tabs` | Tabbed content |
 | `collapsible` | Expandable sections |

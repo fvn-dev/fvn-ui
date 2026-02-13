@@ -1,7 +1,9 @@
-import { el, getCallback, parseArgs, configToClasses } from '../dom.js'
+import { el, getCallback, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import { button } from './button.js'
 import { dialog } from './dialog.js'
 import { header } from './text.js'
+
+const bem = bemFactory('dialog');
 
 /**
  * Creates a confirmation dialog with trigger button
@@ -65,9 +67,9 @@ export function confirm(...args) {
     anchor: trigger,
     inverted,
     content: (close) => [
-      header({ title, description, class: 'ui-dialog__inner' }),
+      header({ title, description, class: bem.el('inner') }),
       el('div', {
-        class: `ui-dialog__footer`,
+        class: bem.el('footer'),
         children: [
           button({
             label: cancel,

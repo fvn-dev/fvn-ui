@@ -1,5 +1,7 @@
-import { el, parseArgs, configToClasses } from '../dom.js'
+import { el, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import './image.css'
+
+const bem = bemFactory('image');
 
 const loadImage = (container) => {
   const img = container.querySelector('img');
@@ -43,10 +45,10 @@ export function image(...args) {
 
   const root = el('div', parent, {
     ...rest,
-    class: ['ui-image', configToClasses(rest), rest.class],
+    class: [bem(), configToClasses(rest), rest.class],
     children: [
       el('img', {
-        class: 'ui-image__img',
+        class: bem.el('img'),
         alt,
         ...(lazy ? { data: { src } } : { src }),
         onLoad: () => root.dataset.loaded = 'true',

@@ -1,7 +1,9 @@
-import { el, getCallback, withValue, parseArgs, configToClasses } from '../dom.js'
+import { el, getCallback, withValue, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import { label as textLabel } from './text.js'
 import './form.css'
-import './radioGroup.css'
+import './radio.css'
+
+const bem = bemFactory('radio');
 
 /**
  * Creates a radio button group
@@ -15,9 +17,9 @@ import './radioGroup.css'
  * @param {Function} [config.onChange] - Called with (value, item, event)
  * @returns {HTMLDivElement} Radio group with .value getter/setter
  * @example
- * radioGroup({ value: 'apple', items: [{ value: 'apple', label: 'Apple' }, { value: 'banana', label: 'Banana' }] })
+ * radio({ value: 'apple', items: [{ value: 'apple', label: 'Apple' }, { value: 'banana', label: 'Banana' }] })
  */
-export function radioGroup(...args) {
+export function radio(...args) {
   const {
     parent,
     items = [],
@@ -51,8 +53,8 @@ export function radioGroup(...args) {
 
   const root = el('div', parent, {
     ...rest,
-    class: ['ui-radio-group ui-form-group', isRow && 'horizontal', configToClasses(rest), rest.class],
-    attrs: { role: 'radiogroup' },
+    class: [bem(), 'ui-form-group', isRow && 'horizontal', configToClasses(rest), rest.class],
+    attrs: { role: 'radio' },
     children: [
       label && textLabel({ text: label, soft: true }),
       el('div', {

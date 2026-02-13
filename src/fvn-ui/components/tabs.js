@@ -1,7 +1,9 @@
-import { el, getCallback, withValue, parseArgs, configToClasses } from '../dom.js'
+import { el, getCallback, withValue, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import { BASE_CLASS } from './index.js'
 import { button } from './button.js'
 import './tabs.css'
+
+const bem = bemFactory('tabs');
 
 const getItemValue = (item) => {
   if (!item) {
@@ -69,7 +71,7 @@ export function tabs(...args) {
     }
 
     const out = item.render();
-    const tab = el('div', { class: 'ui-tabs__tab' });
+    const tab = el('div', { class: bem.el('tab') });
     
     if (typeof out === 'string') {
       tab.innerHTML = out;
@@ -127,21 +129,21 @@ export function tabs(...args) {
     ...rest,
     class: [ 
       BASE_CLASS, 
-      'ui-tabs', 
-      shape && `ui-tabs--${shape}`,
+      bem(), 
+      shape && bem(shape),
       !hasWidth && 'w-full', 
       'flex', 
       'flex-col', 
       !withBorder && 'gap-2',
-      withShade && 'ui-tabs--shade',
+      withShade && bem('shade'),
       configToClasses(rest),
       rest.class
     ],
     children: [
       el('div', {
         class: [
-          'ui-tabs__buttons', 
-          `ui-tabs--${variant || 'default'}`,
+          bem.el('buttons'), 
+          bem(variant || 'default'),
           isCentered && ['justify-center', 'ma'],
         ],
         attrs: { role: 'tablist' },
@@ -164,7 +166,7 @@ export function tabs(...args) {
       }),
       !asButtonGroup && el('div', { 
         class: [
-          'ui-tabs__panel', 
+          bem.el('panel'), 
           withBorder && ['border', 'padding'],
           hasPadding && `pad-${padding}`
         ],

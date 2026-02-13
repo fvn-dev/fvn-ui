@@ -1,6 +1,8 @@
-import { el, col, parseArgs, configToClasses } from '../dom.js'
+import { el, col, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import { header } from './text.js'
 import './card.css'
+
+const bem = bemFactory('card');
 
 /**
  * Creates a card container with optional header
@@ -37,7 +39,7 @@ export function card(...args) {
   const root = el('div', parent, {
     ...rest,
     class: [
-      'ui-card', 
+      bem(), 
       'flex', 
       'flex-col', 
       'gap', 
@@ -49,9 +51,9 @@ export function card(...args) {
       rest.class
     ],
     children: [
-      header({ title, description, class: 'ui-card__header' }),
+      header({ title, description, class: bem.el('header') }),
       col({ 
-        class: 'ui-card__body', 
+        class: bem.el('body'), 
         align: 'start',
         ref: (e) => bodyRef = e 
       })
