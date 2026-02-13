@@ -29,6 +29,7 @@ export function radio(...args) {
     orientation,
     disabled,
     color = 'default',
+    props,
     ...rest
   } = parseArgs(...args);
 
@@ -53,7 +54,7 @@ export function radio(...args) {
 
   const root = el('div', parent, {
     ...rest,
-    class: [bem(), 'ui-form-group', isRow && 'horizontal', configToClasses(rest), rest.class],
+    class: [bem(), 'ui-form-group', isRow && 'horizontal', configToClasses(props), rest.class],
     attrs: { role: 'radio' },
     children: [
       label && textLabel({ text: label, soft: true }),

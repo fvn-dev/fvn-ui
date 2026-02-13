@@ -31,6 +31,7 @@ export function checkbox(...args) {
     name,
     value = 'on',
     color,
+    props,
     ...rest
   } = parseArgs(...args);
 
@@ -56,7 +57,7 @@ export function checkbox(...args) {
 
   const root = el('label', parent, {
     ...rest,
-    class: [bem(), 'ui-form-item', disabled && 'disabled', configToClasses(rest), rest.class],
+    class: [bem(), 'ui-form-item', disabled && 'disabled', configToClasses(props), rest.class],
     data: { state: getStateStr() },
     children: [
       el('input', {

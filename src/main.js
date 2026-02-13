@@ -26,6 +26,7 @@ function init() {
   card(dom.dash, {  
     title: 'Card component',
     description: `Yeah I'm rollin' down Rodeo wit a shotgun. These people ain't seen a brown skin man since their grandparents bought one.`,
+    width: 'full',
     content: `
       <div class="flex justify-between w-full">
         <label class="ui-component ui-label">Zach</label>
@@ -365,8 +366,8 @@ function collapsibleresentation() {
     collapsible({
       label: 'Click to expand',
       content: card({
-        title: 'Expanded',
-        description: 'view',
+        title: 'Card component',
+        description: 'With a description',
       })
     })
   ]);

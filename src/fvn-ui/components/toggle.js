@@ -25,6 +25,7 @@ export function toggle(...args) {
     disabled,
     color = 'default',
     id,
+    props,
     ...rest
   } = parseArgs(...args);
 
@@ -44,7 +45,7 @@ export function toggle(...args) {
 
   const root = el('nav', parent, {
     ...rest,
-    class: [bem(), configToClasses(rest), rest.class],
+    class: [bem(), configToClasses(props), rest.class],
     data: { checked: state, uiCol: color },
     disabled,
     id,

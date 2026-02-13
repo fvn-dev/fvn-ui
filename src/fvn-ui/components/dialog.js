@@ -42,6 +42,7 @@ export function dialog(...args) {
     hover, // if true, close on mouseleave from anchor/dialog
     inverted,
     _isChildOfAnchor, // internal: tooltip is child of anchor for hover persistence
+    props,
     ...rest
   } = parseArgs(...args);
 
@@ -256,7 +257,7 @@ export function dialog(...args) {
   if (isModal) {
     root = el('dialog', parent, {
       ...rest,
-      class: [bem(), 'ui-dialog-component', configToClasses(rest), rest.class],
+      class: [bem(), 'ui-dialog-component', configToClasses(props), rest.class],
       onClick: (e) => {
         const r = root.getBoundingClientRect();
         const inDialog = r.top <= e.clientY && e.clientY <= r.bottom
@@ -270,7 +271,7 @@ export function dialog(...args) {
   } else {
     root = el('div', parent, {
       ...rest,
-      class: [bemPop(), 'ui-dialog-component', configToClasses(rest), rest.class],
+      class: [bemPop(), 'ui-dialog-component', configToClasses(props), rest.class],
       data: { open: 'false', position },
       style: _isChildOfAnchor ? { position: 'absolute' } : undefined,
       children: [

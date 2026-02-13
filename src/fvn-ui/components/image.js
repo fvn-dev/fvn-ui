@@ -40,12 +40,13 @@ export function image(...args) {
     src,
     alt = '',
     lazy = true,
+    props,
     ...rest
   } = parseArgs(...args);
 
   const root = el('div', parent, {
     ...rest,
-    class: [bem(), configToClasses(rest), rest.class],
+    class: [bem(), configToClasses(props), rest.class],
     children: [
       el('img', {
         class: bem.el('img'),

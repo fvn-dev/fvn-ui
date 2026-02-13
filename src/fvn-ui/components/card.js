@@ -25,36 +25,25 @@ export function card(...args) {
     description, 
     content,
     border = true,
-    padding,
-    width,
+    props,
     ...rest 
   } = parseArgs(...args);
 
-  const hasPadding = padding !== undefined;
   let bodyRef;
 
-  const withBorder = border;
-  const fullWidth = width === undefined;
-
-  const root = el('div', parent, {
+  const root = col(parent, {
     ...rest,
     class: [
       bem(), 
-      'flex', 
-      'flex-col', 
-      'gap', 
-      fullWidth && 'w-full',
-      withBorder && 'border',
-      !hasPadding && 'pad-8',
-      hasPadding && `pad-${padding}`,
-      configToClasses(rest), 
+      border && 'border',
+      `gap-${props.gap || 4}`,
+      configToClasses(props), 
       rest.class
     ],
     children: [
       header({ title, description, class: bem.el('header') }),
       col({ 
-        class: bem.el('body'), 
-        align: 'start',
+        class: [ bem.el('body'), configToClasses(props) ], 
         ref: (e) => bodyRef = e 
       })
     ]

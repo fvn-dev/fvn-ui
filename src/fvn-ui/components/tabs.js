@@ -45,6 +45,7 @@ export function tabs(...args) {
     padding,
     width,
     asButtonGroup,
+    props,
     ...rest
   } = parseArgs(...args);
 
@@ -136,7 +137,7 @@ export function tabs(...args) {
       'flex-col', 
       !withBorder && 'gap-2',
       withShade && bem('shade'),
-      configToClasses(rest),
+      configToClasses(props, ['shade']),
       rest.class
     ],
     children: [

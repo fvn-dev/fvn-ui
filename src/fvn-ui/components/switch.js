@@ -26,6 +26,7 @@ export function switchComponent(...args) {
     color = 'default',
     label,
     id,
+    props,
     ...rest
   } = parseArgs(...args);
 
@@ -57,7 +58,7 @@ export function switchComponent(...args) {
 
   const root = el('div', parent, {
     ...rest,
-    class: [bem(), configToClasses(rest), rest.class],
+    class: [bem(), configToClasses(props), rest.class],
     data: { checked: state, uiCol: color },
     children: [
       el('button', {

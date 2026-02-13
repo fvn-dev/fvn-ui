@@ -39,6 +39,7 @@ export function avatar(...args) {
     variant = 'round',
     size = 'small',
     color,
+    props,
     ...rest
   } = parseArgs(...args);
 
@@ -46,7 +47,7 @@ export function avatar(...args) {
 
   return el('div', parent, {
     ...rest,
-    class: [bem(), variant !== 'square' && bem('round'), size && bem(size), configToClasses(rest), rest.class],
+    class: [bem(), variant !== 'square' && bem('round'), size && bem(size), configToClasses(props), rest.class],
     children: [
       el('div', {
         class: bem.el('box'),

@@ -118,6 +118,15 @@ export const configToClasses = (config, exclude = []) => {
     });
 };
 
+const configToProps = config => {
+  return Object.entries(config).reduce((props, [key, val]) => {
+    if (key in CLASS_SHORTHANDS) {
+      props[key] = val;
+    }
+    return props;
+  }, {});
+};
+
 export const parseArgs = (...args) => {
   const firstIsOptions = args[0]?.defaults !== undefined 
     || args[0]?.stringAs !== undefined 
@@ -131,7 +140,7 @@ export const parseArgs = (...args) => {
     numberAs = null 
   } = options;
 
-  const settings = { ...defaults };
+  const settings = { ...defaults, props: {} };
   
   for (const arg of args) {
     if (!arg) {
@@ -146,18 +155,19 @@ export const parseArgs = (...args) => {
       continue;
     }
     if (typeof arg === 'string') {
-      if (stringAs === 'justify') {
-        arg === 'full' ? (settings.full = true) : (settings.justify = arg);
-      } else {
-        settings.text = arg;
-      }
+      stringAs === 'justify'
+        ? settings.justify = arg
+        : settings.text = arg;
       continue;
     }
     if (Array.isArray(arg)) {
-      arrayAs === 'children' ? (settings.children = arg) : merge(settings, arg);
+      arrayAs === 'children' 
+        ? (settings.children = arg) 
+        : merge(settings, arg);
       continue;
     }
     if (typeof arg === 'object') {
+      Object.assign(settings.props, configToProps(arg));
       merge(settings, arg);
     }
   }

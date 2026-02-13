@@ -39,6 +39,7 @@ export function selectComponent(...args) {
     multiselect = false,
     filter: filterProp,
     filterPlaceholder = 'Filter...',
+    props,
     ...rest
   } = parseArgs(...args);
 
@@ -254,7 +255,7 @@ export function selectComponent(...args) {
   const root = col(parent, {
     ...rest,
     gap: 2,
-    class: [configToClasses(rest), rest.class],
+    class: [configToClasses(props), rest.class],
     children: [
       label && text.label({ text: label, soft: true }),
       el('div', {

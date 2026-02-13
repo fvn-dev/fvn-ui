@@ -31,6 +31,7 @@ export function input(...args) {
     label,
     placeholder,
     attrs = {},
+    props,
     ...rest
   } = parseArgs(...args);
 
@@ -48,7 +49,7 @@ export function input(...args) {
 
   const root = col(parent, {
     gap: 2,
-    class: [configToClasses(rest), rest.class],
+    class: [configToClasses(props), rest.class],
     children: [
       label && textLabel({ text: label, soft: true }),
       el('div', {

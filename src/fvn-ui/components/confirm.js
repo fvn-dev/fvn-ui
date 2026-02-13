@@ -45,6 +45,7 @@ export function confirm(...args) {
     dialogVariant,
     type, // backward compat alias for dialogVariant
     inverted,
+    props,
     ...rest
   } = parseArgs(...args);
 
@@ -52,7 +53,7 @@ export function confirm(...args) {
   const cbConfirm = getCallback('onConfirm', rest);
   const dlgVariant = dialogVariant || type || 'modal';
 
-  const root = el('div', parent, { ...rest, class: [configToClasses(rest), rest.class] });
+  const root = el('div', parent, { ...rest, class: [configToClasses(props), rest.class] });
 
   const trigger = button(root, {
     label,

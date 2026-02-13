@@ -38,6 +38,7 @@ export function button(...args) {
     disabled,
     attrs = {},
     dataset,
+    props,
     ...rest
   } = parseArgs(...args);
 
@@ -72,7 +73,7 @@ export function button(...args) {
       shape && !isMinimal && bem(shape),
       size && bem.core('size', size),
       muted && bem('muted'),
-      configToClasses(rest),
+      configToClasses(props),
       rest.class
     ],
     attrs,
