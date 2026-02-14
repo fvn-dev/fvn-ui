@@ -43,9 +43,10 @@ export {
 
   // Text primitives
   text,
-  title,
   description,
-  header
+  divider,
+  header,
+  title
 } from './components/index.js'
 
 // Namespaced export for cleaner DX: ui.button(), ui.switch(), etc.

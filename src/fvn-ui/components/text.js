@@ -62,6 +62,23 @@ export const label = (...args) => {
 };
 
 /**
+ * Creates a divider/spacer element
+ * @param {Object} [config]
+ * @param {boolean} [config.vertical] - Vertical orientation (for use in rows)
+ * @param {string} [config.class] - Additional classes
+ * @returns {HTMLElement}
+ * @category Layout
+ */
+export const divider = (...args) => {
+  const { parent, vertical, ...rest } = parseArgs(...args);
+  
+  return el('div', parent, {
+    ...rest,
+    class: ['ui-divider', vertical && 'ui-divider--vertical', rest.class]
+  });
+};
+
+/**
  * Creates a header group with title and optional description
  * @param {Object} config
  * @param {string} [config.title] - Title text
@@ -99,7 +116,8 @@ export const text = {
   title,
   description,
   label,
-  header
+  header,
+  divider
 };
 
 export default text;

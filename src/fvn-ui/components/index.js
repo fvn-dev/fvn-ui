@@ -18,7 +18,7 @@ import { svg as _svg } from './svg.js'
 import { switchComponent as _switchComponent } from './switch.js'
 import { tabs as _tabs } from './tabs.js'
 import { toggle as _toggle } from './toggle.js'
-import { text, title, description, header, label } from './text.js'
+import { text, divider, title, description, header, label } from './text.js'
 
 const BASE_CLASS = 'ui-component';
 
@@ -75,4 +75,4 @@ export const toggle = bootstrap(_toggle, 'toggle');
 export const tooltip = bootstrap(_dialog, 'tooltip', { type: 'tooltip' });
 
 // Text primitives (no bootstrap needed)
-export { text, title, description, header, label };
+export { text, divider, title, description, header, label };

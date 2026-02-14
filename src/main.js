@@ -299,6 +299,7 @@ function inputPresentation() {
       clamp: true, // todo! implement clamping in the component
       placeholder: 3
     }),   
+    text.divider(),
     editable({ 
       label: 'Contenteditable { plain: true }',
       placeholder: 'Faux text input...',
