@@ -1,7 +1,7 @@
 import './main.css';
 import apiDocs from '../docs/api.json';
 import { version } from '../package.json';
-import { dom, el, editable, dashboard, layout, card, input, textarea, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radio, avatar, colors, collapsible, text } from './fvn-ui'
+import { dom, el, editable, draggable, dashboard, layout, card, input, textarea, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radio, avatar, colors, collapsible, text } from './fvn-ui'
 
 function init() {
   const darkmodeIcons = [ 'moon', 'sun' ];
@@ -71,8 +71,12 @@ function presentation(body) {
       },
       {
         label: 'Collapsible',
-        render: collapsibleresentation
-      },                    
+        render: collapsiblePresentation
+      },            
+      {
+        label: 'Draggable',
+        render: draggablePresentation
+      },        
       {
         label: 'Avatar',
         render: avatarPresentation
@@ -380,20 +384,31 @@ function avatarPresentation() {
 
 // --->
 
-function collapsibleresentation() {
-  return layout.col([
-    collapsible({
-      label: 'Disabled',
-      disabled: true
-    }),    
-    collapsible({
-      label: 'Click to expand',
-      content: card({
-        title: 'Card component',
-        description: 'With a description',
+function collapsiblePresentation() {
+  return layout.col({ gap: 8 },[
+    layout.col([
+      collapsible({
+        label: 'Disabled',
+        disabled: true
+      }),    
+      collapsible({
+        label: 'Click to expand',
+        content: card({
+          title: 'Card component',
+          description: 'With a description',
+        })
       })
-    })
+    ])  
   ]);
+}
+
+// --->
+
+function draggablePresentation() {
+  return draggable({
+    items: exampleOptions.map(({ label }) => text.title(label)),
+    onChange: ({ items, from, to }) => console.log('Reordered:', from, '→', to)
+  });
 }
 
 // --->

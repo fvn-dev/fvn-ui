@@ -90,13 +90,13 @@
 
   --dark-hsl-black: 222 20% 20%;
   --dark-hsl-white: 0 0% 90%;
-  --dark-hsl-back: 222 20% 20%;
+  --dark-hsl-back: 222 20% 15%;
   --dark-hsl-text: 0 0% 90%;
   --dark-hsl-muted: 0 0% 95%;
   --dark-hsl-primary: 256 91% 70%;
   --dark-hsl-red: 332 100% 60%;
-  --dark-hsl-shade: 222 20% 24%;
-  --dark-hover: hsl(221.05 14.29% 26.08%);
+  --dark-hsl-shade: 222 20% 19%;
+  --dark-hover: hsl(222 20% 25%);
   --dark-hover-bright: hsl(var(--hsl-white) / .02);
   --dark-shade: hsl(var(--dark-hsl-shade));
   --dark-border-opacity: .15;
@@ -108,6 +108,8 @@
 
 /* ---- Dark Mode ---- */
 .dark {
+  color-scheme: dark;
+
   --hsl-black: var(--dark-hsl-black);
   --hsl-white: var(--dark-hsl-white);
   --hsl-back: var(--dark-hsl-back);
@@ -116,6 +118,7 @@
   --hsl-primary: var(--dark-hsl-primary);
   --hsl-red: var(--dark-hsl-red);
   --hover: var(--dark-hover);
+  --border: hsl(222 20% 30%);
   --hover-bright: var(--dark-hover-bright);
   --hsl-shade: var(--dark-hsl-shade);
   --shade: var(--dark-shade);

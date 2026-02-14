@@ -34,10 +34,13 @@
 
 .ui-tabs--round .ui-tabs--default {
   border-radius: 999px;
+  gap: 0;
+  padding: var(--space-1) calc(var(--space-1) + .2em);
 }
 .ui-tabs--round .ui-tabs--default .ui-btn {
   --input-padding: calc(var(--space) * .5) calc(var(--space) * 1.5);
   --bg: transparent;
+  margin: 0 -.2em;
 }
 
 /* --- */
@@ -75,7 +78,13 @@
 .ui-tabs--outline .ui-btn[aria-selected="false"] {
   --fg: var(--muted);
   --bg: var(--shade);
+  border-left-color: hsl(var(--hsl-text) / .08);
 }
+.ui-tabs--outline .ui-btn[aria-selected="false"]:first-child, 
+.ui-tabs--outline .ui-btn[aria-selected="true"] + [aria-selected="false"] {
+  border-left-color: transparent;
+}
+
 .ui-tabs--outline .ui-btn[aria-selected="true"] {
   --fg: var(--text);
   --bg: var(--shade-back, var(--back));

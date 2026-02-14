@@ -1,5 +1,6 @@
 /*
   TODO
+    - buttonGroup => toggleGroup
     - Add clamping functionality to number input component? custom arrows
     - "copy text" icon option for input/textarea
     - keyboard element ([enter]) to display where available (eg. input)
@@ -26,6 +27,7 @@ export {
   confirm,
   dashboard,
   dialog,
+  draggable,
   editable,
   image,
   input,

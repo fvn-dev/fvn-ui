@@ -1,5 +1,5 @@
 .ui-dialog::backdrop { 
-  --hover-opacity: .3; 
+  background: hsl(var(--hsl-text) / .2);
 }
 .ui-dialog {
   border: none;

@@ -1,0 +1,64 @@
+.ui-draggable {
+  counter-reset: draggable-index;
+  display: flex;
+  flex-direction: column;
+  gap: 0 !important;
+  width: 100%;
+}
+
+.ui-draggable__item {
+  counter-increment: draggable-index;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  border-bottom: 1px dashed var(--border);
+  padding: var(--space-3);  
+  position: relative;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.ui-draggable__item.ui-draggable--index::before {
+  content: counter(draggable-index);
+  color: var(--muted);
+  text-align: right;
+}
+
+.ui-draggable--disabled {
+  opacity: .5;
+  pointer-events: none;
+}
+
+.ui-draggable__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.ui-draggable__handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  color: var(--muted);
+  border-radius: var(--radius);
+  flex-shrink: 0;
+  user-select: none;
+  touch-action: none;
+}
+
+.ui-draggable__handle:hover {
+  color: var(--text);
+  background: var(--hover);
+}
+
+.ui-draggable__handle:active {
+  cursor: grabbing;
+}
+
+/* Dragging state - highlight with primary color */
+.ui-draggable__item.ui-dragging {
+  background: var(--shade);
+}

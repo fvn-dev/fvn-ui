@@ -8,6 +8,7 @@ import { collapsible as _collapsible } from './collapsible.js'
 import { editable as _editable } from './editable.js'
 import { dashboard as _dashboard } from './dashboard.js'
 import { dialog as _dialog } from './dialog.js'
+import { draggable as _draggable } from './draggable.js'
 import { image as _image } from './image.js'
 import { input as _input } from './input.js'
 import { checkbox as _checkbox } from './checkbox.js'
@@ -59,6 +60,7 @@ export const confirm = bootstrap(_confirm, 'confirm');
 export const editable = bootstrap(_editable, 'editable');
 export const dashboard = bootstrap(_dashboard, 'dashboard');
 export const dialog = bootstrap(_dialog, 'dialog');
+export const draggable = bootstrap(_draggable, 'draggable');
 export const image = bootstrap(_image, 'image');
 export const input = bootstrap(_input, 'input');
 export const modal = bootstrap(_dialog, 'modal', { type: 'modal' });
