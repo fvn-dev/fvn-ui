@@ -53,7 +53,6 @@ const bootstrap = (componentFn, componentName, customConfig) => (...args) => {
 
 export const avatar = bootstrap(_avatar, 'avatar');
 export const button = bootstrap(_button, 'button');
-export const buttonGroup = bootstrap(_tabs, 'buttonGroup', { asButtonGroup: true });
 export const card = bootstrap(_card, 'card');
 export const collapsible = bootstrap(_collapsible, 'collapsible');
 export const confirm = bootstrap(_confirm, 'confirm');
@@ -72,6 +71,27 @@ export const svg = bootstrap(_svg, 'svg');
 export const tabs = bootstrap(_tabs, 'tabs');
 export const textarea = bootstrap(_input, 'textarea', { rows: 4 });
 export const toggle = bootstrap(_toggle, 'toggle');
+
+/**
+ * Creates a toggle group (tabs without content panel, for selection UI)
+ * @param {Object} config
+ * @param {Array<{label: string, icon?: string, color?: string}>} config.items - Toggle items
+ * @param {number} [config.active=0] - Initially active index
+ * @param {Function} [config.callback] - Called with active index on change
+ * @param {'default'|'outline'|'ghost'|'minimal'|'border'} [config.variant='default'] - Style variant
+ * @param {'round'} [config.shape] - Round shape
+ * @param {boolean} [config.shade] - Shaded background
+ * @param {string} [config.color] - Color theme
+ * @param {string} [config.width] - Width ('auto' or CSS value)
+ * @returns {HTMLElement} Toggle group element
+ * @example
+ * toggleGroup({
+ *   items: [{ label: 'One' }, { label: 'Two' }, { label: 'Three' }],
+ *   active: 0,
+ *   callback: (index) => console.log('Selected:', index)
+ * })
+ */
+export const toggleGroup = bootstrap(_tabs, 'toggleGroup', { asButtonGroup: true });
 export const tooltip = bootstrap(_dialog, 'tooltip', { type: 'tooltip' });
 
 // Text primitives (no bootstrap needed)

@@ -1,4 +1,4 @@
-import { el, col, parseArgs, configToClasses, bemFactory } from '../dom.js'
+import { col, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import { header } from './text.js'
 import './card.css'
 

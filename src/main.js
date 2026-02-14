@@ -1,7 +1,7 @@
 import './main.css';
 import apiDocs from '../docs/api.json';
 import { version } from '../package.json';
-import { dom, el, editable, draggable, dashboard, layout, card, input, textarea, selectComponent, switchComponent, tabs, buttonGroup, confirm, toggle, tooltip, button, checkbox, radio, avatar, colors, collapsible, text } from './fvn-ui'
+import { dom, el, editable, draggable, dashboard, layout, card, input, textarea, selectComponent, switchComponent, tabs, toggleGroup, confirm, toggle, tooltip, button, checkbox, radio, avatar, colors, collapsible, text } from './fvn-ui'
 
 function init() {
   const darkmodeIcons = [ 'moon', 'sun' ];
@@ -169,33 +169,56 @@ function buttonPresentation() {
 // --->
 
 function togglesPresentation() {
-  return layout.row({ justify: 'between', gap: 8 }, [
-    layout.col([text.label('Checkbox', { soft: true }), checkboxPresentation()]), 
-    layout.col([radioPresentation()]),    
-    layout.col({ gap: 3 }, [
-      switchComponent({
-        label: 'Switch default'
-      }),
-      switchComponent({
-        label: 'Switch red',
-        color: 'red',
-        checked: true
-      }),
-      switchComponent({
-        label: 'Switch primary',
-        color: 'primary',
-        checked: true
-      })
+  return layout.col({ gap: 6 }, [
+
+    // Section 1: Checkbox + Radio
+    layout.row({ justify: 'between', gap: 8 }, [
+      layout.col([text.label('Checkbox', { soft: true }), checkboxPresentation()]), 
+      layout.col([radioPresentation()])
     ]),
-    layout.col({ gap: 3 }, [
-      toggle({ 
-        options: ['Off', 'On'], 
+    
+    text.divider(),
+    
+    // Section 2: Switch + Toggle
+    layout.row({ justify: 'between', gap: 8 }, [
+      layout.col({ gap: 3 }, [
+        switchComponent({ label: 'Switch default' }),
+        switchComponent({ label: 'Switch red', color: 'red', checked: true }),
+        switchComponent({ label: 'Switch primary', color: 'primary', checked: true })
+      ]),
+      layout.col({ gap: 3 }, [
+        toggle({ options: ['Off', 'On'] }),
+        toggle({ options: ['With', 'Color'], color: 'primary', checked: true })       
+      ])
+    ]),
+    
+    text.divider(),
+    
+    // Section 3: Toggle Groups
+    layout.col({ gap: 4 }, [
+      toggleGroup({
+        variant: 'ghost',
+        color: 'blue',
+        width: 'auto',
+        active: 0,
+        items: [
+          { label: 'One', icon: 'moon' },
+          { label: 'Two', icon: 'sun' },
+          { label: 'Three', icon: 'user' }
+        ]
       }),
-      toggle({ 
-        options: ['With', 'Color'], 
-        color: 'primary',
-        checked: true
-      })       
+      toggleGroup({
+        variant: 'ghost',
+        shape: 'round',
+        shade: true,
+        width: 'auto',
+        callback: (active) => { txt2.innerHTML = 'Callback from ' + active; },
+        items: [
+          { label: 'One', icon: 'moon', color: 'green' },
+          { label: 'Two', icon: 'sun', color: 'pink' },
+          { label: 'Three', icon: 'user', color: 'yellow' }
+        ]
+      })
     ])
   ]);
 }
@@ -408,14 +431,14 @@ function collapsiblePresentation() {
 function draggablePresentation() {
   return draggable({
     items: exampleOptions.map(({ label }) => text.title(label)),
-    onChange: ({ items, from, to }) => console.log('Reordered:', from, '→', to)
+    onChange: ({ items, from, to }) => console.log('Reordered:', from, '→', to, { items })
   });
 }
 
 // --->
 
 function tabsPresentation() {
-  return layout.col({ gap: 8 }, ['outline', 'border', 'minimal', 'default', 'ghost', 'ghost'].map((variant, i) => {
+  return layout.col({ gap: 4 }, ['outline', 'border', 'minimal', 'default'].map((variant, i) => {
     const c = {
       variant,
       center: i % 2 !== 0,
@@ -424,41 +447,6 @@ function tabsPresentation() {
       shape: i === 3 && 'round',
       padding: 6
     };
-    
-    if (i > 3) {
-      const txt = text.label({ muted: true, small: true }, `As ${i === 5 ? 'shaded ' : ''}button group`);
-      return layout.row({ justify: 'between', width: 'full' }, [
-        buttonGroup({
-          ...c,
-          shape: i === 5 && 'round',
-          color: i === 4 && 'blue',
-          shade: i === 5,
-          width: 'auto',
-          active: i === 5 ? 1 : 0,
-          callback(active) {
-            txt.innerHTML = 'Callback from ' + active;
-          },
-          items: [
-            {
-              label: 'One',
-              icon: 'moon',
-              color: i === 5 && 'green'
-            },
-            {
-              label: 'Two',
-              icon: 'sun',
-              color: i === 5 && 'pink'
-            },    
-            {
-              label: 'Three',
-              icon: 'user',
-              color: i === 5 && 'yellow'
-            }
-          ]
-        }),
-        txt
-      ]);
-    }
 
     const small = str => `<small>${str}</small>`;
     const content = Object.entries(c)

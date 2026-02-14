@@ -1,6 +1,5 @@
 /*
   TODO
-    - buttonGroup => toggleGroup
     - Add clamping functionality to number input component? custom arrows
     - "copy text" icon option for input/textarea
     - keyboard element ([enter]) to display where available (eg. input)
@@ -20,7 +19,6 @@ export { template, processTemplates, autoProcess } from './template.js'
 export {
   avatar,
   button,
-  buttonGroup,
   card,
   checkbox,
   collapsible,
@@ -34,6 +32,7 @@ export {
   modal,
   radio,
   selectComponent,
+  toggleGroup,
   svg,
   switchComponent,
   tabs,
