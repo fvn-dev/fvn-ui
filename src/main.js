@@ -123,7 +123,10 @@ function buttonPresentation() {
     button({ label: 'Colored outline', variant: 'outline', color: 'primary' }),
     button({ label: 'Ghost round', shape: 'round', variant: 'ghost', color: 'yellow' }),
     button({ label: 'Primary round', shape: 'round',color: 'primary' }),
-    button({ label: 'Loading', shape: 'round', variant: 'secondary', className: 'loading' }),
+    button({ label: 'Toggle loading', shape: 'round', variant: 'secondary', onClick(e) {
+      this.toggleLoading('');
+      setTimeout(() => this.toggleLoading(), 3000);
+    }}),
   ]);
   const c = layout.row([
     button({ icon: 'settings', label: 'Settings' }),

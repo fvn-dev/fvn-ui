@@ -29,7 +29,7 @@ export function draggable(...args) {
     parent,
     id,
     items: initialItems = [],
-    icon = 'menu',
+    icon = 'grip',
     border = true,
     handlePosition = 'right',
     index = true,

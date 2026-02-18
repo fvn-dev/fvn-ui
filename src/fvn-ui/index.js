@@ -1,5 +1,6 @@
 /*
   TODO
+    - move "dashboard" component under layout category?
     - Add clamping functionality to number input component? custom arrows
     - "copy text" icon option for input/textarea
     - keyboard element ([enter]) to display where available (eg. input)

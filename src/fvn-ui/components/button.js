@@ -34,6 +34,7 @@ export function button(...args) {
     size,
     color,
     muted,
+    loading,
     type = 'button',
     disabled,
     attrs = {},
@@ -73,6 +74,7 @@ export function button(...args) {
       shape && !isMinimal && bem(shape),
       size && bem.core('size', size),
       muted && bem('muted'),
+      loading && 'loading',
       configToClasses(props),
       rest.class
     ],
@@ -100,7 +102,7 @@ export function button(...args) {
       }
     },
     toggleLoading(text) {
-      this.classList.toggle('loading', !!text);
+      this.classList.toggle('loading', typeof text === 'string');
       this.textContent = text || label;
     }
   });

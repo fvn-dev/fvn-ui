@@ -127,6 +127,21 @@ ui.col({ center: true }, [
 | `center: true` | Center content (justify for col, align for row) |
 | `distribute: 'equal'` | Children share space equally |
 
+## Custom Icons
+
+Extend with icons from [Lucide](https://lucide.dev/icons) or [Feather](https://feathericons.com):
+
+```js
+// Add icons using SVG inner content (no <svg> wrapper)
+ui.svg.extend({
+  github: '<path d="M15 22v-4a4.8..."/>',
+  custom: '<circle cx="12" cy="12" r="10"/>'
+})
+
+ui.button({ icon: 'github' })  // Now works
+ui.svg.list()                   // Get all icon names
+```
+
 ## Full Documentation
 
 For complete API reference, examples, and patterns, read:

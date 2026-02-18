@@ -34,7 +34,7 @@ export function collapsible(...args) {
   let state = !!open;
   let iconEl;
 
-  const getIcon = () => svg(state ? 'chevronDown' : 'chevronRight');
+  const getIcon = () => svg(state ? 'chevron-down' : 'chevron-right');
 
   const toggle = () => {
     if (disabled) {
@@ -55,7 +55,7 @@ export function collapsible(...args) {
         class: bem.el('trigger'),
         variant: 'none',
         disabled,
-        icon: state ? 'chevronDown' : 'chevronRight',
+        icon: state ? 'chevron-down' : 'chevron-right',
         label,
         onclick: toggle,
         ref: (btn) => iconEl = btn.querySelector('.ui-btn__icon')
