@@ -176,87 +176,45 @@ export function dialog(...args) {
   const toggle = (eventOrElement) => isOpen ? close() : open(eventOrElement);
 
   const positionPopover = () => {
-    if (!currentAnchor || isModal) {
-      return;
-    }
+    if (!currentAnchor || isModal) return;
     
     const gap = 8;
-    const edgePadding = 12;
-    const anchorRect = currentAnchor.getBoundingClientRect();
-    const popoverWidth = root.offsetWidth || 200;
-    const popoverHeight = root.offsetHeight || 100;
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
+    const pad = 12;
+    const anchor = currentAnchor.getBoundingClientRect();
+    const pw = root.offsetWidth || 200;
+    const ph = root.offsetHeight || 100;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
     
-    // Determine vertical position - flip if needed
-    let actualPosition = position;
-    if (position === 'bottom' && anchorRect.bottom + popoverHeight + gap > viewportHeight) {
-      actualPosition = 'top';
-    } else if (position === 'top' && anchorRect.top - popoverHeight - gap < 0) {
-      actualPosition = 'bottom';
-    }
-    root.dataset.position = actualPosition;
+    // Flip vertically if needed
+    const pos = (position === 'bottom' && anchor.bottom + ph + gap > vh) ? 'top'
+              : (position === 'top' && anchor.top - ph - gap < 0) ? 'bottom'
+              : position;
+    root.dataset.position = pos;
     
-    // If tooltip is child of anchor, use relative positioning
+    // Calculate left position (clamped to viewport)
+    const anchorCenterX = anchor.left + anchor.width / 2;
+    const idealLeft = anchorCenterX - pw / 2;
+    const left = Math.max(pad, Math.min(vw - pw - pad, idealLeft));
+    
+    // Apply positioning
     if (_isChildOfAnchor) {
-      const anchorHeight = currentAnchor.offsetHeight;
-      const anchorWidth = currentAnchor.offsetWidth;
-      
-      // Calculate horizontal position with viewport clamping
-      const anchorLeft = anchorRect.left;
-      const anchorCenterX = anchorLeft + anchorWidth / 2;
-      
-      // Ideal position is centered
-      let idealLeft = (anchorWidth - popoverWidth) / 2;
-      
-      // Check if it would go off-screen left
-      const absoluteLeft = anchorLeft + idealLeft;
-      if (absoluteLeft < edgePadding) {
-        idealLeft = edgePadding - anchorLeft;
-      }
-      // Check if it would go off-screen right
-      const absoluteRight = anchorLeft + idealLeft + popoverWidth;
-      if (absoluteRight > viewportWidth - edgePadding) {
-        idealLeft = viewportWidth - edgePadding - popoverWidth - anchorLeft;
-      }
-      
-      root.style.left = `${idealLeft}px`;
-      root.style.transform = 'none';
-      
-      if (actualPosition === 'bottom') {
-        root.style.top = `${anchorHeight + gap}px`;
-        root.style.bottom = 'auto';
-      } else {
-        root.style.bottom = `${anchorHeight + gap}px`;
-        root.style.top = 'auto';
-      }
-      
-      // Position arrow to point at anchor center
-      if (arrowEl) {
-        const arrowOffset = (anchorWidth / 2) - idealLeft;
-        arrowEl.style.left = `${arrowOffset}px`;
-      }
-      
-      return;
+      // Relative to anchor
+      const relativeLeft = left - anchor.left;
+      root.style.left = `${relativeLeft}px`;
+      root.style.top = pos === 'bottom' ? `${anchor.height + gap}px` : 'auto';
+      root.style.bottom = pos === 'top' ? `${anchor.height + gap}px` : 'auto';
+    } else {
+      // Fixed positioning
+      root.style.left = `${left}px`;
+      root.style.top = pos === 'bottom' ? `${anchor.bottom + gap}px` : `${anchor.top - ph - gap}px`;
+      root.style.bottom = 'auto';
     }
-    
-    // Fixed positioning for click-triggered tooltips
-    root.style.top = actualPosition === 'bottom'
-      ? `${anchorRect.bottom + gap}px`
-      : `${anchorRect.top - popoverHeight - gap}px`;
-    root.style.bottom = 'auto';
-    
-    const anchorCenterX = anchorRect.left + anchorRect.width / 2;
-    const minLeft = edgePadding;
-    const maxLeft = viewportWidth - popoverWidth - edgePadding;
-    const left = Math.max(minLeft, Math.min(maxLeft, anchorCenterX - popoverWidth / 2));
-    
-    root.style.left = `${left}px`;
     root.style.transform = 'none';
-
+    
+    // Arrow points to anchor center
     if (arrowEl) {
-      const arrowOffset = anchorCenterX - left;
-      arrowEl.style.left = `${arrowOffset}px`;
+      arrowEl.style.left = `${anchorCenterX - left}px`;
     }
   };
 
