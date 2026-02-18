@@ -19,7 +19,7 @@ const dialogCache = new WeakMap(); // cache toggled dialogs
  * @param {boolean} [config.inverted] - Dark/inverted style
  * @param {Function} [config.onOpen] - Called when dialog opens
  * @param {Function} [config.onClose] - Called when dialog closes
- * @returns {HTMLElement} Dialog element with open(), close(), toggle(), isOpen
+ * @returns {HTMLElement} Dialog element with show(), hide(), toggle(), isOpen
  * @example
  * // Modal triggered by click
  * modal({ open: clickEvent, content: card({ title: 'Confirm' }) })
@@ -73,7 +73,7 @@ export function dialog(...args) {
       const cached = dialogCache.get(anchorEl);
       if (cached) {
         if (!isHoverTrigger) cached.toggle();
-        else if (!cached.isOpen) cached.open();
+        else if (!cached.isOpen) cached.show();
         return cached;
       }
       
@@ -91,7 +91,7 @@ export function dialog(...args) {
         _isChildOfAnchor: isHoverTrigger
       });
       dialogCache.set(anchorEl, newDialog);
-      newDialog.open();
+      newDialog.show();
       
       return newDialog;
     }
@@ -104,7 +104,7 @@ export function dialog(...args) {
       type: 'modal',
       position, arrow, content, inverted 
     });
-    modalDialog.open();
+    modalDialog.show();
     return modalDialog;
   }
 
@@ -162,7 +162,11 @@ export function dialog(...args) {
     } else {
       positionPopover();
       root.dataset.open = 'true';
-      cleanupOutside = onOutsideClick(root, close);
+      // Exclude anchor from outside click detection so toggle works
+      cleanupOutside = onOutsideClick(root, (e) => {
+        if (currentAnchor?.contains(e.target)) return; // Let toggle handle anchor clicks
+        close();
+      });
     }
 
     document.addEventListener('keydown', onKeydown, true);
@@ -283,8 +287,9 @@ export function dialog(...args) {
 
   inverted && root.classList.add('ui-inverted');
 
-  root.open = open;
-  root.close = close;
+  // Use show/hide/toggle to avoid conflict with native <dialog>.open property
+  root.show = open;
+  root.hide = close;
   root.toggle = toggle;
   Object.defineProperty(root, 'isOpen', { get: () => isOpen });
 

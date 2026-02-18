@@ -100,10 +100,10 @@ export function confirm(...args) {
     ]
   });
 
-  trigger.addEventListener('click', () => instance.open());
+  trigger.addEventListener('click', () => instance.show());
 
-  root.open = () => instance.open();
-  root.close = () => instance.close();
+  root.open = () => instance.show();
+  root.close = () => instance.hide();
 
   return root;
 }

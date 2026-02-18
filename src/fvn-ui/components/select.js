@@ -1,4 +1,4 @@
-import { el, col, getCallback, escapeHtml, onOutsideClick, withValue, parseArgs, configToClasses, bemFactory } from '../dom.js'
+import { el, col, getCallback, escapeHtml, onOutsideClick, withValue, parseArgs, configToClasses, bemFactory, focusAfterRender } from '../dom.js'
 import { button } from './button.js'
 import { text } from './text.js'
 import { svg } from './svg.js'
@@ -39,6 +39,7 @@ export function selectComponent(...args) {
     multiselect = false,
     filter: filterProp,
     filterPlaceholder = 'Filter...',
+    focus,
     props,
     ...rest
   } = parseArgs(...args);
@@ -267,7 +268,10 @@ export function selectComponent(...args) {
             type: 'button',
             class: [bem.el('trigger'), 'ui-border'],
             attrs: { 'aria-haspopup': 'listbox', 'aria-expanded': false },
-            ref: (e) => triggerEl = e,
+            ref: (e) => {
+              triggerEl = e;
+              if (focus) focusAfterRender(e);
+            },
             onClick: () => setOpen(!isOpen),
             onKeydown: onTriggerKeydown,
             children: [

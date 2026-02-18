@@ -16,6 +16,8 @@
 .ui-editable.ui-plain {
   border: none;
   padding: 0;
+  min-height: auto;
+  border-radius: 0;
 }
 
 /* Placeholder via :empty and data attribute */

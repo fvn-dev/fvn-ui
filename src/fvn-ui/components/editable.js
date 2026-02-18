@@ -1,4 +1,4 @@
-import { el, col, parseArgs, configToClasses, bemFactory, noSpellcheck } from '../dom.js'
+import { el, col, parseArgs, configToClasses, bemFactory, noSpellcheck, focusAfterRender } from '../dom.js'
 import { label as textLabel } from './text.js'
 import './editable.css'
 
@@ -40,6 +40,7 @@ export function editable(...args) {
     multiline,
     plainText = false,
     plain = false,
+    focus,
     onChange,
     onInput,
     onFocus,
@@ -140,6 +141,7 @@ export function editable(...args) {
     ref: (e) => {
       editableEl = e;
       if (value) e.innerHTML = value;
+      if (focus) focusAfterRender(e);
     },
     onInput: handleInput,
     onKeydown: handleKeydown,

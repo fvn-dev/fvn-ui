@@ -68,6 +68,11 @@ export const withValue = (element, getter, setter) => {
   return element;
 };
 
+export const focusAfterRender = (el) => {
+  if (!el) return;
+  requestAnimationFrame(() => el.focus());
+};
+
 export const getCallback = (preferred, obj, skipFallback) =>
   obj[preferred] || obj[preferred.toLowerCase()] || (!skipFallback && (obj.callback || obj.cb));
 

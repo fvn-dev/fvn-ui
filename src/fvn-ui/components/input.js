@@ -1,4 +1,4 @@
-import { el, col, getCallback, withValue, parseArgs, configToClasses, bemFactory, noSpellcheck } from '../dom.js'
+import { el, col, getCallback, withValue, parseArgs, configToClasses, bemFactory, noSpellcheck, focusAfterRender } from '../dom.js'
 import { button } from './button.js'
 import { label as textLabel } from './text.js'
 import './input.css'
@@ -33,6 +33,7 @@ export function input(...args) {
     value,
     label,
     placeholder,
+    focus,
     attrs = {},
     props,
     ...rest
@@ -74,6 +75,7 @@ export function input(...args) {
             ref: (e) => {
               inputEl = e;
               if (isTextarea && value) e.textContent = value;
+              if (focus) focusAfterRender(e);
             },
             onKeyup: cb && onKeyup
           }),

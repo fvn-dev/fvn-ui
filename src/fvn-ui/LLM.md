@@ -420,10 +420,15 @@ tabs({
 
 ```js
 // Modal dialog
-modal({ 
-  open: clickEvent, 
+const dlg = modal({ 
   content: card({ title: 'Edit Profile', content: form })
 })
+dlg.show()  // Open the dialog
+dlg.hide()  // Close the dialog
+dlg.toggle() // Toggle open/close
+
+// Auto-open on event
+modal({ open: clickEvent, content: card({ title: 'Edit' }) })
 
 // Tooltip on hover
 button({
@@ -442,6 +447,15 @@ confirm({
   cancel: 'Cancel',
   onConfirm: handleDelete
 })
+```
+
+**Dialog instance methods:**
+| Method | Description |
+|--------|-------------|
+| `show()` | Open the dialog |
+| `hide()` | Close the dialog |
+| `toggle()` | Toggle open/close |
+| `isOpen` | Boolean property for current state |
 ```
 
 ---
