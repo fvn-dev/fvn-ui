@@ -27,28 +27,37 @@ const slugify = (str) => String(str || '')
   .replace(/[^a-z0-9]+/g, '-')
   .replace(/^-|-$/g, '');
 
-const bootstrap = (componentFn, componentName, customConfig) => (...args) => {
-  const idx = args.findIndex((a) => a && typeof a === 'object' && !(a instanceof Node) && !Array.isArray(a));
-  const obj = idx !== -1 ? args[idx] : (args.push({}), args.at(-1));
-  obj.class = [BASE_CLASS, obj.class];
-  
-  if (customConfig) {
-    Object.assign(obj, customConfig);
-  }
-  
-  const result = componentFn(...args);
-  
-  // ---> register in dom object if identifiable
-
-  const key = obj.id || slugify(obj.label) || slugify(obj.title);
-  if (key && componentName) {
-    (dom[componentName] ||= {})[key] = result;
-    if (obj.id) {
-      dom[obj.id] = result;
+const bootstrap = (componentFn, componentName, customConfig) => {
+  const wrapper = (...args) => {
+    const idx = args.findIndex((a) => a && typeof a === 'object' && !(a instanceof Node) && !Array.isArray(a));
+    const obj = idx !== -1 ? args[idx] : (args.push({}), args.at(-1));
+    obj.class = [BASE_CLASS, obj.class];
+    
+    if (customConfig) {
+      Object.assign(obj, customConfig);
     }
-  }
+    
+    const result = componentFn(...args);
+    
+    // ---> register in dom object if identifiable
+
+    const key = obj.id || slugify(obj.label) || slugify(obj.title);
+    if (key && componentName) {
+      (dom[componentName] ||= {})[key] = result;
+      if (obj.id) {
+        dom[obj.id] = result;
+      }
+    }
+    
+    return result;
+  };
   
-  return result;
+  // Copy over any static methods from original function (e.g., svg.extend, svg.list)
+  Object.keys(componentFn).forEach(key => {
+    wrapper[key] = componentFn[key];
+  });
+  
+  return wrapper;
 };
 
 export const avatar = bootstrap(_avatar, 'avatar');
