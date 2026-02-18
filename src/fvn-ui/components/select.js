@@ -277,7 +277,7 @@ export function selectComponent(...args) {
             children: [
               el('span', { class: bem.el('value'), ref: (e) => valueEl = e }),
               el('span', { class: bem.el('actions'), children: [
-                button({ icon: 'chevron-down', variant: 'stripped', muted: true }),
+                button({ icon: 'chevron-down', variant: 'none', muted: true }),
                 multiselect && el('span', { 
                   class: bem.el('badge'),
                   ref: (e) => badgeEl = e,

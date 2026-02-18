@@ -482,6 +482,22 @@ function miscPresentation() {
     text.header({ title: 'Normal header', description: 'with a description' }),
     text.label('Label'), 
     text.label('Soft label', { soft: true }),
+    layout.row({ gap: 4 }, [
+      selectComponent({
+        //label: 'Pick a fruit',
+        options: exampleOptions.slice(0, 5),
+        value: 1
+      }),
+      input({
+        //label: 'Text input',
+        placeholder: 'Type something...'
+      }),
+      button({ 
+        label: 'Button',
+        variant: 'outline',
+        style: { alignSelf: 'flex-end' }
+      })     
+    ]),
   ]);
 }
 

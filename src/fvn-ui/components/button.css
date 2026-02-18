@@ -2,6 +2,7 @@
   --bg: transparent;
   --fg: var(--text);
   flex: none;
+  align-self: flex-start;
   border: 1px solid transparent;
   background: var(--bg);
   color: var(--fg);
@@ -49,6 +50,9 @@
 }
 .ui-btn--stripped {
   --input-padding: 0;
+  & > div {
+    border-bottom: 1px solid var(--muted);
+  }
 }
 .ui-btn--minimal {
   --bg: transparent;

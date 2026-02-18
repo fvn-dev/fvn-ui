@@ -181,22 +181,47 @@ export function dialog(...args) {
     }
     
     const gap = 8;
+    const edgePadding = 12;
+    const anchorRect = currentAnchor.getBoundingClientRect();
+    const popoverWidth = root.offsetWidth || 200;
+    const popoverHeight = root.offsetHeight || 100;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // Determine vertical position - flip if needed
+    let actualPosition = position;
+    if (position === 'bottom' && anchorRect.bottom + popoverHeight + gap > viewportHeight) {
+      actualPosition = 'top';
+    } else if (position === 'top' && anchorRect.top - popoverHeight - gap < 0) {
+      actualPosition = 'bottom';
+    }
+    root.dataset.position = actualPosition;
     
     // If tooltip is child of anchor, use relative positioning
     if (_isChildOfAnchor) {
       const anchorHeight = currentAnchor.offsetHeight;
-      const popoverHeight = root.offsetHeight || 100;
+      const anchorWidth = currentAnchor.offsetWidth;
       
-      let actualPosition = position;
-      // Simple flip check based on viewport position
-      const anchorRect = currentAnchor.getBoundingClientRect();
-      if (position === 'bottom' && anchorRect.bottom + popoverHeight + gap > window.innerHeight) {
-        actualPosition = 'top';
+      // Calculate horizontal position with viewport clamping
+      const anchorLeft = anchorRect.left;
+      const anchorCenterX = anchorLeft + anchorWidth / 2;
+      
+      // Ideal position is centered
+      let idealLeft = (anchorWidth - popoverWidth) / 2;
+      
+      // Check if it would go off-screen left
+      const absoluteLeft = anchorLeft + idealLeft;
+      if (absoluteLeft < edgePadding) {
+        idealLeft = edgePadding - anchorLeft;
+      }
+      // Check if it would go off-screen right
+      const absoluteRight = anchorLeft + idealLeft + popoverWidth;
+      if (absoluteRight > viewportWidth - edgePadding) {
+        idealLeft = viewportWidth - edgePadding - popoverWidth - anchorLeft;
       }
       
-      root.style.left = '50%';
-      root.style.transform = 'translateX(-50%)';
-      root.dataset.position = actualPosition;
+      root.style.left = `${idealLeft}px`;
+      root.style.transform = 'none';
       
       if (actualPosition === 'bottom') {
         root.style.top = `${anchorHeight + gap}px`;
@@ -206,32 +231,20 @@ export function dialog(...args) {
         root.style.top = 'auto';
       }
       
+      // Position arrow to point at anchor center
+      if (arrowEl) {
+        const arrowOffset = (anchorWidth / 2) - idealLeft;
+        arrowEl.style.left = `${arrowOffset}px`;
+      }
+      
       return;
     }
     
-    const anchorRect = currentAnchor.getBoundingClientRect();
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-    const edgePadding = 12;
-    const popoverWidth = root.offsetWidth || 200;
-    const popoverHeight = root.offsetHeight || 100;
-
-    // Determine vertical position - flip if needed
-    const spaceBelow = viewportHeight - anchorRect.bottom - gap - edgePadding;
-    const spaceAbove = anchorRect.top - gap - edgePadding;
-    
-    let actualPosition = position;
-    if (position === 'bottom' && spaceBelow < popoverHeight && spaceAbove > spaceBelow) {
-      actualPosition = 'top';
-    } else if (position === 'top' && spaceAbove < popoverHeight && spaceBelow > spaceAbove) {
-      actualPosition = 'bottom';
-    }
-
+    // Fixed positioning for click-triggered tooltips
     root.style.top = actualPosition === 'bottom'
       ? `${anchorRect.bottom + gap}px`
       : `${anchorRect.top - popoverHeight - gap}px`;
     root.style.bottom = 'auto';
-    root.dataset.position = actualPosition;
     
     const anchorCenterX = anchorRect.left + anchorRect.width / 2;
     const minLeft = edgePadding;

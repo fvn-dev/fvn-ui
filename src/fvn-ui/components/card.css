@@ -4,3 +4,7 @@
   color: var(--text);
   box-shadow: var(--shadow-sm);
 }
+
+.ui-dialog-component .ui-card {
+  box-shadow: none;
+}
