@@ -800,9 +800,9 @@
           "index": 1280
         },
         "end": {
-          "line": 136,
+          "line": 138,
           "column": 1,
-          "index": 4047
+          "index": 4106
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/button.js"
@@ -1673,6 +1673,1714 @@
       }
     ],
     "namespace": "card"
+  },
+  {
+    "description": {
+      "type": "root",
+      "children": [
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "value": "Creates a checkbox input"
+            }
+          ]
+        }
+      ]
+    },
+    "tags": [
+      {
+        "title": "param",
+        "description": null,
+        "lineNumber": 2,
+        "type": {
+          "type": "NameExpression",
+          "name": "Object"
+        },
+        "name": "config"
+      },
+      {
+        "title": "param",
+        "description": "Checkbox label",
+        "lineNumber": 3,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.label"
+      },
+      {
+        "title": "param",
+        "description": "Initial checked state",
+        "lineNumber": 4,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "boolean"
+          }
+        },
+        "name": "config.checked"
+      },
+      {
+        "title": "param",
+        "description": "Disabled state",
+        "lineNumber": 5,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "boolean"
+          }
+        },
+        "name": "config.disabled"
+      },
+      {
+        "title": "param",
+        "description": "Form value when checked",
+        "lineNumber": 6,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.value",
+        "default": "'on'"
+      },
+      {
+        "title": "param",
+        "description": "Checkbox color when checked",
+        "lineNumber": 7,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "UnionType",
+            "elements": [
+              {
+                "type": "StringLiteralType",
+                "value": "primary"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "red"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "green"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "blue"
+              }
+            ]
+          }
+        },
+        "name": "config.color"
+      },
+      {
+        "title": "param",
+        "description": "Called with (checked, event)",
+        "lineNumber": 8,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Function"
+          }
+        },
+        "name": "config.onChange"
+      },
+      {
+        "title": "param",
+        "description": "Registers to dom.checkbox[id] and dom[id]",
+        "lineNumber": 9,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.id"
+      },
+      {
+        "title": "returns",
+        "description": "Checkbox element with .value getter/setter",
+        "lineNumber": 10,
+        "type": {
+          "type": "NameExpression",
+          "name": "HTMLLabelElement"
+        }
+      },
+      {
+        "title": "example",
+        "description": "checkbox({ label: 'Accept terms' })\ncheckbox({ label: 'Premium', color: 'blue', checked: true })",
+        "lineNumber": 11
+      }
+    ],
+    "loc": {
+      "start": {
+        "line": 9,
+        "column": 0,
+        "index": 255
+      },
+      "end": {
+        "line": 23,
+        "column": 3,
+        "index": 970
+      }
+    },
+    "context": {
+      "loc": {
+        "start": {
+          "line": 24,
+          "column": 0,
+          "index": 971
+        },
+        "end": {
+          "line": 82,
+          "column": 1,
+          "index": 2370
+        }
+      },
+      "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/checkbox.js"
+    },
+    "augments": [],
+    "examples": [
+      {
+        "description": "checkbox({ label: 'Accept terms' })\ncheckbox({ label: 'Premium', color: 'blue', checked: true })"
+      }
+    ],
+    "implements": [],
+    "params": [
+      {
+        "title": "param",
+        "name": "args",
+        "lineNumber": 24,
+        "type": {
+          "type": "RestType"
+        }
+      },
+      {
+        "title": "param",
+        "name": "config",
+        "lineNumber": 2,
+        "type": {
+          "type": "NameExpression",
+          "name": "Object"
+        },
+        "properties": [
+          {
+            "title": "param",
+            "name": "config.label",
+            "lineNumber": 3,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Checkbox label"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "string"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.checked",
+            "lineNumber": 4,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Initial checked state"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "boolean"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.disabled",
+            "lineNumber": 5,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Disabled state"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "boolean"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.value",
+            "lineNumber": 6,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Form value when checked"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "NameExpression",
+              "name": "string"
+            },
+            "default": "'on'"
+          },
+          {
+            "title": "param",
+            "name": "config.color",
+            "lineNumber": 7,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Checkbox color when checked"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "UnionType",
+                "elements": [
+                  {
+                    "type": "StringLiteralType",
+                    "value": "primary"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "red"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "green"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "blue"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.onChange",
+            "lineNumber": 8,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Called with (checked, event)"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "Function"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.id",
+            "lineNumber": 9,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Registers to dom.checkbox[id] and dom[id]"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "string"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "properties": [],
+    "returns": [
+      {
+        "description": {
+          "type": "root",
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Checkbox element with .value getter/setter"
+                }
+              ]
+            }
+          ]
+        },
+        "title": "returns",
+        "type": {
+          "type": "NameExpression",
+          "name": "HTMLLabelElement"
+        }
+      }
+    ],
+    "sees": [],
+    "throws": [],
+    "todos": [],
+    "yields": [],
+    "name": "checkbox",
+    "kind": "function",
+    "members": {
+      "global": [],
+      "inner": [],
+      "instance": [],
+      "events": [],
+      "static": []
+    },
+    "path": [
+      {
+        "name": "checkbox",
+        "kind": "function"
+      }
+    ],
+    "namespace": "checkbox"
+  },
+  {
+    "description": {
+      "type": "root",
+      "children": [
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "value": "Creates a collapsible/accordion section"
+            }
+          ]
+        }
+      ]
+    },
+    "tags": [
+      {
+        "title": "param",
+        "description": null,
+        "lineNumber": 2,
+        "type": {
+          "type": "NameExpression",
+          "name": "Object"
+        },
+        "name": "config"
+      },
+      {
+        "title": "param",
+        "description": "Trigger label",
+        "lineNumber": 3,
+        "type": {
+          "type": "NameExpression",
+          "name": "string"
+        },
+        "name": "config.label"
+      },
+      {
+        "title": "param",
+        "description": "Collapsible content",
+        "lineNumber": 4,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "UnionType",
+            "elements": [
+              {
+                "type": "NameExpression",
+                "name": "string"
+              },
+              {
+                "type": "NameExpression",
+                "name": "HTMLElement"
+              }
+            ]
+          }
+        },
+        "name": "config.content"
+      },
+      {
+        "title": "param",
+        "description": "Initially open",
+        "lineNumber": 5,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "boolean"
+          }
+        },
+        "name": "config.open"
+      },
+      {
+        "title": "param",
+        "description": "Disabled state",
+        "lineNumber": 6,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "boolean"
+          }
+        },
+        "name": "config.disabled"
+      },
+      {
+        "title": "param",
+        "description": "Called with (isOpen)",
+        "lineNumber": 7,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Function"
+          }
+        },
+        "name": "config.onChange"
+      },
+      {
+        "title": "param",
+        "description": "Registers to dom.collapsible[id] and dom[id]",
+        "lineNumber": 8,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.id"
+      },
+      {
+        "title": "returns",
+        "description": "Collapsible element with .value getter/setter for open state",
+        "lineNumber": 9,
+        "type": {
+          "type": "NameExpression",
+          "name": "HTMLDivElement"
+        }
+      },
+      {
+        "title": "example",
+        "description": "collapsible({ label: 'Advanced Settings', content: card({ title: 'Settings' }) })\ncollapsible({ label: 'Details', open: true, content: 'Hidden content' })",
+        "lineNumber": 10
+      }
+    ],
+    "loc": {
+      "start": {
+        "line": 8,
+        "column": 0,
+        "index": 236
+      },
+      "end": {
+        "line": 21,
+        "column": 3,
+        "index": 939
+      }
+    },
+    "context": {
+      "loc": {
+        "start": {
+          "line": 22,
+          "column": 0,
+          "index": 940
+        },
+        "end": {
+          "line": 72,
+          "column": 1,
+          "index": 2073
+        }
+      },
+      "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/collapsible.js"
+    },
+    "augments": [],
+    "examples": [
+      {
+        "description": "collapsible({ label: 'Advanced Settings', content: card({ title: 'Settings' }) })\ncollapsible({ label: 'Details', open: true, content: 'Hidden content' })"
+      }
+    ],
+    "implements": [],
+    "params": [
+      {
+        "title": "param",
+        "name": "args",
+        "lineNumber": 22,
+        "type": {
+          "type": "RestType"
+        }
+      },
+      {
+        "title": "param",
+        "name": "config",
+        "lineNumber": 2,
+        "type": {
+          "type": "NameExpression",
+          "name": "Object"
+        },
+        "properties": [
+          {
+            "title": "param",
+            "name": "config.label",
+            "lineNumber": 3,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Trigger label"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "NameExpression",
+              "name": "string"
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.content",
+            "lineNumber": 4,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Collapsible content"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "UnionType",
+                "elements": [
+                  {
+                    "type": "NameExpression",
+                    "name": "string"
+                  },
+                  {
+                    "type": "NameExpression",
+                    "name": "HTMLElement"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.open",
+            "lineNumber": 5,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Initially open"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "boolean"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.disabled",
+            "lineNumber": 6,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Disabled state"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "boolean"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.onChange",
+            "lineNumber": 7,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Called with (isOpen)"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "Function"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.id",
+            "lineNumber": 8,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Registers to dom.collapsible[id] and dom[id]"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "string"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "properties": [],
+    "returns": [
+      {
+        "description": {
+          "type": "root",
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Collapsible element with .value getter/setter for open state"
+                }
+              ]
+            }
+          ]
+        },
+        "title": "returns",
+        "type": {
+          "type": "NameExpression",
+          "name": "HTMLDivElement"
+        }
+      }
+    ],
+    "sees": [],
+    "throws": [],
+    "todos": [],
+    "yields": [],
+    "name": "collapsible",
+    "kind": "function",
+    "members": {
+      "global": [],
+      "inner": [],
+      "instance": [],
+      "events": [],
+      "static": []
+    },
+    "path": [
+      {
+        "name": "collapsible",
+        "kind": "function"
+      }
+    ],
+    "namespace": "collapsible"
+  },
+  {
+    "description": {
+      "type": "root",
+      "children": [
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "text",
+              "value": "Creates a confirmation dialog with trigger button"
+            }
+          ]
+        }
+      ]
+    },
+    "tags": [
+      {
+        "title": "param",
+        "description": null,
+        "lineNumber": 2,
+        "type": {
+          "type": "NameExpression",
+          "name": "Object"
+        },
+        "name": "config"
+      },
+      {
+        "title": "param",
+        "description": "Trigger button text",
+        "lineNumber": 3,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.label",
+        "default": "'Open dialog'"
+      },
+      {
+        "title": "param",
+        "description": "Dialog title",
+        "lineNumber": 4,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.title",
+        "default": "'Are you absolutely sure?'"
+      },
+      {
+        "title": "param",
+        "description": "Dialog description",
+        "lineNumber": 5,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.description",
+        "default": "'This action cannot be undone.'"
+      },
+      {
+        "title": "param",
+        "description": "Confirm button text",
+        "lineNumber": 6,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.confirm",
+        "default": "'Continue'"
+      },
+      {
+        "title": "param",
+        "description": "Cancel button text",
+        "lineNumber": 7,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.cancel",
+        "default": "'Cancel'"
+      },
+      {
+        "title": "param",
+        "description": "Dialog type",
+        "lineNumber": 8,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "UnionType",
+            "elements": [
+              {
+                "type": "StringLiteralType",
+                "value": "modal"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "tooltip"
+              }
+            ]
+          }
+        },
+        "name": "config.type",
+        "default": "'modal'"
+      },
+      {
+        "title": "param",
+        "description": "Trigger button icon",
+        "lineNumber": 9,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "string"
+          }
+        },
+        "name": "config.icon"
+      },
+      {
+        "title": "param",
+        "description": "Trigger button shape",
+        "lineNumber": 10,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "StringLiteralType",
+            "value": "round"
+          }
+        },
+        "name": "config.shape"
+      },
+      {
+        "title": "param",
+        "description": "Color for both trigger and confirm buttons",
+        "lineNumber": 11,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "UnionType",
+            "elements": [
+              {
+                "type": "StringLiteralType",
+                "value": "primary"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "red"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "green"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "blue"
+              }
+            ]
+          }
+        },
+        "name": "config.color"
+      },
+      {
+        "title": "param",
+        "description": "Override color for trigger button",
+        "lineNumber": 12,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "UnionType",
+            "elements": [
+              {
+                "type": "StringLiteralType",
+                "value": "primary"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "red"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "green"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "blue"
+              }
+            ]
+          }
+        },
+        "name": "config.triggerColor"
+      },
+      {
+        "title": "param",
+        "description": "Override color for confirm button",
+        "lineNumber": 13,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "UnionType",
+            "elements": [
+              {
+                "type": "StringLiteralType",
+                "value": "primary"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "red"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "green"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "blue"
+              }
+            ]
+          }
+        },
+        "name": "config.confirmColor"
+      },
+      {
+        "title": "param",
+        "description": "Trigger button variant",
+        "lineNumber": 14,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "UnionType",
+            "elements": [
+              {
+                "type": "StringLiteralType",
+                "value": "default"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "primary"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "outline"
+              },
+              {
+                "type": "StringLiteralType",
+                "value": "ghost"
+              }
+            ]
+          }
+        },
+        "name": "config.variant"
+      },
+      {
+        "title": "param",
+        "description": "Inverted dialog style",
+        "lineNumber": 15,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "boolean"
+          }
+        },
+        "name": "config.inverted"
+      },
+      {
+        "title": "param",
+        "description": "Called when confirm clicked",
+        "lineNumber": 16,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Function"
+          }
+        },
+        "name": "config.onConfirm"
+      },
+      {
+        "title": "param",
+        "description": "Called when cancel clicked",
+        "lineNumber": 17,
+        "type": {
+          "type": "OptionalType",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Function"
+          }
+        },
+        "name": "config.onCancel"
+      },
+      {
+        "title": "returns",
+        "description": "Container with trigger button and dialog",
+        "lineNumber": 18,
+        "type": {
+          "type": "NameExpression",
+          "name": "HTMLDivElement"
+        }
+      },
+      {
+        "title": "example",
+        "description": "confirm({ label: 'Delete', color: 'red', title: 'Delete item?', onConfirm: handleDelete })\nconfirm({ label: 'Save', triggerColor: 'green', confirmColor: 'red', title: 'Confirm?' })",
+        "lineNumber": 19
+      }
+    ],
+    "loc": {
+      "start": {
+        "line": 8,
+        "column": 0,
+        "index": 229
+      },
+      "end": {
+        "line": 30,
+        "column": 3,
+        "index": 1733
+      }
+    },
+    "context": {
+      "loc": {
+        "start": {
+          "line": 31,
+          "column": 0,
+          "index": 1734
+        },
+        "end": {
+          "line": 109,
+          "column": 1,
+          "index": 3568
+        }
+      },
+      "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/confirm.js"
+    },
+    "augments": [],
+    "examples": [
+      {
+        "description": "confirm({ label: 'Delete', color: 'red', title: 'Delete item?', onConfirm: handleDelete })\nconfirm({ label: 'Save', triggerColor: 'green', confirmColor: 'red', title: 'Confirm?' })"
+      }
+    ],
+    "implements": [],
+    "params": [
+      {
+        "title": "param",
+        "name": "args",
+        "lineNumber": 31,
+        "type": {
+          "type": "RestType"
+        }
+      },
+      {
+        "title": "param",
+        "name": "config",
+        "lineNumber": 2,
+        "type": {
+          "type": "NameExpression",
+          "name": "Object"
+        },
+        "properties": [
+          {
+            "title": "param",
+            "name": "config.label",
+            "lineNumber": 3,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Trigger button text"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "NameExpression",
+              "name": "string"
+            },
+            "default": "'Open dialog'"
+          },
+          {
+            "title": "param",
+            "name": "config.title",
+            "lineNumber": 4,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Dialog title"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "NameExpression",
+              "name": "string"
+            },
+            "default": "'Are you absolutely sure?'"
+          },
+          {
+            "title": "param",
+            "name": "config.description",
+            "lineNumber": 5,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Dialog description"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "NameExpression",
+              "name": "string"
+            },
+            "default": "'This action cannot be undone.'"
+          },
+          {
+            "title": "param",
+            "name": "config.confirm",
+            "lineNumber": 6,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Confirm button text"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "NameExpression",
+              "name": "string"
+            },
+            "default": "'Continue'"
+          },
+          {
+            "title": "param",
+            "name": "config.cancel",
+            "lineNumber": 7,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Cancel button text"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "NameExpression",
+              "name": "string"
+            },
+            "default": "'Cancel'"
+          },
+          {
+            "title": "param",
+            "name": "config.type",
+            "lineNumber": 8,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Dialog type"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "UnionType",
+              "elements": [
+                {
+                  "type": "StringLiteralType",
+                  "value": "modal"
+                },
+                {
+                  "type": "StringLiteralType",
+                  "value": "tooltip"
+                }
+              ]
+            },
+            "default": "'modal'"
+          },
+          {
+            "title": "param",
+            "name": "config.icon",
+            "lineNumber": 9,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Trigger button icon"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "string"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.shape",
+            "lineNumber": 10,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Trigger button shape"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "StringLiteralType",
+                "value": "round"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.color",
+            "lineNumber": 11,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Color for both trigger and confirm buttons"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "UnionType",
+                "elements": [
+                  {
+                    "type": "StringLiteralType",
+                    "value": "primary"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "red"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "green"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "blue"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.triggerColor",
+            "lineNumber": 12,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Override color for trigger button"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "UnionType",
+                "elements": [
+                  {
+                    "type": "StringLiteralType",
+                    "value": "primary"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "red"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "green"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "blue"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.confirmColor",
+            "lineNumber": 13,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Override color for confirm button"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "UnionType",
+                "elements": [
+                  {
+                    "type": "StringLiteralType",
+                    "value": "primary"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "red"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "green"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "blue"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.variant",
+            "lineNumber": 14,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Trigger button variant"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "UnionType",
+                "elements": [
+                  {
+                    "type": "StringLiteralType",
+                    "value": "default"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "primary"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "outline"
+                  },
+                  {
+                    "type": "StringLiteralType",
+                    "value": "ghost"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.inverted",
+            "lineNumber": 15,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Inverted dialog style"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "boolean"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.onConfirm",
+            "lineNumber": 16,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Called when confirm clicked"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "Function"
+              }
+            }
+          },
+          {
+            "title": "param",
+            "name": "config.onCancel",
+            "lineNumber": 17,
+            "description": {
+              "type": "root",
+              "children": [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "type": "text",
+                      "value": "Called when cancel clicked"
+                    }
+                  ]
+                }
+              ]
+            },
+            "type": {
+              "type": "OptionalType",
+              "expression": {
+                "type": "NameExpression",
+                "name": "Function"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "properties": [],
+    "returns": [
+      {
+        "description": {
+          "type": "root",
+          "children": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Container with trigger button and dialog"
+                }
+              ]
+            }
+          ]
+        },
+        "title": "returns",
+        "type": {
+          "type": "NameExpression",
+          "name": "HTMLDivElement"
+        }
+      }
+    ],
+    "sees": [],
+    "throws": [],
+    "todos": [],
+    "yields": [],
+    "name": "confirm",
+    "kind": "function",
+    "members": {
+      "global": [],
+      "inner": [],
+      "instance": [],
+      "events": [],
+      "static": []
+    },
+    "path": [
+      {
+        "name": "confirm",
+        "kind": "function"
+      }
+    ],
+    "namespace": "confirm"
   },
   {
     "description": {
@@ -3484,1714 +5192,6 @@
           "children": [
             {
               "type": "text",
-              "value": "Creates a checkbox input"
-            }
-          ]
-        }
-      ]
-    },
-    "tags": [
-      {
-        "title": "param",
-        "description": null,
-        "lineNumber": 2,
-        "type": {
-          "type": "NameExpression",
-          "name": "Object"
-        },
-        "name": "config"
-      },
-      {
-        "title": "param",
-        "description": "Checkbox label",
-        "lineNumber": 3,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.label"
-      },
-      {
-        "title": "param",
-        "description": "Initial checked state",
-        "lineNumber": 4,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "boolean"
-          }
-        },
-        "name": "config.checked"
-      },
-      {
-        "title": "param",
-        "description": "Disabled state",
-        "lineNumber": 5,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "boolean"
-          }
-        },
-        "name": "config.disabled"
-      },
-      {
-        "title": "param",
-        "description": "Form value when checked",
-        "lineNumber": 6,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.value",
-        "default": "'on'"
-      },
-      {
-        "title": "param",
-        "description": "Checkbox color when checked",
-        "lineNumber": 7,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "UnionType",
-            "elements": [
-              {
-                "type": "StringLiteralType",
-                "value": "primary"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "red"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "green"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "blue"
-              }
-            ]
-          }
-        },
-        "name": "config.color"
-      },
-      {
-        "title": "param",
-        "description": "Called with (checked, event)",
-        "lineNumber": 8,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Function"
-          }
-        },
-        "name": "config.onChange"
-      },
-      {
-        "title": "param",
-        "description": "Registers to dom.checkbox[id] and dom[id]",
-        "lineNumber": 9,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.id"
-      },
-      {
-        "title": "returns",
-        "description": "Checkbox element with .value getter/setter",
-        "lineNumber": 10,
-        "type": {
-          "type": "NameExpression",
-          "name": "HTMLLabelElement"
-        }
-      },
-      {
-        "title": "example",
-        "description": "checkbox({ label: 'Accept terms' })\ncheckbox({ label: 'Premium', color: 'blue', checked: true })",
-        "lineNumber": 11
-      }
-    ],
-    "loc": {
-      "start": {
-        "line": 9,
-        "column": 0,
-        "index": 255
-      },
-      "end": {
-        "line": 23,
-        "column": 3,
-        "index": 970
-      }
-    },
-    "context": {
-      "loc": {
-        "start": {
-          "line": 24,
-          "column": 0,
-          "index": 971
-        },
-        "end": {
-          "line": 82,
-          "column": 1,
-          "index": 2370
-        }
-      },
-      "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/checkbox.js"
-    },
-    "augments": [],
-    "examples": [
-      {
-        "description": "checkbox({ label: 'Accept terms' })\ncheckbox({ label: 'Premium', color: 'blue', checked: true })"
-      }
-    ],
-    "implements": [],
-    "params": [
-      {
-        "title": "param",
-        "name": "args",
-        "lineNumber": 24,
-        "type": {
-          "type": "RestType"
-        }
-      },
-      {
-        "title": "param",
-        "name": "config",
-        "lineNumber": 2,
-        "type": {
-          "type": "NameExpression",
-          "name": "Object"
-        },
-        "properties": [
-          {
-            "title": "param",
-            "name": "config.label",
-            "lineNumber": 3,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Checkbox label"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "string"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.checked",
-            "lineNumber": 4,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Initial checked state"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "boolean"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.disabled",
-            "lineNumber": 5,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Disabled state"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "boolean"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.value",
-            "lineNumber": 6,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Form value when checked"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "NameExpression",
-              "name": "string"
-            },
-            "default": "'on'"
-          },
-          {
-            "title": "param",
-            "name": "config.color",
-            "lineNumber": 7,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Checkbox color when checked"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "UnionType",
-                "elements": [
-                  {
-                    "type": "StringLiteralType",
-                    "value": "primary"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "red"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "green"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "blue"
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.onChange",
-            "lineNumber": 8,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Called with (checked, event)"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "Function"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.id",
-            "lineNumber": 9,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Registers to dom.checkbox[id] and dom[id]"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "string"
-              }
-            }
-          }
-        ]
-      }
-    ],
-    "properties": [],
-    "returns": [
-      {
-        "description": {
-          "type": "root",
-          "children": [
-            {
-              "type": "paragraph",
-              "children": [
-                {
-                  "type": "text",
-                  "value": "Checkbox element with .value getter/setter"
-                }
-              ]
-            }
-          ]
-        },
-        "title": "returns",
-        "type": {
-          "type": "NameExpression",
-          "name": "HTMLLabelElement"
-        }
-      }
-    ],
-    "sees": [],
-    "throws": [],
-    "todos": [],
-    "yields": [],
-    "name": "checkbox",
-    "kind": "function",
-    "members": {
-      "global": [],
-      "inner": [],
-      "instance": [],
-      "events": [],
-      "static": []
-    },
-    "path": [
-      {
-        "name": "checkbox",
-        "kind": "function"
-      }
-    ],
-    "namespace": "checkbox"
-  },
-  {
-    "description": {
-      "type": "root",
-      "children": [
-        {
-          "type": "paragraph",
-          "children": [
-            {
-              "type": "text",
-              "value": "Creates a collapsible/accordion section"
-            }
-          ]
-        }
-      ]
-    },
-    "tags": [
-      {
-        "title": "param",
-        "description": null,
-        "lineNumber": 2,
-        "type": {
-          "type": "NameExpression",
-          "name": "Object"
-        },
-        "name": "config"
-      },
-      {
-        "title": "param",
-        "description": "Trigger label",
-        "lineNumber": 3,
-        "type": {
-          "type": "NameExpression",
-          "name": "string"
-        },
-        "name": "config.label"
-      },
-      {
-        "title": "param",
-        "description": "Collapsible content",
-        "lineNumber": 4,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "UnionType",
-            "elements": [
-              {
-                "type": "NameExpression",
-                "name": "string"
-              },
-              {
-                "type": "NameExpression",
-                "name": "HTMLElement"
-              }
-            ]
-          }
-        },
-        "name": "config.content"
-      },
-      {
-        "title": "param",
-        "description": "Initially open",
-        "lineNumber": 5,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "boolean"
-          }
-        },
-        "name": "config.open"
-      },
-      {
-        "title": "param",
-        "description": "Disabled state",
-        "lineNumber": 6,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "boolean"
-          }
-        },
-        "name": "config.disabled"
-      },
-      {
-        "title": "param",
-        "description": "Called with (isOpen)",
-        "lineNumber": 7,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Function"
-          }
-        },
-        "name": "config.onChange"
-      },
-      {
-        "title": "param",
-        "description": "Registers to dom.collapsible[id] and dom[id]",
-        "lineNumber": 8,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.id"
-      },
-      {
-        "title": "returns",
-        "description": "Collapsible element with .value getter/setter for open state",
-        "lineNumber": 9,
-        "type": {
-          "type": "NameExpression",
-          "name": "HTMLDivElement"
-        }
-      },
-      {
-        "title": "example",
-        "description": "collapsible({ label: 'Advanced Settings', content: card({ title: 'Settings' }) })\ncollapsible({ label: 'Details', open: true, content: 'Hidden content' })",
-        "lineNumber": 10
-      }
-    ],
-    "loc": {
-      "start": {
-        "line": 8,
-        "column": 0,
-        "index": 236
-      },
-      "end": {
-        "line": 21,
-        "column": 3,
-        "index": 939
-      }
-    },
-    "context": {
-      "loc": {
-        "start": {
-          "line": 22,
-          "column": 0,
-          "index": 940
-        },
-        "end": {
-          "line": 72,
-          "column": 1,
-          "index": 2069
-        }
-      },
-      "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/collapsible.js"
-    },
-    "augments": [],
-    "examples": [
-      {
-        "description": "collapsible({ label: 'Advanced Settings', content: card({ title: 'Settings' }) })\ncollapsible({ label: 'Details', open: true, content: 'Hidden content' })"
-      }
-    ],
-    "implements": [],
-    "params": [
-      {
-        "title": "param",
-        "name": "args",
-        "lineNumber": 22,
-        "type": {
-          "type": "RestType"
-        }
-      },
-      {
-        "title": "param",
-        "name": "config",
-        "lineNumber": 2,
-        "type": {
-          "type": "NameExpression",
-          "name": "Object"
-        },
-        "properties": [
-          {
-            "title": "param",
-            "name": "config.label",
-            "lineNumber": 3,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Trigger label"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "NameExpression",
-              "name": "string"
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.content",
-            "lineNumber": 4,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Collapsible content"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "UnionType",
-                "elements": [
-                  {
-                    "type": "NameExpression",
-                    "name": "string"
-                  },
-                  {
-                    "type": "NameExpression",
-                    "name": "HTMLElement"
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.open",
-            "lineNumber": 5,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Initially open"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "boolean"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.disabled",
-            "lineNumber": 6,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Disabled state"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "boolean"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.onChange",
-            "lineNumber": 7,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Called with (isOpen)"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "Function"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.id",
-            "lineNumber": 8,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Registers to dom.collapsible[id] and dom[id]"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "string"
-              }
-            }
-          }
-        ]
-      }
-    ],
-    "properties": [],
-    "returns": [
-      {
-        "description": {
-          "type": "root",
-          "children": [
-            {
-              "type": "paragraph",
-              "children": [
-                {
-                  "type": "text",
-                  "value": "Collapsible element with .value getter/setter for open state"
-                }
-              ]
-            }
-          ]
-        },
-        "title": "returns",
-        "type": {
-          "type": "NameExpression",
-          "name": "HTMLDivElement"
-        }
-      }
-    ],
-    "sees": [],
-    "throws": [],
-    "todos": [],
-    "yields": [],
-    "name": "collapsible",
-    "kind": "function",
-    "members": {
-      "global": [],
-      "inner": [],
-      "instance": [],
-      "events": [],
-      "static": []
-    },
-    "path": [
-      {
-        "name": "collapsible",
-        "kind": "function"
-      }
-    ],
-    "namespace": "collapsible"
-  },
-  {
-    "description": {
-      "type": "root",
-      "children": [
-        {
-          "type": "paragraph",
-          "children": [
-            {
-              "type": "text",
-              "value": "Creates a confirmation dialog with trigger button"
-            }
-          ]
-        }
-      ]
-    },
-    "tags": [
-      {
-        "title": "param",
-        "description": null,
-        "lineNumber": 2,
-        "type": {
-          "type": "NameExpression",
-          "name": "Object"
-        },
-        "name": "config"
-      },
-      {
-        "title": "param",
-        "description": "Trigger button text",
-        "lineNumber": 3,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.label",
-        "default": "'Open dialog'"
-      },
-      {
-        "title": "param",
-        "description": "Dialog title",
-        "lineNumber": 4,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.title",
-        "default": "'Are you absolutely sure?'"
-      },
-      {
-        "title": "param",
-        "description": "Dialog description",
-        "lineNumber": 5,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.description",
-        "default": "'This action cannot be undone.'"
-      },
-      {
-        "title": "param",
-        "description": "Confirm button text",
-        "lineNumber": 6,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.confirm",
-        "default": "'Continue'"
-      },
-      {
-        "title": "param",
-        "description": "Cancel button text",
-        "lineNumber": 7,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.cancel",
-        "default": "'Cancel'"
-      },
-      {
-        "title": "param",
-        "description": "Dialog type",
-        "lineNumber": 8,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "UnionType",
-            "elements": [
-              {
-                "type": "StringLiteralType",
-                "value": "modal"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "tooltip"
-              }
-            ]
-          }
-        },
-        "name": "config.type",
-        "default": "'modal'"
-      },
-      {
-        "title": "param",
-        "description": "Trigger button icon",
-        "lineNumber": 9,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "string"
-          }
-        },
-        "name": "config.icon"
-      },
-      {
-        "title": "param",
-        "description": "Trigger button shape",
-        "lineNumber": 10,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "StringLiteralType",
-            "value": "round"
-          }
-        },
-        "name": "config.shape"
-      },
-      {
-        "title": "param",
-        "description": "Color for both trigger and confirm buttons",
-        "lineNumber": 11,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "UnionType",
-            "elements": [
-              {
-                "type": "StringLiteralType",
-                "value": "primary"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "red"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "green"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "blue"
-              }
-            ]
-          }
-        },
-        "name": "config.color"
-      },
-      {
-        "title": "param",
-        "description": "Override color for trigger button",
-        "lineNumber": 12,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "UnionType",
-            "elements": [
-              {
-                "type": "StringLiteralType",
-                "value": "primary"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "red"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "green"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "blue"
-              }
-            ]
-          }
-        },
-        "name": "config.triggerColor"
-      },
-      {
-        "title": "param",
-        "description": "Override color for confirm button",
-        "lineNumber": 13,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "UnionType",
-            "elements": [
-              {
-                "type": "StringLiteralType",
-                "value": "primary"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "red"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "green"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "blue"
-              }
-            ]
-          }
-        },
-        "name": "config.confirmColor"
-      },
-      {
-        "title": "param",
-        "description": "Trigger button variant",
-        "lineNumber": 14,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "UnionType",
-            "elements": [
-              {
-                "type": "StringLiteralType",
-                "value": "default"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "primary"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "outline"
-              },
-              {
-                "type": "StringLiteralType",
-                "value": "ghost"
-              }
-            ]
-          }
-        },
-        "name": "config.variant"
-      },
-      {
-        "title": "param",
-        "description": "Inverted dialog style",
-        "lineNumber": 15,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "boolean"
-          }
-        },
-        "name": "config.inverted"
-      },
-      {
-        "title": "param",
-        "description": "Called when confirm clicked",
-        "lineNumber": 16,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Function"
-          }
-        },
-        "name": "config.onConfirm"
-      },
-      {
-        "title": "param",
-        "description": "Called when cancel clicked",
-        "lineNumber": 17,
-        "type": {
-          "type": "OptionalType",
-          "expression": {
-            "type": "NameExpression",
-            "name": "Function"
-          }
-        },
-        "name": "config.onCancel"
-      },
-      {
-        "title": "returns",
-        "description": "Container with trigger button and dialog",
-        "lineNumber": 18,
-        "type": {
-          "type": "NameExpression",
-          "name": "HTMLDivElement"
-        }
-      },
-      {
-        "title": "example",
-        "description": "confirm({ label: 'Delete', color: 'red', title: 'Delete item?', onConfirm: handleDelete })\nconfirm({ label: 'Save', triggerColor: 'green', confirmColor: 'red', title: 'Confirm?' })",
-        "lineNumber": 19
-      }
-    ],
-    "loc": {
-      "start": {
-        "line": 8,
-        "column": 0,
-        "index": 229
-      },
-      "end": {
-        "line": 30,
-        "column": 3,
-        "index": 1733
-      }
-    },
-    "context": {
-      "loc": {
-        "start": {
-          "line": 31,
-          "column": 0,
-          "index": 1734
-        },
-        "end": {
-          "line": 109,
-          "column": 1,
-          "index": 3585
-        }
-      },
-      "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/confirm.js"
-    },
-    "augments": [],
-    "examples": [
-      {
-        "description": "confirm({ label: 'Delete', color: 'red', title: 'Delete item?', onConfirm: handleDelete })\nconfirm({ label: 'Save', triggerColor: 'green', confirmColor: 'red', title: 'Confirm?' })"
-      }
-    ],
-    "implements": [],
-    "params": [
-      {
-        "title": "param",
-        "name": "args",
-        "lineNumber": 31,
-        "type": {
-          "type": "RestType"
-        }
-      },
-      {
-        "title": "param",
-        "name": "config",
-        "lineNumber": 2,
-        "type": {
-          "type": "NameExpression",
-          "name": "Object"
-        },
-        "properties": [
-          {
-            "title": "param",
-            "name": "config.label",
-            "lineNumber": 3,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Trigger button text"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "NameExpression",
-              "name": "string"
-            },
-            "default": "'Open dialog'"
-          },
-          {
-            "title": "param",
-            "name": "config.title",
-            "lineNumber": 4,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Dialog title"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "NameExpression",
-              "name": "string"
-            },
-            "default": "'Are you absolutely sure?'"
-          },
-          {
-            "title": "param",
-            "name": "config.description",
-            "lineNumber": 5,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Dialog description"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "NameExpression",
-              "name": "string"
-            },
-            "default": "'This action cannot be undone.'"
-          },
-          {
-            "title": "param",
-            "name": "config.confirm",
-            "lineNumber": 6,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Confirm button text"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "NameExpression",
-              "name": "string"
-            },
-            "default": "'Continue'"
-          },
-          {
-            "title": "param",
-            "name": "config.cancel",
-            "lineNumber": 7,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Cancel button text"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "NameExpression",
-              "name": "string"
-            },
-            "default": "'Cancel'"
-          },
-          {
-            "title": "param",
-            "name": "config.type",
-            "lineNumber": 8,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Dialog type"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "UnionType",
-              "elements": [
-                {
-                  "type": "StringLiteralType",
-                  "value": "modal"
-                },
-                {
-                  "type": "StringLiteralType",
-                  "value": "tooltip"
-                }
-              ]
-            },
-            "default": "'modal'"
-          },
-          {
-            "title": "param",
-            "name": "config.icon",
-            "lineNumber": 9,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Trigger button icon"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "string"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.shape",
-            "lineNumber": 10,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Trigger button shape"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "StringLiteralType",
-                "value": "round"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.color",
-            "lineNumber": 11,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Color for both trigger and confirm buttons"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "UnionType",
-                "elements": [
-                  {
-                    "type": "StringLiteralType",
-                    "value": "primary"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "red"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "green"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "blue"
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.triggerColor",
-            "lineNumber": 12,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Override color for trigger button"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "UnionType",
-                "elements": [
-                  {
-                    "type": "StringLiteralType",
-                    "value": "primary"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "red"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "green"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "blue"
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.confirmColor",
-            "lineNumber": 13,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Override color for confirm button"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "UnionType",
-                "elements": [
-                  {
-                    "type": "StringLiteralType",
-                    "value": "primary"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "red"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "green"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "blue"
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.variant",
-            "lineNumber": 14,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Trigger button variant"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "UnionType",
-                "elements": [
-                  {
-                    "type": "StringLiteralType",
-                    "value": "default"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "primary"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "outline"
-                  },
-                  {
-                    "type": "StringLiteralType",
-                    "value": "ghost"
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.inverted",
-            "lineNumber": 15,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Inverted dialog style"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "boolean"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.onConfirm",
-            "lineNumber": 16,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Called when confirm clicked"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "Function"
-              }
-            }
-          },
-          {
-            "title": "param",
-            "name": "config.onCancel",
-            "lineNumber": 17,
-            "description": {
-              "type": "root",
-              "children": [
-                {
-                  "type": "paragraph",
-                  "children": [
-                    {
-                      "type": "text",
-                      "value": "Called when cancel clicked"
-                    }
-                  ]
-                }
-              ]
-            },
-            "type": {
-              "type": "OptionalType",
-              "expression": {
-                "type": "NameExpression",
-                "name": "Function"
-              }
-            }
-          }
-        ]
-      }
-    ],
-    "properties": [],
-    "returns": [
-      {
-        "description": {
-          "type": "root",
-          "children": [
-            {
-              "type": "paragraph",
-              "children": [
-                {
-                  "type": "text",
-                  "value": "Container with trigger button and dialog"
-                }
-              ]
-            }
-          ]
-        },
-        "title": "returns",
-        "type": {
-          "type": "NameExpression",
-          "name": "HTMLDivElement"
-        }
-      }
-    ],
-    "sees": [],
-    "throws": [],
-    "todos": [],
-    "yields": [],
-    "name": "confirm",
-    "kind": "function",
-    "members": {
-      "global": [],
-      "inner": [],
-      "instance": [],
-      "events": [],
-      "static": []
-    },
-    "path": [
-      {
-        "name": "confirm",
-        "kind": "function"
-      }
-    ],
-    "namespace": "confirm"
-  },
-  {
-    "description": {
-      "type": "root",
-      "children": [
-        {
-          "type": "paragraph",
-          "children": [
-            {
-              "type": "text",
               "value": "Creates a dashboard layout with header, menu, and view system"
             }
           ]
@@ -5811,7 +5811,7 @@
       },
       {
         "title": "returns",
-        "description": "Dialog element with showDialog(), closeDialog(), toggleDialog(), isOpen",
+        "description": "Dialog element with open(), close(), toggle(), isOpen",
         "lineNumber": 14,
         "type": {
           "type": "NameExpression",
@@ -5843,7 +5843,7 @@
       "end": {
         "line": 30,
         "column": 3,
-        "index": 1577
+        "index": 1559
       }
     },
     "context": {
@@ -5851,12 +5851,12 @@
         "start": {
           "line": 31,
           "column": 0,
-          "index": 1578
+          "index": 1560
         },
         "end": {
           "line": 302,
           "column": 1,
-          "index": 9797
+          "index": 9738
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/dialog.js"
@@ -6263,7 +6263,7 @@
               "children": [
                 {
                   "type": "text",
-                  "value": "Dialog element with showDialog(), closeDialog(), toggleDialog(), isOpen"
+                  "value": "Dialog element with open(), close(), toggle(), isOpen"
                 }
               ]
             }
@@ -9397,7 +9397,7 @@
         "end": {
           "line": 366,
           "column": 1,
-          "index": 11495
+          "index": 11496
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/select.js"
@@ -9797,12 +9797,12 @@
       "start": {
         "line": 89,
         "column": 0,
-        "index": 11386
+        "index": 11571
       },
       "end": {
         "line": 109,
         "column": 3,
-        "index": 12006
+        "index": 12191
       }
     },
     "context": {
@@ -9810,12 +9810,12 @@
         "start": {
           "line": 110,
           "column": 0,
-          "index": 12007
+          "index": 12192
         },
         "end": {
           "line": 110,
           "column": 43,
-          "index": 12050
+          "index": 12235
         }
       },
       "file": "/Users/frodenordbo/Documents/GitHub/fvn-ui/src/fvn-ui/components/svg.js"

@@ -19,7 +19,7 @@ const dialogCache = new WeakMap(); // cache toggled dialogs
  * @param {boolean} [config.inverted] - Dark/inverted style
  * @param {Function} [config.onOpen] - Called when dialog opens
  * @param {Function} [config.onClose] - Called when dialog closes
- * @returns {HTMLElement} Dialog element with showDialog(), closeDialog(), toggleDialog(), isOpen
+ * @returns {HTMLElement} Dialog element with open(), close(), toggle(), isOpen
  * @example
  * // Modal triggered by click
  * modal({ open: clickEvent, content: card({ title: 'Confirm' }) })
@@ -72,8 +72,8 @@ export function dialog(...args) {
     if (anchorEl) {
       const cached = dialogCache.get(anchorEl);
       if (cached) {
-        if (!isHoverTrigger) cached.toggleDialog();
-        else if (!cached.isOpen) cached.showDialog();
+        if (!isHoverTrigger) cached.toggle();
+        else if (!cached.isOpen) cached.open();
         return cached;
       }
       
@@ -91,7 +91,7 @@ export function dialog(...args) {
         _isChildOfAnchor: isHoverTrigger
       });
       dialogCache.set(anchorEl, newDialog);
-      newDialog.showDialog();
+      newDialog.open();
       
       return newDialog;
     }
@@ -104,7 +104,7 @@ export function dialog(...args) {
       type: 'modal',
       position, arrow, content, inverted 
     });
-    modalDialog.showDialog();
+    modalDialog.open();
     return modalDialog;
   }
 
@@ -283,9 +283,9 @@ export function dialog(...args) {
 
   inverted && root.classList.add('ui-inverted');
 
-  root.showDialog = open;
-  root.hideDialog = close;
-  root.toggleDialog = toggle;
+  root.open = open;
+  root.close = close;
+  root.toggle = toggle;
   Object.defineProperty(root, 'isOpen', { get: () => isOpen });
 
   // Set up hover behavior
