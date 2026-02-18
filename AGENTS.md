@@ -50,7 +50,26 @@ ui.card({
     ])
   ])
 })
+
+// Inputs in a row (grow: true makes row stretch to full width)
+ui.row({ grow: true }, [
+  ui.input({ label: 'First' }),
+  ui.input({ label: 'Last' })
+])
+
+// Vertically center content in a column
+ui.col({ center: true }, [
+  ui.avatar({ name: 'John' })
+])
 ```
+
+## Layout Shorthands
+
+| Prop | Effect |
+|------|--------|
+| `grow: true` | Stretch to fill available space |
+| `center: true` | Center content (justify for col, align for row) |
+| `distribute: 'equal'` | Children share space equally |
 
 ## Full Documentation
 

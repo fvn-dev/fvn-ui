@@ -29,7 +29,7 @@ function init() {
     description: `Look at the <a href="https://github.com/fvn-dev/fvn-ui/blob/main/src/main.js#L12" target="_blank">source code</a> for this page to see examples of how to use the components`,
     width: 'full',
     content: `
-      <div class="flex justify-between w-full">
+      <div class="row w-full" style="--jc: space-between">
         <label class="ui-component ui-label">fvn-dev</label>
         <a class="small" href="https://github.com/fvn-dev/fvn-ui" target="_blank">Github</a>
       </div>  
@@ -279,7 +279,7 @@ function selectPresentation() {
 
 function inputPresentation() {
   return layout.col({ gap: 6 }, [
-    layout.row({ width: 'full' }, [
+    layout.row({ grow: true }, [
       input({
         label: 'Standard',
         placeholder: 'Text input'
@@ -287,39 +287,31 @@ function inputPresentation() {
       input({
         label: 'Submit',
         placeholder: 'Text input with submit',
-        flex: 1,
         onsubmit() {
           this.style.borderColor = 'var(--primary)';
           setTimeout(() => this.style.borderColor = '', 2000);
         }
-      })
-    ]),
-    layout.row({ width: 'full' }, [
-      input({
-        label: 'Size large',
-        placeholder: 'Text input',
-        size: 'large',
-        flex: 1,
-        onsubmit() {
-          this.style.borderColor = 'var(--primary)';
-          setTimeout(() => this.style.borderColor = '', 2000);
-        }
-      })
-    ]), 
-    layout.row({ width: 'full' }, [
-      textarea({
-        label: 'Textarea',
-        placeholder: 'Textarea input',
-        flex: 1
       })
     ]),
     input({
+      label: 'Size large',
+      placeholder: 'Text input',
+      size: 'large',
+      onsubmit() {
+        this.style.borderColor = 'var(--primary)';
+        setTimeout(() => this.style.borderColor = '', 2000);
+      }
+    }),
+    textarea({
+      label: 'Textarea',
+      placeholder: 'Textarea input'
+    }),
+    input({
       label: 'Number',
       type: 'number',
-      width: 'full',
       min: 3,
       max: 7,
-      clamp: true, // todo! implement clamping in the component
+      clamp: true,
       placeholder: 3
     }),   
     text.divider(),
@@ -397,10 +389,10 @@ function avatarPresentation() {
       avatar({ name: 'Jane Doe', description: 'Designer', color: 'pink' }),
       avatar({ name: 'Alex', variant: 'square', color: 'blue' }),
     ]),
-    layout.col([
+    layout.col({ center: true }, [
       avatar({ name: 'John Smith', description: 'Designer', color: 'green', size: 'medium' }),
     ]),    
-    layout.col([
+    layout.col({ center: true }, [
       avatar({ src, name: 'Jolly Holyfield', description: 'Developer', variant: 'square', size: 'large' }),
     ])        
   ])
@@ -409,7 +401,7 @@ function avatarPresentation() {
 // --->
 
 function collapsiblePresentation() {
-  return layout.col({ gap: 8 },[
+  return layout.col([
     layout.col([
       collapsible({
         label: 'Disabled',

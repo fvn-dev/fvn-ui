@@ -61,7 +61,10 @@
     background: none;
     gap: 0;
 }
-.ui-tabs--outline:not(.justify-center) + .ui-tabs__panel {
+.ui-tabs--outline + .ui-tabs__panel {
+  margin-top: calc(-1 * var(--space-2));
+}
+.ui-tabs--outline:not([data-centered]) + .ui-tabs__panel {
     border-top-left-radius: 0;
 }
 .ui-tabs--outline .ui-btn {
@@ -119,7 +122,7 @@
     background: none;
     gap: 0;
 }
-.ui-tabs--border:not(.justify-center) + .ui-tabs__panel {
+.ui-tabs--border:not([data-centered]) + .ui-tabs__panel {
     border-top-left-radius: 0;
 }
 .ui-tabs--border .ui-btn {

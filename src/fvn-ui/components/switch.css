@@ -1,5 +1,6 @@
 .ui-switch {
   --bg: var(--text);
+  flex: none;
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);

@@ -398,67 +398,77 @@ el.create = new Proxy({}, {
 const LAYOUT_PARSE_OPTIONS = { 
   stringAs: 'justify', 
   arrayAs: 'children', 
-  numberAs: 'count' 
+  numberAs: 'gap' 
 };
 
-const createLayout = (direction, defaults, ...args) => {
-  const isRow = direction === 'row';
-  const opts = parseArgs({ ...LAYOUT_PARSE_OPTIONS, defaults }, ...args);
+// Map shorthand values to CSS
+const justifyMap = {
+  start: 'flex-start',
+  center: 'center', 
+  end: 'flex-end',
+  between: 'space-between',
+  around: 'space-around',
+  evenly: 'space-evenly'
+};
+
+const alignMap = {
+  start: 'flex-start',
+  center: 'center',
+  end: 'flex-end',
+  stretch: 'stretch'
+};
+
+const createLayout = (direction, ...args) => {
+  const opts = parseArgs(LAYOUT_PARSE_OPTIONS, ...args);
   
   let { 
-    parent, count, justify, align, gap = 2, padding, inline, block, flex, full, children, width,
+    parent, 
+    justify, 
+    align,
+    center,
+    gap, 
+    wrap,
+    grow,
+    distribute,
+    width,
+    children, 
+    style = {},
+    data = {},
     ...rest 
   } = opts;
 
-  if (full) {
-    justify = 'center';
-    align = 'center';
+  // center: true → justify-center for col, align-center for row
+  if (center) {
+    if (direction === 'col') justify = justify || 'center';
+    else align = align || 'center';
   }
 
-  // Process passed children
+  // Build style object with CSS custom properties
+  const layoutStyle = { ...style };
+  if (gap !== undefined) layoutStyle['--gap'] = `var(--space-${gap})`;
+  if (justify) layoutStyle['--jc'] = justifyMap[justify] || justify;
+  if (align) layoutStyle['--ai'] = alignMap[align] || align;
+
+  // Build data attributes
+  const layoutData = { ...data };
+  if (distribute) layoutData.distribute = distribute;
+  if (wrap) layoutData.wrap = '';
+  if (grow) layoutData.grow = '';
+
+  // Flatten children
   if (children) {
     children = children.flat();
-    if (Number.isInteger(flex)) {
-      for (const child of children) {
-        child.classList.add(`flex-${flex}`);
-      }
-    }
   }
-
-  // Generate placeholder children if count provided
-  if (!children && count > 0) {
-    children = Array.from({ length: count }, (_, i) => 
-      el('div', { 
-        class: [
-          'flex',
-          isRow && 'align-center',
-          !isRow && 'flex-col',
-          // space && `${spacePrefix}-${space}`,
-          !isNaN(gap) && `gap-${gap}`,
-          Number.isInteger(flex) && `flex-${flex}`,
-          isRow && count === 2 && (i === count - 1 ? 'justify-end' : 'justify-start')
-        ]
-      })
-    );
-  }
-
-  const space = padding ?? inline ?? block;
-  const spacePrefix = padding != null ? 'pad' : inline != null ? 'inline' : block != null ? 'block' : null;
 
   return el('div', parent, {
     ...rest,
     class: [
       direction,
-      'flex',
-      !isRow && 'flex-col',
-      `align-${flex ? 'stretch' : align}`,
-      `justify-${justify}`,
-      spacePrefix && `${spacePrefix}-${space}`,
-      !isNaN(gap) && `gap-${gap}`,
-      full && 'min-h-screen',
-      width && (width === 'full' ? 'w-full' : `w-${width}`),
+      width === 'full' && 'w-full',
       rest.class
     ],
+    style: layoutStyle,
+    data: Object.keys(layoutData).length ? layoutData : undefined,
     children
   });
 };
@@ -468,35 +478,42 @@ const createLayout = (direction, defaults, ...args) => {
  * @param {Node} [parent] - Parent element to append to
  * @param {Object} [config] - Layout configuration
  * @param {Node[]} [config.children] - Child elements (also accepts array as second arg)
- * @param {string} [config.justify='start'] - Justify content (start, center, end, between, around)
- * @param {string} [config.align='center'] - Align items (start, center, end, stretch)
- * @param {number} [config.gap=2] - Gap between children (0-10)
- * @param {boolean} [config.full] - Full viewport height, centered
- * @param {number} [config.flex] - Apply flex-N to all children
- * @returns {HTMLDivElement} Flex container element
+ * @param {string} [config.justify='start'] - Justify content (start, center, end, between, around, evenly)
+ * @param {string} [config.align] - Align items (start, center, end, stretch)
+ * @param {number} [config.gap=2] - Gap between children (0-10, maps to --space-N)
+ * @param {boolean} [config.wrap] - Allow flex wrapping
+ * @param {boolean} [config.grow] - Grow to fill available space (flex: 1, width: 100%)
+ * @param {boolean} [config.center] - Center content on cross axis (align-items: center for row)
+ * @param {string} [config.distribute='equal'] - Distribute children equally
+ * @param {string} [config.width] - Width ('full' for 100%)
+ * @returns {HTMLDivElement} Flex row container
  * @category Layout
  * @example
- * layout.row([button('One'), button('Two')])
- * layout.row({ gap: 4, justify: 'between' }, [left, right])
+ * row([button('One'), button('Two')])
+ * row({ gap: 4, justify: 'between' }, [left, right])
+ * row({ grow: true }, [input(), input()]) // row stretches, inputs grow
  */
-export const row = (...args) => createLayout('row', { justify: 'start', align: 'center' }, ...args);
+export const row = (...args) => createLayout('row', ...args);
 
 /**
  * Creates a vertical flex column layout
  * @param {Node} [parent] - Parent element to append to
  * @param {Object} [config] - Layout configuration
  * @param {Node[]} [config.children] - Child elements (also accepts array as second arg)
- * @param {string} [config.justify='start'] - Justify content (start, center, end, between, around)
- * @param {string} [config.align='start'] - Align items (start, center, end, stretch)
- * @param {number} [config.gap=2] - Gap between children (0-10)
- * @param {boolean} [config.full] - Full viewport height, centered
- * @param {number} [config.flex] - Apply flex-N to all children
- * @returns {HTMLDivElement} Flex container element
+ * @param {string} [config.justify='start'] - Justify content (start, center, end, between, around, evenly)
+ * @param {string} [config.align] - Align items (start, center, end, stretch)
+ * @param {number} [config.gap=2] - Gap between children (0-10, maps to --space-N)
+ * @param {boolean} [config.wrap] - Allow flex wrapping
+ * @param {boolean} [config.grow] - Grow to fill available space (flex: 1, width: 100%)
+ * @param {boolean} [config.center] - Center content on main axis (justify-content: center for col)
+ * @param {string} [config.distribute='equal'] - Distribute children equally
+ * @param {string} [config.width] - Width ('full' for 100%)
+ * @returns {HTMLDivElement} Flex column container
  * @category Layout
  * @example
- * layout.col([input({ label: 'Name' }), input({ label: 'Email' })])
- * layout.col({ gap: 6, align: 'center' }, [title, content, footer])
+ * col([input({ label: 'Name' }), input({ label: 'Email' })])
+ * col({ center: true }, [avatar()]) // vertically centers avatar
  */
-export const col = (...args) => createLayout('col', { justify: 'start', align: 'start' }, ...args);
+export const col = (...args) => createLayout('col', ...args);
 
 export const layout = { row, col, column: col };

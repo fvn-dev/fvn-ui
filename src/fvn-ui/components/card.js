@@ -33,17 +33,17 @@ export function card(...args) {
 
   const root = col(parent, {
     ...rest,
+    gap: props.gap ?? 4,
     class: [
       bem(), 
       border && 'border',
-      `gap-${props.gap || 4}`,
-      configToClasses(props), 
+      configToClasses(props, ['gap']), 
       rest.class
     ],
     children: [
       header({ title, description, class: bem.el('header') }),
       col({ 
-        class: [ bem.el('body'), configToClasses(props) ], 
+        class: [ bem.el('body'), configToClasses(props, ['gap']) ], 
         ref: (e) => bodyRef = e 
       })
     ]

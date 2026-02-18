@@ -1,6 +1,7 @@
 .ui-toggle {
   --bg: var(--text);
   --fg: var(--back);
+  flex: none;
   display: inline-flex;
   background: var(--hover);
   padding: 0;

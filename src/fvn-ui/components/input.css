@@ -1,3 +1,8 @@
+.ui-input-root {
+  flex: 1;
+  width: 100%;
+}
+
 .ui-input {
   border: 1px solid var(--border);
   border-radius: var(--radius);

@@ -191,29 +191,60 @@ body.fvn-ui {
 }
 
 /* ---- Utilities ---- */
+
+/* Layout primitives */
+.row, .col {
+  --gap: var(--space-2);  /* Reset per container to prevent inheritance */
+  --jc: flex-start;
+  display: flex;
+  gap: var(--gap);
+  justify-content: var(--jc);
+}
+
+.row { 
+  flex-direction: row; 
+  align-items: var(--ai, stretch); /* stretch by default for rows */
+}
+.col { 
+  flex-direction: column; 
+  align-items: var(--ai, start); /* start by default for columns */
+}
+
+/* Practical default: allow children to shrink/truncate */
+.row > *, .col > * {
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Parent modes */
+.row[data-distribute="equal"] > *,
+.col[data-distribute="equal"] > * { 
+  flex: 1; 
+}
+
+.row[data-wrap], .col[data-wrap] { 
+  flex-wrap: wrap; 
+}
+
+/* Child opt-ins */
+.row > [data-grow="1"], .col > [data-grow="1"] { flex: 1 1 0; }
+.row > [data-grow="0"], .col > [data-grow="0"] { flex: 0 0 auto; }
+
+/* Self grow - for row/col that should stretch to fill parent */
+[data-grow] { flex: 1; width: 100%; }
+
+.row > [data-self="center"], .col > [data-self="center"] { align-self: center; }
+.row > [data-self="start"], .col > [data-self="start"] { align-self: flex-start; }
+.row > [data-self="end"], .col > [data-self="end"] { align-self: flex-end; }
+.row > [data-self="stretch"], .col > [data-self="stretch"] { align-self: stretch; }
+
+
 /* :root wrapper for specificity boost */
 :root {
-  & .flex { display: flex; flex-wrap: wrap; }
-  & .nowrap { flex-wrap: nowrap; }
-  & .flex-1 { flex: 1; }
-  & .flex-0 { flex: 0; }
-  & .flex-col { flex-direction: column; }
-
-  & .align-start { align-items: flex-start; }
-  & .align-center { align-items: center; }
-  & .align-end { align-items: flex-end; }
-  & .align-stretch { align-items: stretch; }
-
-  & .justify-start { justify-content: flex-start; }
-  & .justify-center { justify-content: center; }
-  & .justify-end { justify-content: flex-end; }
-  & .justify-between { justify-content: space-between; }
-  & .justify-around { justify-content: space-around; }
-  & .justify-evenly { justify-content: space-evenly; }
-
+  /* Keep: used by components */
   & .w-full { width: 100%; }
   & .h-full { height: 100%; }
-  & .min-h-screen { min-height: calc(100vh - (2 * var(--space))); }
+  & .ma { margin: auto; }
 
   & .round { border-radius: var(--radius); }
   
@@ -222,20 +253,6 @@ body.fvn-ui {
 
   & .border-bottom { border-bottom: 1px solid var(--border); padding-bottom: var(--space); }
   & .border-top { border-top: 1px solid var(--border); padding-top: var(--space); }
-
-  /* Gap utilities */
-  & .gap { gap: var(--space); }
-  & .gap-0 { gap: 0; }
-  & .gap-1 { gap: var(--space-1); }
-  & .gap-2 { gap: var(--space-2); }
-  & .gap-3 { gap: var(--space-3); }
-  & .gap-4 { gap: var(--space-4); }
-  & .gap-5 { gap: var(--space-5); }
-  & .gap-6 { gap: var(--space-6); }
-  & .gap-7 { gap: var(--space-7); }
-  & .gap-8 { gap: var(--space-8); }
-  & .gap-9 { gap: var(--space-9); }
-  & .gap-10 { gap: var(--space-10); }
 
   /* Padding utilities */
   & .pad { padding: var(--padding); }
@@ -250,44 +267,12 @@ body.fvn-ui {
   & .pad-9 { padding: var(--space-9); }
   & .pad-10 { padding: var(--space-10); }
 
-  & .inline { padding-inline: var(--space); }
-  & .inline-1 { padding-inline: var(--space-1); }
-  & .inline-2 { padding-inline: var(--space-2); }
-  & .inline-3 { padding-inline: var(--space-3); }
-  & .inline-4 { padding-inline: var(--space-4); }
-  & .inline-5 { padding-inline: var(--space-5); }
-  & .inline-6 { padding-inline: var(--space-6); }
-  & .inline-7 { padding-inline: var(--space-7); }
-  & .inline-8 { padding-inline: var(--space-8); }
-  & .inline-9 { padding-inline: var(--space-9); }
-  & .inline-10 { padding-inline: var(--space-10); }
-
-  & .block { padding-block: var(--space); }
   & .block-1 { padding-block: var(--space-1); }
   & .block-2 { padding-block: var(--space-2); }
-  & .block-3 { padding-block: var(--space-3); }
-  & .block-4 { padding-block: var(--space-4); }
-  & .block-5 { padding-block: var(--space-5); }
-  & .block-6 { padding-block: var(--space-6); }
-  & .block-7 { padding-block: var(--space-7); }
-  & .block-8 { padding-block: var(--space-8); }
-  & .block-9 { padding-block: var(--space-9); }
-  & .block-10 { padding-block: var(--space-10); }
 
   /* Text utilities */
   & .small, & small { font-size: .9em; line-height: 1.25em; }
   & .muted { color: var(--muted); }
-
-  /* Margin utilities */
-  & .ma { margin: auto; }
-  & .mt-2 { margin-top: var(--space-2); }
-  & .mt-4 { margin-top: var(--space-4); }
-
-  /* Border utilities */
-  & .bt { border-top: 1px solid var(--border); }
-  & .bb { border-bottom: 1px solid var(--border); }
-  & .bl { border-left: 1px solid var(--border); }
-  & .br { border-right: 1px solid var(--border); }
 }
 
 /* ---- Focus Ring ---- */

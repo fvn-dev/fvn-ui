@@ -126,22 +126,23 @@ export function tabs(...args) {
     ...rest,
     class: [ 
       bem(), 
+      'col',
       shape && bem(shape),
-      `w-${width || 'full'}`, 
-      'flex', 
-      'flex-col', 
-      !withBorder && 'gap-2',
+      width === 'auto' ? null : 'w-full', 
       shade && bem('shade'),
       configToClasses(props, ['shade']),
       rest.class
     ],
+    style: !withBorder ? { '--gap': 'var(--space-2)' } : undefined,
     children: [
       el('div', {
         class: [
           bem.el('buttons'), 
           bem(variant || 'default'),
-          isCentered && ['justify-center', 'ma'],
+          isCentered && 'ma',
         ],
+        style: isCentered ? { '--jc': 'center' } : undefined,
+        data: isCentered ? { centered: '' } : undefined,
         attrs: { role: 'tablist' },
         children: items.map((o, i) => {
           const val = getItemValue(o);
