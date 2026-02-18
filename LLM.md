@@ -2,6 +2,64 @@
 
 A minimalist vanilla JS component library. No framework, no build complexity.
 
+## 🎨 Zero-CSS Principle
+
+fvn-ui is designed to create complete UIs with **zero custom CSS**.
+
+### Layout Props Replace CSS
+
+| Instead of CSS | Use This |
+|----------------|----------|
+| `display: flex` | `ui.row()` or `ui.col()` |
+| `gap: 1rem` | `gap: 4` prop |
+| `justify-content: center` | `center: true` or `justify: 'center'` |
+| `align-items: center` | `align: 'center'` |
+| `flex: 1` / `width: 100%` | `grow: true` |
+| `background`, `border`, `shadow` | `ui.card()` or nothing |
+| `padding` | `padding: 4` prop |
+
+### Clean Interface Pattern
+
+```js
+// ✅ Complete UI with NO custom CSS
+ui.dashboard(document.body, {
+  title: 'My App',
+  views: {
+    default: () => ui.col({ gap: 4, grow: true }, [
+      ui.row({ justify: 'between', grow: true }, [
+        ui.button({ label: 'Action 1' }),
+        ui.button({ label: 'Action 2', variant: 'primary' })
+      ]),
+      ui.col({ center: true, grow: true }, [
+        ui.button({ label: 'Centered Button' })
+      ])
+    ])
+  }
+})
+```
+
+### When You Think You Need CSS, Try These First
+
+1. **Need a border/container?** → `ui.card({ content: [...] })`
+2. **Need spacing?** → `gap` prop on row/col
+3. **Need centering?** → `center: true` on col
+4. **Need full width?** → `grow: true`
+5. **Need padding?** → `padding` prop
+6. **Need separation?** → `ui.divider()`
+
+### The Only CSS You Should Write
+
+```css
+/* 1. App-level constraints */
+.ui-dashboard { max-width: 1000px; margin: 0 auto; }
+
+/* 2. Custom behaviors fvn-ui doesn't handle */
+[draggable] { cursor: grab; }
+.dragging { opacity: 0.5; cursor: grabbing; }
+```
+
+---
+
 ## IMPORTANT: Native HTML Props Pass Through
 
 All components accept standard HTML attributes which are passed to the underlying element:

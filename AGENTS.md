@@ -23,6 +23,62 @@ ui.card({ title: 'Card', content: [...] })
 4. **One primary button** — Only one `variant: 'primary'` per view
 5. **Switch for booleans** — Use `ui.switch()` not checkbox for on/off settings
 6. **Placeholder not value** — Use `placeholder` for hints, not `value`
+7. **Zero custom CSS** — fvn-ui provides complete styling (see below)
+
+## ⚠️ Styling Philosophy — CRITICAL
+
+**fvn-ui provides complete styling. Do NOT add custom CSS unless absolutely necessary.**
+
+### When Custom CSS is Needed
+- Drag-and-drop visual states (`.dragging`, `.drag-over`)
+- Custom interactive behaviors not in fvn-ui
+- App-level layout constraints (e.g., `max-width` on dashboard)
+
+### When Custom CSS is NOT Needed
+- Backgrounds, borders, shadows → use `ui.card()` or `border` prop
+- Spacing/gaps → use `gap` prop on `row()`/`col()`
+- Centering → use `center: true` prop
+- Full-width elements → use `grow: true` prop
+- Padding → use `padding` prop
+- Hover/focus states → fvn-ui components include these
+- Dark mode → fvn-ui handles automatically
+
+### Anti-Patterns
+
+❌ **Wrong — CSS for layout:**
+```css
+.my-container { display: flex; justify-content: center; }
+```
+```js
+ui.el('div', { class: 'my-container' }, [...])
+```
+
+✅ **Correct — Use layout props:**
+```js
+ui.col({ center: true }, [...])
+```
+
+❌ **Wrong — CSS for backgrounds/borders:**
+```css
+.toolbar { background: #f9fafb; border: 1px solid #e5e7eb; }
+```
+
+✅ **Correct — Use card or clean layout:**
+```js
+ui.row({ gap: 2 }, [...])  // Clean, no background needed
+ui.card({ content: [...] })  // When you need a bordered container
+```
+
+### Minimal CSS Template
+
+```css
+/* Only add what fvn-ui cannot do */
+.ui-dashboard { max-width: 1000px; margin: 0 auto; }
+
+/* Custom interactive states */
+.draggable.dragging { opacity: 0.5; }
+.draggable.drag-over { border-style: dashed; }
+```
 
 ## Component Selection
 
