@@ -16,6 +16,10 @@
 /* Dialog sections - uses text.css header() for title/description */
 .ui-dialog__inner { padding: var(--space-4); }
 
+/* Direct row/col children grow to fill dialog */
+.ui-dialog__inner > .row,
+.ui-dialog__inner > .col { flex: 1; width: 100%; }
+
 .ui-dialog__footer {
   display: flex;
   justify-content: flex-end;

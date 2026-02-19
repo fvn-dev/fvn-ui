@@ -68,27 +68,24 @@ export function dialog(...args) {
       anchorEl = anchor;
     }
     
-    // If we have an anchor, use cache system
-    if (anchorEl) {
+    // For hover tooltips: use cache to prevent re-render spam
+    // For click/modals: always create fresh (content may have changed)
+    if (anchorEl && isHoverTrigger) {
       const cached = dialogCache.get(anchorEl);
       if (cached) {
-        if (!isHoverTrigger) cached.toggle();
-        else if (!cached.isOpen) cached.show();
+        if (!cached.isOpen) cached.show();
         return cached;
       }
       
-      // For hover triggers, append to anchor so tooltip persists when hovering tooltip
-      const dialogParent = isHoverTrigger ? anchorEl : parent;
-      if (isHoverTrigger) {
-        anchorEl.style.position = anchorEl.style.position || 'relative';
-      }
+      // Hover tooltips: append to anchor so tooltip persists when hovering it
+      anchorEl.style.position = anchorEl.style.position || 'relative';
       
       const newDialog = dialog({ 
         ...rest, 
-        parent: dialogParent, 
+        parent: anchorEl, 
         variant, type, position, arrow, content, inverted,
         anchor: anchorEl,
-        _isChildOfAnchor: isHoverTrigger
+        _isChildOfAnchor: true
       });
       dialogCache.set(anchorEl, newDialog);
       newDialog.show();
@@ -96,16 +93,17 @@ export function dialog(...args) {
       return newDialog;
     }
     
-    // No anchor - create modal, append to body, and open
-    const modalDialog = dialog({ 
+    // Click-triggered or no anchor: create fresh modal/tooltip, append to body
+    const newDialog = dialog({ 
       ...rest, 
       parent: document.body, 
-      variant: 'modal', 
-      type: 'modal',
-      position, arrow, content, inverted 
+      variant: variant || 'modal', 
+      type: type || variant || 'modal',
+      position, arrow, content, inverted,
+      anchor: anchorEl
     });
-    modalDialog.show();
-    return modalDialog;
+    newDialog.show();
+    return newDialog;
   }
 
   const cbOpen = getCallback('onOpen', rest);
@@ -227,6 +225,21 @@ export function dialog(...args) {
       : []
   });
 
+  const setContent = (newContent) => {
+    contentEl.innerHTML = '';
+    if (typeof newContent === 'string') {
+      contentEl.innerHTML = newContent;
+    } else if (newContent instanceof HTMLElement) {
+      contentEl.appendChild(newContent);
+    } else if (Array.isArray(newContent)) {
+      newContent.forEach(c => contentEl.appendChild(c));
+    } else if (typeof newContent === 'function') {
+      const result = newContent(close);
+      if (result instanceof HTMLElement) contentEl.appendChild(result);
+      else if (Array.isArray(result)) result.forEach(c => contentEl.appendChild(c));
+    }
+  };
+
   let root;
 
   if (isModal) {
@@ -262,6 +275,12 @@ export function dialog(...args) {
   root.show = open;
   root.hide = close;
   root.toggle = toggle;
+  root.setContent = setContent;
+  root.destroy = () => {
+    close();
+    if (currentAnchor) dialogCache.delete(currentAnchor);
+    root.remove();
+  };
   Object.defineProperty(root, 'isOpen', { get: () => isOpen });
 
   // Set up hover behavior

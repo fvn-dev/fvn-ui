@@ -455,8 +455,9 @@ confirm({
 | `show()` | Open the dialog |
 | `hide()` | Close the dialog |
 | `toggle()` | Toggle open/close |
-| `isOpen` | Boolean property for current state |
-```
+| `setContent(content)` | Replace dialog content |
+| `destroy()` | Close, remove from DOM |
+| `isOpen` | Property: current state |
 
 ---
 

@@ -551,6 +551,16 @@ confirm({
 })
 ```
 
+**Dialog instance methods:**
+| Method | Description |
+|--------|-------------|
+| `show()` | Open the dialog |
+| `hide()` | Close the dialog |
+| `toggle()` | Toggle open/close |
+| `setContent(content)` | Replace dialog content |
+| `destroy()` | Close, remove from DOM |
+| `isOpen` | Property: current state |
+
 ---
 
 ### `collapsible({ label, content })`
