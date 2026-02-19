@@ -16,6 +16,7 @@ const MENU_DEFAULTS = { shape: 'round', variant: 'ghost' };
  * @param {string} [config.defaultView='default'] - Initial view key
  * @param {string} [config.id] - Registers to dom.dashboard[id] and dom[id]
  * @returns {HTMLDivElement} Dashboard element with navigate(viewKey) method
+ * @category Layout
  * @example
  * dashboard(document.body, {
  *   title: 'My App',

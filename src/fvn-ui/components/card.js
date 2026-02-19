@@ -14,6 +14,7 @@ const bem = bemFactory('card');
  * @param {number} [config.padding] - Override default padding
  * @param {string} [config.id] - Registers to dom.card[id] and dom[id]
  * @returns {HTMLDivElement} Card element
+ * @category Layout
  * @example
  * card({ title: 'Settings', description: 'Configure your app' })
  * card({ title: 'Note', content: [input(), button()], border: false })

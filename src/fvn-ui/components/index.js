@@ -71,13 +71,37 @@ export const dialog = bootstrap(_dialog, 'dialog');
 export const draggable = bootstrap(_draggable, 'draggable');
 export const image = bootstrap(_image, 'image');
 export const input = bootstrap(_input, 'input');
+
+/**
+ * Creates a modal dialog
+ * @param {Object} config - Same options as dialog with type='modal'
+ * @param {string|HTMLElement|HTMLElement[]} [config.content] - Modal content
+ * @param {Event|HTMLElement|boolean} [config.open] - Event/element to trigger open
+ * @param {Function} [config.onOpen] - Called when modal opens
+ * @param {Function} [config.onClose] - Called when modal closes
+ * @returns {HTMLElement} Modal element with show(), hide(), toggle(), setContent(), destroy(), isOpen
+ * @example
+ * modal({ open: clickEvent, content: card({ title: 'Settings' }) })
+ */
 export const modal = bootstrap(_dialog, 'modal', { type: 'modal' });
-export const checkbox = bootstrap(_checkbox, 'checkbox');
+export const checkbox = bootstrap(_checkbox, 'checkbox');;
 export const radio = bootstrap(_radio, 'radio');
 export const selectComponent = bootstrap(_selectComponent, 'select');
 export const switchComponent = bootstrap(_switchComponent, 'switch');
 export const svg = bootstrap(_svg, 'svg');
 export const tabs = bootstrap(_tabs, 'tabs');
+
+/**
+ * Creates a textarea input (multiline text)
+ * @param {Object} config - Same options as input with rows default of 4
+ * @param {string} [config.label] - Input label
+ * @param {string} [config.placeholder] - Placeholder text
+ * @param {number} [config.rows=4] - Number of rows
+ * @param {Function} [config.onchange] - Called on value change
+ * @returns {HTMLElement} Textarea element
+ * @example
+ * textarea({ label: 'Description', placeholder: 'Enter description...' })
+ */
 export const textarea = bootstrap(_input, 'textarea', { rows: 4 });
 export const toggle = bootstrap(_toggle, 'toggle');
 
@@ -101,6 +125,19 @@ export const toggle = bootstrap(_toggle, 'toggle');
  * })
  */
 export const toggleGroup = bootstrap(_tabs, 'toggleGroup', { asButtonGroup: true });
+
+/**
+ * Creates a tooltip/popover
+ * @param {Object} config - Same options as dialog with type='tooltip'
+ * @param {string|HTMLElement|HTMLElement[]} [config.content] - Tooltip content
+ * @param {Event|HTMLElement|boolean} [config.open] - Event/element to trigger open
+ * @param {'top'|'bottom'|'left'|'right'} [config.position='bottom'] - Position relative to anchor
+ * @param {boolean} [config.inverted] - Dark/inverted style
+ * @param {boolean} [config.arrow=true] - Show arrow
+ * @returns {HTMLElement} Tooltip element with show(), hide(), toggle(), isOpen
+ * @example
+ * tooltip({ open: hoverEvent, content: 'Help text', inverted: true })
+ */
 export const tooltip = bootstrap(_dialog, 'tooltip', { type: 'tooltip' });
 
 // Text primitives (no bootstrap needed)
