@@ -201,6 +201,10 @@ const patchHandlers = {
   text: (el, v) => { el.textContent = String(v); },
   html: (el, v) => { el.innerHTML = String(v); },
   style: (el, v) => {
+    if (typeof v === 'string') {
+      el.style.cssText += v;
+      return;
+    }
     for (const prop in v) {
       prop[0] === '-' 
         ? el.style.setProperty(prop, v[prop]) 
