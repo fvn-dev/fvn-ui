@@ -2,7 +2,7 @@
   --bg: transparent;
   --fg: var(--text);
   flex: none;
-  align-self: flex-start;
+  height: fit-content;
   border: 1px solid transparent;
   background: var(--bg);
   color: var(--fg);
