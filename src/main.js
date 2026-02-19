@@ -473,6 +473,7 @@ function collapsiblePresentation() {
 
 function draggablePresentation() {
   return draggable({
+    plain: false,
     items: exampleOptions.map(({ label }) => text.title(label)),
     onChange: ({ items, from, to }) => console.log('Reordered:', from, '→', to, { items })
   });

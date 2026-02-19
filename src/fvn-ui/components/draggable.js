@@ -9,7 +9,8 @@ const bem = bemFactory('draggable');
  * @param {Object} config
  * @param {Array} [config.items] - Initial items (elements or objects with { content, id })
  * @param {string} [config.icon='menu'] - Drag handle icon name
- * @param {boolean} [config.border=true] - Show border around items
+ * @param {boolean} [config.index=true] - Show index numbers
+ * @param {boolean} [config.plain=false] - Plain will render unstyled items
  * @param {string} [config.handlePosition='right'] - Handle position: 'left' or 'right'
  * @param {Function} [config.onChange] - Called after reorder with { items, from, to }
  * @param {Function} [config.onDragStart] - Called when drag starts
@@ -30,9 +31,9 @@ export function draggable(...args) {
     id,
     items: initialItems = [],
     icon = 'grip',
-    border = true,
     handlePosition = 'right',
     index = true,
+    plain,
     onChange,
     onDragStart,
     onDragEnd,
@@ -62,7 +63,7 @@ export function draggable(...args) {
     });
 
     const wrapper = el('div', {
-      class: [bem.el('item'), index && bem('index'), item.disabled && bem('disabled'), border && 'ui-border'],
+      class: [bem.el('item'), plain && bem('plain'), index && bem('index'), item.disabled && bem('disabled')],
       draggable: 'true',
       children: handlePosition === 'left' 
         ? [handle, contentWrap]

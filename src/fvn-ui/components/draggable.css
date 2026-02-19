@@ -8,13 +8,16 @@
 
 .ui-draggable__item {
   counter-increment: draggable-index;
+  position: relative;
+}
+
+.ui-draggable__item:not(.ui-draggable--plain) {
   display: flex;
   align-items: center;
   gap: var(--space-3);
   width: 100%;
   border-bottom: 1px dashed var(--border);
   padding: var(--space-3);  
-  position: relative;
 
   &:last-child {
     border-bottom: none;

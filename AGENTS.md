@@ -143,8 +143,14 @@ field.ok()               // clear error
 | `start: true` | Align start (left for row, top for col) |
 | `end: true` | Align end (right for row, bottom for col) |
 | `grow: false` | Shrink to content (default is grow) |
-| `end: true` | Child: push to end |
-| `start: true` | Child: push to start |
+
+**Child props:**
+
+| Prop | Effect |
+|------|--------|
+| `end: true` | Push to end (right in row, bottom in col) |
+| `start: true` | Push to start |
+| `self: 'start'` | Align self: `'start'`, `'center'`, `'end'` |
 
 ## CSS Variables
 

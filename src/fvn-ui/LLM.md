@@ -239,7 +239,7 @@ layout.section({ block: 6 }, [...])      // custom padding
 |------|-------------|
 | `end: true` | Push to end of parent (right in row, bottom in col) |
 | `start: true` | Push to start of parent |
-| `data-self="center"` | Vertical center in row, horizontal center in col |
+| `self: 'start'` | Align self: `'start'`, `'center'`, `'end'`, `'stretch'` |
 
 ---
 
@@ -577,6 +577,152 @@ avatar({ src: 'photo.jpg', name: 'Jane', size: 'large' })
 | `size` | `'default'` `'medium'` `'large'` |
 | `variant` | `'round'` `'square'` |
 | `color` | Color for fallback |
+
+---
+
+### `image({ src, alt })`
+
+```js
+image({ src: 'photo.jpg', alt: 'Description' })
+image({ src: 'photo.jpg', fallback: 'placeholder.jpg' })
+```
+
+| Prop | Description |
+|------|-------------|
+| `src` | Image URL |
+| `alt` | Alt text |
+| `fallback` | Fallback image URL on error |
+
+---
+
+### `draggable({ items, onChange })`
+
+Sortable list with drag handles.
+
+```js
+const list = draggable({
+  items: [
+    el('div', { text: 'Item 1' }),
+    el('div', { text: 'Item 2' }),
+    el('div', { text: 'Item 3' })
+  ],
+  onChange: ({ items, from, to }) => console.log('Reordered:', from, '→', to)
+})
+
+// Methods
+list.add(el('div', { text: 'New item' }))  // append
+list.add(el('div', { text: 'At index' }), 0)  // insert at index
+list.remove(0)  // remove by index
+list.remove(element)  // remove by element
+list.clear()  // remove all
+list.reorder(fromIndex, toIndex)  // programmatic reorder
+list.items  // get current items array
+```
+
+| Prop | Description |
+|------|-------------|
+| `items` | Initial items (elements or `{ content, id }`) |
+| `icon` | Drag handle icon (default: `'grip'`) |
+| `border` | Show borders (default: `true`) |
+| `handlePosition` | `'left'` or `'right'` (default: `'right'`) |
+| `index` | Show index numbers (default: `true`) |
+| `onChange` | Called with `{ items, from, to }` after reorder |
+| `onDragStart` | Called when drag starts |
+| `onDragEnd` | Called when drag ends |
+
+---
+
+### `editable({ label, placeholder })`
+
+Contenteditable element with input-like behavior. Supports rich text.
+
+```js
+// Multiline (default)
+editable({ placeholder: 'Type here...' })
+editable({ label: 'Bio', rows: 5 })
+
+// Single line with submit
+editable({ label: 'Title', rows: 1, onSubmit: ({ value }) => save(value) })
+editable({ multiline: false })  // same as rows: 1
+```
+
+| Prop | Description |
+|------|-------------|
+| `label` | Label text |
+| `placeholder` | Placeholder (shown when empty) |
+| `value` | Initial HTML content |
+| `rows` | 1 = single line, >1 = sets min-height |
+| `multiline` | `false` = single line mode |
+| `plainText` | Strip formatting on paste |
+| `onChange` | Called with `{ value, html, element }` |
+| `onSubmit` | Called on Enter (single line only) |
+
+---
+
+### `toggleGroup({ items, active, callback })`
+
+Tab-style button group for selection (tabs without content panel).
+
+```js
+toggleGroup({
+  items: [{ label: 'Day' }, { label: 'Week' }, { label: 'Month' }],
+  active: 0,
+  callback: (index) => setView(index)
+})
+
+// With icons
+toggleGroup({
+  items: [{ icon: 'list' }, { icon: 'grid' }],
+  variant: 'ghost'
+})
+```
+
+| Prop | Description |
+|------|-------------|
+| `items` | Array of `{ label, icon, color }` |
+| `active` | Initially active index |
+| `callback` | Called with active index on change |
+| `variant` | `'default'`, `'outline'`, `'ghost'`, `'minimal'` |
+| `shape` | `'round'` |
+| `shade` | Shaded background |
+
+---
+
+### `dashboard({ title, views })`
+
+View management with sidebar navigation.
+
+```js
+dashboard(document.body, {
+  title: 'My App',
+  description: 'App description',
+  views: [
+    { label: 'Home', icon: 'home', render: () => homeView() },
+    { label: 'Settings', icon: 'settings', render: () => settingsView() }
+  ]
+})
+```
+
+| Prop | Description |
+|------|-------------|
+| `title` | App title in sidebar |
+| `description` | Subtitle |
+| `views` | Array of `{ label, icon, render }` |
+| `active` | Initial view index |
+| `onNavigate` | Called on view change |
+
+---
+
+### Text Helpers
+
+```js
+text.title('Page Title')           // <h2>
+text.description('Subtitle text')  // <p class="muted">
+text.label('Field Label')          // <label>
+text.header({ title: 'Title', description: 'Desc' })  // title + description group
+text.divider()                      // horizontal rule
+text.divider({ vertical: true })    // vertical divider (for rows)
+```
 
 ---
 
