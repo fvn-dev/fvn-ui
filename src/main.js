@@ -264,7 +264,13 @@ function selectPresentation() {
       selectComponent({
         label: '&nbsp;',
         options: exampleOptions.slice(0, 5),
-        placeholder: 'Pick a fruit'
+        placeholder: 'Pick a fruit',
+        onchange(value) {
+          if (value === 1) {
+            this.error('test');
+            setTimeout(() => this.ok(), 2000);
+          }
+        }
       })
     ]),
     selectComponent({

@@ -167,7 +167,7 @@ export function selectComponent(...args) {
   const setValue = (v, e) => {
     selected = v;
     renderValue();
-    cb?.(selected, getSelectedItems(), e);
+    cb?.call(root, selected, getSelectedItems(), e);
   };
   
   const toggleValue = (v, e) => {
@@ -179,7 +179,7 @@ export function selectComponent(...args) {
     }
     renderValue();
     renderList();
-    cb?.([...selected], getSelectedItems(), e);
+    cb?.call(root, [...selected], getSelectedItems(), e);
   };
   
   const clearAll = (e) => {
@@ -187,7 +187,7 @@ export function selectComponent(...args) {
     selected.clear();
     renderValue();
     if (isOpen) renderList();
-    cb?.([], [], e);
+    cb?.call(root, [], [], e);
   };
   
   const onFilter = (e) => {
@@ -322,7 +322,7 @@ export function selectComponent(...args) {
         if (multiselect) {
           selected = new Set(Array.isArray(v) ? v.map(toValue) : v != null ? [toValue(v)] : []);
           renderValue();
-          e && cb?.([...selected], getSelectedItems(), e);
+          e && cb?.call(root, [...selected], getSelectedItems(), e);
         } else {
           setValue(v, e);
         }
@@ -354,7 +354,11 @@ export function selectComponent(...args) {
     }
     renderValue();
     if (isOpen) renderList();
-  };  
+  };
+  
+  // Manual validation control
+  root.error = () => selectEl.classList.add('invalid');
+  root.ok = () => selectEl.classList.remove('invalid');
 
   return withValue(
     root, 
@@ -363,7 +367,7 @@ export function selectComponent(...args) {
       if (multiselect) {
         selected = new Set(Array.isArray(v) ? v.map(toValue) : v != null ? [toValue(v)] : []);
         renderValue();
-        e && cb?.([...selected], getSelectedItems(), e);
+        e && cb?.call(root, [...selected], getSelectedItems(), e);
       } else {
         setValue(v, e);
       }
