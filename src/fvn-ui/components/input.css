@@ -43,3 +43,19 @@
   border-color: var(--muted);
   outline: none;
 }
+
+/* Validation */
+.ui-input__wrap.invalid .ui-input {
+  border-color: var(--red);
+}
+
+/* Character counter */
+.ui-input__counter {
+  font-size: .8em;
+  color: var(--muted);
+  text-align: right;
+  margin: auto 0 auto auto;
+}
+.ui-input__counter.ok { color: var(--green); }
+.ui-input__counter.warn { color: var(--orange); }
+.ui-input__counter.error { color: var(--red); }

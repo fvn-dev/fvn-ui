@@ -528,5 +528,22 @@ export const row = (...args) => createLayout('row', ...args);
  */
 export const col = (...args) => createLayout('col', ...args);
 
+/**
+ * Creates a section (col with vertical padding)
+ * @param {...any} args - Same as col()
+ * @param {number} [config.block=4] - Vertical padding (1-10)
+ * @returns {HTMLElement} Section element
+ * @category Layout
+ * @example
+ * section([card(), card()])           // default block-4 padding
+ * section({ block: 6 }, [content])    // block-6 padding
+ */
+export const section = (...args) => {
+  const config = args.find(a => a && typeof a === 'object' && !Array.isArray(a) && !(a instanceof Node)) || {};
+  const block = config.block ?? 4;
+  delete config.block;
+  return col(...args, { class: `block-${block}` });
+};
+
 // Layout namespace - extended in index.js with card, dashboard, and text primitives
-export const layout = { row, col, column: col };
+export const layout = { row, col, column: col, section };

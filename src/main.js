@@ -281,40 +281,86 @@ function selectPresentation() {
 // --->
 
 function inputPresentation() {
-  return layout.col({ gap: 6 }, [
-    layout.row([
-      input({
-        label: 'Standard',
-        placeholder: 'Text input'
-      }),
-      input({
-        label: 'Submit',
-        placeholder: 'Text input with submit',
-        onsubmit() {
-          this.style.borderColor = 'var(--primary)';
-          setTimeout(() => this.style.borderColor = '', 2000);
-        }
-      })
+  return layout.col([
+    layout.section([
+      text.label('Text input'),
+      layout.row([
+        input({
+          label: 'Standard',
+          placeholder: 'Text input'
+        }),
+        input({
+          label: 'Submit',
+          placeholder: 'Text input with submit',
+          onsubmit() {
+            this.style.borderColor = 'var(--primary)';
+            setTimeout(() => this.style.borderColor = '', 2000);
+          }
+        }),
+        input({
+          label: 'Number',
+          type: 'number',
+          min: 3,
+          max: 7,
+          clamp: true,
+          placeholder: 3
+        })
+      ])
     ]),
-    textarea({
-      label: 'Textarea',
-      placeholder: 'Textarea input'
-    }),
-    input({
-      label: 'Number',
-      type: 'number',
-      min: 3,
-      max: 7,
-      clamp: true,
-      placeholder: 3
-    }),   
-    text.divider(),
-    editable({ 
-      label: 'Contenteditable { plain: true }',
-      placeholder: 'Faux text input...',
-      rows: 1,
-      plain: true
-    }) 
+    layout.section([
+      text.label('Validation'),
+      layout.row([
+        input({
+          label: 'Email',
+          placeholder: 'you@example.com',
+          validate: 'email'
+        }),
+        input({
+          label: 'URL',
+          placeholder: 'https://...',
+          validate: 'url'
+        }),
+        input({
+          label: 'Phone',
+          placeholder: '+1 234 567 890',
+          validate: 'phone'
+        })
+      ])
+    ]),
+    layout.section([
+      text.label('Character counter'),
+      layout.row([
+        textarea({
+          label: 'With max',
+          placeholder: 'Max 50 characters...',
+          counter: true,
+          max: 50
+        }),
+        textarea({
+          label: 'With min & max',
+          placeholder: 'Min 10, max 50...',
+          counter: true,
+          min: 10,
+          max: 50
+        })
+      ])
+    ]),
+    layout.section([
+      text.label('Contenteditable'),
+      layout.col([
+        editable({ 
+          label: 'Standard',
+          placeholder: 'Faux text input...',
+          rows: 1,
+        }),
+        editable({ 
+          label: 'Plain',
+          placeholder: 'Faux text input...',
+          rows: 1,
+          plain: true
+        })
+      ])
+    ])
   ]);
 }
 
@@ -466,42 +512,6 @@ function tabsPresentation() {
 
 // ---> 
 
-const layoutAlignmentTests = [
-  text.header({ title: 'Layout Alignment Tests' }),
-  layout.col({ gap: 2 }, [
-    text.label('row({ center: true })'),
-    layout.row({ center: true, style: { background: 'var(--shade)', padding: '8px' } }, [
-      box('centered')
-    ]),
-    text.label('row({ left: true }) - default'),
-    layout.row({ left: true, style: { background: 'var(--shade)', padding: '8px' } }, [
-      box('left')
-    ]),
-    text.label('row({ right: true })'),
-    layout.row({ right: true, style: { background: 'var(--shade)', padding: '8px' } }, [
-      box('right')
-    ]),
-    text.label('col({ center: true })'),
-    layout.col({ center: true, grow: false, style: { background: 'var(--shade)', padding: '8px', height: '100px' } }, [
-      box('centered')
-    ]),
-    text.label('col({ top: true }) - default'),
-    layout.col({ top: true, grow: false, style: { background: 'var(--shade)', padding: '8px', height: '100px' } }, [
-      box('top')
-    ]),
-    text.label('col({ bottom: true })'),
-    layout.col({ bottom: true, grow: false, style: { background: 'var(--shade)', padding: '8px', height: '100px' } }, [
-      box('bottom')
-    ]),
-    text.label('row with self alignment (top/center/bottom)'),
-    layout.row({ grow: false, style: { background: 'var(--shade)', padding: '8px', height: '100px' } }, [
-      el('div', { text: 'top', data: { self: 'top' }, style: { padding: '8px', background: 'var(--back)' } }),
-      el('div', { text: 'center', data: { self: 'center' }, style: { padding: '8px', background: 'var(--back)' } }),
-      el('div', { text: 'bottom', data: { self: 'bottom' }, style: { padding: '8px', background: 'var(--back)' } }),
-    ]),
-  ])  
-];
-
 function miscPresentation() {
   const box = (label) => el('div', { 
     text: label, 
@@ -509,7 +519,6 @@ function miscPresentation() {
   });
   
   return layout.col({ gap: 6 }, [
-    // ...layoutAlignmentTests,
     layout.row({ grow: false }, colors.map(c => el(`<div data-ui-col="${c}" class="color-swatch">${c}</div>`))),
     text.header({ title: 'Large header', description: 'With a description', large: true }),
     text.header({ title: 'Normal header', description: 'with a description' }),
