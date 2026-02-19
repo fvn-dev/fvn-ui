@@ -349,7 +349,7 @@ const template = document.createElement('template');
  * el('<input type="text">', { placeholder: 'Name' })
  */
 export function el(...args) {
-  let str, txtArg, parent, config;
+  let str, txtArg, parent, config, children;
 
   for (const arg of args) {
     if (!arg) {
@@ -361,6 +361,10 @@ export function el(...args) {
     }
     if (arg instanceof Node) {
       parent = arg;
+      continue;
+    }
+    if (Array.isArray(arg)) {
+      children = arg;
       continue;
     }
     if (typeof arg === 'object') {
@@ -392,6 +396,12 @@ export function el(...args) {
     
     patch(node, config, state);
   }
+  
+  // Handle children passed as array argument
+  if (children) {
+    patchHandlers.children(node, children);
+  }
+  
   if (state.parent) {
     state.parent.appendChild(node);
   }
