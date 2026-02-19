@@ -26,7 +26,7 @@
   --space-8: calc(var(--core) * 3);
   --space-9: calc(var(--core) * 4);
   --space-10: calc(var(--core) * 5);
-  --space: calc(var(--core) * .85);
+  --space: var(--space-4);
   --padding: var(--space-8);
 
   /* Presets */
@@ -197,8 +197,16 @@ body.fvn-ui {
   --gap: var(--space-2);  /* Reset per container to prevent inheritance */
   --jc: flex-start;
   display: flex;
+  flex: 1;           /* Grow by default */
+  width: 100%;       /* Fill parent width */
   gap: var(--gap);
   justify-content: var(--jc);
+}
+
+/* Opt-out of grow */
+.row[data-grow="false"], .col[data-grow="false"] {
+  flex: 0 0 auto;
+  width: auto;
 }
 
 .row { 
@@ -226,17 +234,23 @@ body.fvn-ui {
   flex-wrap: wrap; 
 }
 
-/* Child opt-ins */
-.row > [data-grow="1"], .col > [data-grow="1"] { flex: 1 1 0; }
-.row > [data-grow="0"], .col > [data-grow="0"] { flex: 0 0 auto; }
-
-/* Self grow - for row/col that should stretch to fill parent */
-[data-grow] { flex: 1; width: 100%; }
+/* Child opt-ins (for children of row/col) */
+.row > [data-grow="true"], .col > [data-grow="true"] { flex: 1 1 0; }
+.row > [data-grow="false"], .col > [data-grow="false"] { flex: 0 0 auto; width: auto; }
 
 .row > [data-self="center"], .col > [data-self="center"] { align-self: center; }
 .row > [data-self="start"], .col > [data-self="start"] { align-self: flex-start; }
 .row > [data-self="end"], .col > [data-self="end"] { align-self: flex-end; }
 .row > [data-self="stretch"], .col > [data-self="stretch"] { align-self: stretch; }
+/* Directional aliases */
+.row > [data-self="top"], .col > [data-self="left"] { align-self: flex-start; }
+.row > [data-self="bottom"], .col > [data-self="right"] { align-self: flex-end; }
+
+/* Push to start/end of main axis (margin auto trick) */
+.row > [data-end] { margin-left: auto; }
+.row > [data-start] { margin-right: auto; }
+.col > [data-end] { margin-top: auto; }
+.col > [data-start] { margin-bottom: auto; }
 
 
 /* :root wrapper for specificity boost */
@@ -269,6 +283,25 @@ body.fvn-ui {
 
   & .block-1 { padding-block: var(--space-1); }
   & .block-2 { padding-block: var(--space-2); }
+  & .block-3 { padding-block: var(--space-3); }
+  & .block-4 { padding-block: var(--space-4); }
+  & .block-5 { padding-block: var(--space-5); }
+  & .block-6 { padding-block: var(--space-6); }
+  & .block-7 { padding-block: var(--space-7); }
+  & .block-8 { padding-block: var(--space-8); }
+  & .block-9 { padding-block: var(--space-9); }
+  & .block-10 { padding-block: var(--space-10); }
+
+  & .inline-1 { padding-inline: var(--space-1); }
+  & .inline-2 { padding-inline: var(--space-2); }
+  & .inline-3 { padding-inline: var(--space-3); }
+  & .inline-4 { padding-inline: var(--space-4); }
+  & .inline-5 { padding-inline: var(--space-5); }
+  & .inline-6 { padding-inline: var(--space-6); }
+  & .inline-7 { padding-inline: var(--space-7); }
+  & .inline-8 { padding-inline: var(--space-8); }
+  & .inline-9 { padding-inline: var(--space-9); }
+  & .inline-10 { padding-inline: var(--space-10); }
 
   /* Text utilities */
   & .small, & small { font-size: .9em; line-height: 1.25em; }

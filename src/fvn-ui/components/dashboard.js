@@ -104,7 +104,7 @@ export function dashboard(...args) {
     class: [bem.el('header'), props.border !== false && 'border-bottom', configToClasses(props)],
     children: [
       header({ title, description, gap: 1, flex: 1 }),
-      row({ gap: 0, class: bem.el('menu'), children: menuButtons })
+      row({ end: true, gap: 0, class: bem.el('menu'), children: menuButtons })
     ]
   });
 

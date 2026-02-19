@@ -47,10 +47,12 @@ import { card } from 'fvn-ui/card'
 |-----------|-------------|
 | `button` | Buttons with variants, colors, icons |
 | `card` | Container with title, description, content |
-| `dialog` / `modal` / `tooltip` | Modal dialogs and popovers |
-| `confirm` | Confirmation dialog with trigger button |
+| `modal` / `tooltip` | Dialogs / popovers |
+| `confirm` | Confirmation dialog |
+| `editable` | Contenteditable with common text input features |
 | `input` / `textarea` | Text input with label and validation |
-| `checkbox` / `switch` / `toggle` | Boolean inputs (use `ui.switch()` or `switchComponent`) |
+| `switch` / `toggle` / `toggleGroup` | Boolean inputs (use `ui.switch()` or `switchComponent`) |
+| `checkbox` | Checkbox |
 | `radio` | Radio button group |
 | `select` | Dropdown with filter and multiselect (use `ui.select()` or `selectComponent`) |
 | `tabs` | Tabbed content |
@@ -61,14 +63,61 @@ import { card } from 'fvn-ui/card'
 
 ### Layout Helpers
 
-All functions accept arguments in any order — parent element, config object, and children array are detected by type, not position.
+Flexbox containers that **grow by default** to fill parent. Args can be in any order.
 
 ```js
 import { el, row, col, layout } from 'fvn-ui'
 
-layout.row({ gap: 4 }, [ button({ label: 'A' }), button({ label: 'B' }) ])
-layout.col(parent, { gap: 2, align: 'center', children: [el('div', { onclick })] })
+// Basic usage
+layout.row([ button({ label: 'A' }), button({ label: 'B' }) ])
+layout.col(parent, { gap: 2, children: [...] })
+
+// Alignment shorthands (same for row and col)
+row({ start: true }, [...])    // aligned left (default)
+row({ center: true }, [...])   // centered
+row({ end: true }, [...])      // aligned right
+col({ end: true }, [...])      // aligned bottom
+
+// Push child to end
+row([
+  button({ label: 'Cancel' }),
+  button({ label: 'Save', end: true })  // pushed right
+])
+
+// Opt-out of grow
+row({ grow: false }, [...])    // shrink to content
 ```
+
+| Container Props | Description |
+|-----------------|-------------|
+| `gap: 4` | Space between children (0-10, default: 2) |
+| `start`, `center`, `end` | Align children on main axis |
+| `grow: false` | Shrink to content |
+
+| Child Props | Description |
+|-------------|-------------|
+| `end: true` | Push to end (right in row, bottom in col) |
+| `start: true` | Push to start |
+
+| Spacing Props | Description |
+|---------------|-------------|
+| `padding: 4` | All-around padding (1-10) |
+| `block: 4` | Vertical padding (1-10) |
+| `inline: 4` | Horizontal padding (1-10) |
+
+### CSS Variables
+
+Common CSS variables available for custom styling. See [style.css](./src/fvn-ui/style.css) for full list.
+
+| Variable | Description |
+|----------|-------------|
+| `--space-1` to `--space-10` | Spacing scale (used by gap, padding props) |
+| `--back` | Background color |
+| `--text` | Text color |
+| `--muted` | Muted/secondary text |
+| `--hover` | Hover state background |
+| `--border` | Border color |
+| `--radius` | Common border radius |
 
 ### AI Assistant Setup
 

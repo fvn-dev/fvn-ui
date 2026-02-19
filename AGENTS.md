@@ -100,15 +100,15 @@ ui.card({
   content: ui.col({ gap: 4 }, [
     ui.input({ label: 'Field 1' }),
     ui.input({ label: 'Field 2' }),
-    ui.row({ gap: 2, justify: 'end' }, [
+    ui.row({ gap: 2 }, [
       ui.button({ label: 'Cancel', variant: 'ghost' }),
-      ui.button({ label: 'Save', variant: 'primary' })
+      ui.button({ label: 'Save', variant: 'primary', end: true })
     ])
   ])
 })
 
-// Inputs in a row (grow: true makes row stretch to full width)
-ui.row({ grow: true }, [
+// Inputs in a row (rows grow by default now)
+ui.row([  
   ui.input({ label: 'First' }),
   ui.input({ label: 'Last' })
 ])
@@ -123,9 +123,23 @@ ui.col({ center: true }, [
 
 | Prop | Effect |
 |------|--------|
-| `grow: true` | Stretch to fill available space |
-| `center: true` | Center content (justify for col, align for row) |
-| `distribute: 'equal'` | Children share space equally |
+| `center: true` | Center on main axis |
+| `start: true` | Align start (left for row, top for col) |
+| `end: true` | Align end (right for row, bottom for col) |
+| `grow: false` | Shrink to content (default is grow) |
+| `end: true` | Child: push to end |
+| `start: true` | Child: push to start |
+
+## CSS Variables
+
+Common variables for custom styling (see `style.css` for full list):
+
+| Variable | Description |
+|----------|-------------|
+| `--space-1` to `--space-10` | Spacing scale (gap, padding) |
+| `--back`, `--text`, `--muted` | Background, text, muted colors |
+| `--hover`, `--border` | Hover and border colors |
+| `--radius` | Common border radius |
 
 ## Custom Icons
 

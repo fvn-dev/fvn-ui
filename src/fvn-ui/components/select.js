@@ -256,6 +256,7 @@ export function selectComponent(...args) {
   const root = col(parent, {
     ...rest,
     gap: 2,
+    grow: false,  // Don't grow in flex containers by default
     class: [configToClasses(props), rest.class],
     children: [
       label && text.label({ text: label, soft: true }),

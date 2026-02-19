@@ -252,23 +252,30 @@ el('<h1>HTML string</h1>')  // Parse HTML
 
 ## Layout: `layout.row()` / `layout.col()`
 
-Flexbox containers. Args can be in any order.
+Flexbox containers. **Grow by default** to fill parent. Args can be in any order.
 
 ```js
-layout.row([child1, child2])                       // horizontal, default gap
-layout.row({ gap: 4, children: [child1, child2] }) // explicit
+layout.row([child1, child2])                       // horizontal, grows to fill
+layout.row({ gap: 4, children: [child1, child2] }) // explicit gap
 layout.col({ gap: 4, justify: 'between' }, [...])  // children as arg
+layout.row({ grow: false }, [...])                 // opt-out: shrink to content
+
+// Alignment shorthands
+layout.row({ center: true }, [...])   // horizontally centered
+layout.row({ end: true }, [...])      // aligned right
+layout.col({ center: true }, [...])   // vertically centered
+layout.col({ end: true }, [...])      // aligned bottom
+
+// Push child to end
+layout.row([
+  button({ label: 'Left' }),
+  button({ label: 'Right', end: true })  // pushed to right
+])
 ```
 
-**Props:** `gap`, `align`, `justify`, `padding`, `width`, `flex`
+**Container props:** `gap`, `justify`, `align`, `center`, `start`, `end`, `grow`, `distribute`, `wrap`
 
-| Align/Justify | Description |
-|---------------|-------------|
-| `start` | Flex start |
-| `center` | Center |
-| `end` | Flex end |
-| `between` | Space between |
-| `stretch` | Stretch (align only) |
+**Child props:** `end: true` (push to end), `start: true` (push to start)
 
 ---
 
@@ -284,6 +291,22 @@ layout.col({ gap: 4, justify: 'between' }, [...])  // children as arg
 | `shade: true` | `shade` | shaded background |
 | `small: true` | `small` | small text |
 | `muted: true` | `muted` | muted text color |
+
+---
+
+## CSS Variables
+
+Common variables for custom styling. See `style.css` for full list.
+
+| Variable | Description |
+|----------|-------------|
+| `--space-1` to `--space-10` | Spacing scale (used by gap, padding props) |
+| `--back` | Background color |
+| `--text` | Text color |
+| `--muted` | Muted/secondary text |
+| `--hover` | Hover state background |
+| `--border` | Border color |
+| `--radius` | Common border radius |
 
 ---
 

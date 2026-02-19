@@ -246,6 +246,12 @@ export const patch = (node, source, state = {}) => {
       continue;
     }
 
+    // Layout child shorthands: end/start → data-end/data-start
+    if ((key === 'end' || key === 'start') && val) {
+      node.dataset[key] = '';
+      continue;
+    }
+
     // Parent reference
     if (key === 'parent') {
       state.parent = val;
@@ -431,6 +437,8 @@ const createLayout = (direction, ...args) => {
     justify, 
     align,
     center,
+    start,
+    end,
     gap, 
     wrap,
     grow,
@@ -442,11 +450,10 @@ const createLayout = (direction, ...args) => {
     ...rest 
   } = opts;
 
-  // center: true → justify-center for col, align-center for row
-  if (center) {
-    if (direction === 'col') justify = justify || 'center';
-    else align = align || 'center';
-  }
+  // Alignment shorthands → justify on main axis
+  if (center) justify = justify || 'center';
+  if (start) justify = justify || 'start';
+  if (end) justify = justify || 'end';
 
   // Build style object with CSS custom properties
   const layoutStyle = { ...style };
@@ -458,7 +465,7 @@ const createLayout = (direction, ...args) => {
   const layoutData = { ...data };
   if (distribute) layoutData.distribute = distribute;
   if (wrap) layoutData.wrap = '';
-  if (grow) layoutData.grow = '';
+  if (grow === false) layoutData.grow = 'false';
 
   // Flatten children
   if (children) {

@@ -194,28 +194,48 @@ el('<h1>HTML string</h1>')  // Parse HTML
 
 ## Layout: `layout.row()` / `layout.col()`
 
-Flexbox containers. Args can be in any order.
+Flexbox containers. **Grow by default** to fill parent. Args can be in any order.
 
 ```js
-layout.row([child1, child2])                       // horizontal, default gap
-layout.row({ gap: 4, children: [child1, child2] }) // explicit
+layout.row([child1, child2])                       // horizontal, grows to fill
+layout.row({ gap: 4, children: [child1, child2] }) // explicit gap
 layout.col({ gap: 4, justify: 'between' }, [...])  // children as arg
-layout.row({ grow: true }, [input(), input()])     // row stretches, inputs grow
-layout.col({ center: true }, [avatar()])           // vertically centers content
+layout.row({ grow: false }, [...])                 // opt-out: shrink to content
+
+// Alignment shorthands
+layout.row({ center: true }, [...])   // horizontally centered
+layout.row({ end: true }, [...])      // aligned right
+layout.col({ center: true }, [...])   // vertically centered
+layout.col({ end: true }, [...])      // aligned bottom
+
+// Push child to end (works in both row and col)
+layout.row([
+  button({ label: 'Left' }),
+  button({ label: 'Right', end: true })  // pushed to end
+])
 ```
 
-**Props:** `gap`, `align`, `justify`, `grow`, `center`, `distribute`, `wrap`, `width`
+**Container props:**
 
 | Prop | Description |
 |------|-------------|
 | `gap: 4` | Gap between children (0-10, maps to --space-N) |
 | `justify` | Main axis: `start`, `center`, `end`, `between`, `around`, `evenly` |
 | `align` | Cross axis: `start`, `center`, `end`, `stretch` |
-| `grow: true` | Stretch to fill available space (flex: 1, width: 100%) |
-| `center: true` | Center content (justify for col, align for row) |
+| `center: true` | Center content on main axis |
+| `start: true` | Align content to start |
+| `end: true` | Align content to end |
+| `grow: false` | Opt-out: shrink to content instead of fill |
 | `distribute: 'equal'` | Children share space equally (flex: 1) |
 | `wrap: true` | Allow flex wrapping |
-| `width: 'full'` | 100% width |
+
+**Child props:**
+
+| Prop | Description |
+|------|-------------|
+| `end: true` | Push to end of parent (right in row, bottom in col) |
+| `start: true` | Push to start of parent |
+| `data-self="center"` | Vertical center in row, horizontal center in col |
 
 ---
 
@@ -231,6 +251,22 @@ layout.col({ center: true }, [avatar()])           // vertically centers content
 | `shade: true` | `shade` | shaded background |
 | `small: true` | `small` | small text |
 | `muted: true` | `muted` | muted text color |
+
+---
+
+## CSS Variables
+
+Common variables for custom styling. See `style.css` for full list.
+
+| Variable | Description |
+|----------|-------------|
+| `--space-1` to `--space-10` | Spacing scale (used by gap, padding props) |
+| `--back` | Background color |
+| `--text` | Text color |
+| `--muted` | Muted/secondary text |
+| `--hover` | Hover state background |
+| `--border` | Border color |
+| `--radius` | Common border radius |
 
 ---
 

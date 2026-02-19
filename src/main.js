@@ -175,7 +175,7 @@ function togglesPresentation() {
   return layout.col({ gap: 6 }, [
 
     // Section 1: Checkbox + Radio
-    layout.row({ justify: 'between', gap: 8 }, [
+    layout.row({ justify: 'between' }, [
       layout.col([text.label('Checkbox', { soft: true }), checkboxPresentation()]), 
       layout.col([radioPresentation()])
     ]),
@@ -183,7 +183,7 @@ function togglesPresentation() {
     text.divider(),
     
     // Section 2: Switch + Toggle
-    layout.row({ justify: 'between', gap: 8 }, [
+    layout.row({ justify: 'between' }, [
       layout.col({ gap: 3 }, [
         switchComponent({ label: 'Switch default' }),
         switchComponent({ label: 'Switch red', color: 'red', checked: true }),
@@ -282,7 +282,7 @@ function selectPresentation() {
 
 function inputPresentation() {
   return layout.col({ gap: 6 }, [
-    layout.row({ grow: true }, [
+    layout.row([
       input({
         label: 'Standard',
         placeholder: 'Text input'
@@ -296,15 +296,6 @@ function inputPresentation() {
         }
       })
     ]),
-    input({
-      label: 'Size large',
-      placeholder: 'Text input',
-      size: 'large',
-      onsubmit() {
-        this.style.borderColor = 'var(--primary)';
-        setTimeout(() => this.style.borderColor = '', 2000);
-      }
-    }),
     textarea({
       label: 'Textarea',
       placeholder: 'Textarea input'
@@ -475,9 +466,51 @@ function tabsPresentation() {
 
 // ---> 
 
+const layoutAlignmentTests = [
+  text.header({ title: 'Layout Alignment Tests' }),
+  layout.col({ gap: 2 }, [
+    text.label('row({ center: true })'),
+    layout.row({ center: true, style: { background: 'var(--shade)', padding: '8px' } }, [
+      box('centered')
+    ]),
+    text.label('row({ left: true }) - default'),
+    layout.row({ left: true, style: { background: 'var(--shade)', padding: '8px' } }, [
+      box('left')
+    ]),
+    text.label('row({ right: true })'),
+    layout.row({ right: true, style: { background: 'var(--shade)', padding: '8px' } }, [
+      box('right')
+    ]),
+    text.label('col({ center: true })'),
+    layout.col({ center: true, grow: false, style: { background: 'var(--shade)', padding: '8px', height: '100px' } }, [
+      box('centered')
+    ]),
+    text.label('col({ top: true }) - default'),
+    layout.col({ top: true, grow: false, style: { background: 'var(--shade)', padding: '8px', height: '100px' } }, [
+      box('top')
+    ]),
+    text.label('col({ bottom: true })'),
+    layout.col({ bottom: true, grow: false, style: { background: 'var(--shade)', padding: '8px', height: '100px' } }, [
+      box('bottom')
+    ]),
+    text.label('row with self alignment (top/center/bottom)'),
+    layout.row({ grow: false, style: { background: 'var(--shade)', padding: '8px', height: '100px' } }, [
+      el('div', { text: 'top', data: { self: 'top' }, style: { padding: '8px', background: 'var(--back)' } }),
+      el('div', { text: 'center', data: { self: 'center' }, style: { padding: '8px', background: 'var(--back)' } }),
+      el('div', { text: 'bottom', data: { self: 'bottom' }, style: { padding: '8px', background: 'var(--back)' } }),
+    ]),
+  ])  
+];
+
 function miscPresentation() {
+  const box = (label) => el('div', { 
+    text: label, 
+    style: { padding: '8px 16px', background: 'var(--shade)', borderRadius: 'var(--radius)' } 
+  });
+  
   return layout.col({ gap: 6 }, [
-    layout.row(colors.map(c => el(`<div data-ui-col="${c}" class="color-swatch">${c}</div>`))),
+    // ...layoutAlignmentTests,
+    layout.row({ grow: false }, colors.map(c => el(`<div data-ui-col="${c}" class="color-swatch">${c}</div>`))),
     text.header({ title: 'Large header', description: 'With a description', large: true }),
     text.header({ title: 'Normal header', description: 'with a description' }),
     text.label('Label'), 
