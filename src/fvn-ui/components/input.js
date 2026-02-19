@@ -68,7 +68,8 @@ export function input(...args) {
   const getMessage = (errorType) => {
     if (!message) return null;
     if (typeof message === 'string') return message;
-    const msg = message[errorType];
+    // Support both generic 'validate' key and specific validator name (e.g., 'email')
+    const msg = message[errorType] || (errorType === 'validate' && typeof validate === 'string' && message[validate]);
     if (!msg) return null;
     return msg.replace('{min}', min).replace('{max}', max).replace('{length}', inputEl?.value?.length || 0);
   };
