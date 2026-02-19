@@ -121,6 +121,7 @@ export function selectComponent(...args) {
             isSelected && el('span', { class: bem.el('check'), html: svg('check') })
           ],
           onClick: (e) => {
+            e.stopPropagation();
             if (it.disabled) return;
             
             if (multiselect) {
