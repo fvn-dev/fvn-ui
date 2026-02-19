@@ -321,9 +321,10 @@ function inputPresentation() {
           validate: 'url'
         }),
         input({
-          label: 'Phone',
-          placeholder: '+1 234 567 890',
-          validate: 'phone'
+          label: 'Phone (with message)',
+          placeholder: '92 60 47 33',
+          validate: 'phone',
+          message: 'Invalid phone number'
         })
       ])
     ]),
@@ -337,11 +338,15 @@ function inputPresentation() {
           max: 50
         }),
         textarea({
-          label: 'With min & max',
+          label: 'With min & max (and message)',
           placeholder: 'Min 10, max 50...',
           counter: true,
           min: 10,
-          max: 50
+          max: 50,
+          message: {
+            min: 'Minimum {min} characters required',
+            max: 'Maximum {max} characters allowed'
+          },          
         })
       ])
     ]),

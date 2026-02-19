@@ -49,13 +49,20 @@
   border-color: var(--red);
 }
 
+/* Footer row (message + counter) */
+.ui-input__footer {
+  font-size: .8em;
+}
+
 /* Character counter */
 .ui-input__counter {
-  font-size: .8em;
   color: var(--muted);
-  text-align: right;
-  margin: auto 0 auto auto;
 }
 .ui-input__counter.ok { color: var(--green); }
 .ui-input__counter.warn { color: var(--orange); }
 .ui-input__counter.error { color: var(--red); }
+
+/* Validation message */
+.ui-input__message {
+  color: var(--red);
+}

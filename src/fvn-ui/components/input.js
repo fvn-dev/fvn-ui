@@ -25,12 +25,15 @@ const validators = {
  * @param {number} [config.min] - Minimum length (also used for counter color)
  * @param {number} [config.max] - Maximum length (also used for counter color)
  * @param {boolean} [config.counter] - Show character counter (textarea only)
+ * @param {string|Object} [config.message] - Validation error message(s)
  * @param {Function} [config.onSubmit] - Called on Enter key with value (input only)
  * @param {string} [config.id] - Registers to dom.input[id] and dom[id]
  * @returns {HTMLDivElement} Input wrapper with .value getter/setter and .isValid()
  * @example
  * input({ label: 'Email', validate: 'email' })
  * input({ label: 'Bio', rows: 4, counter: true, max: 500 })
+ * input({ label: 'Email', validate: 'email', message: 'Ugyldig e-post' })
+ * input({ validate: 'email', min: 10, message: { validate: 'Ugyldig e-post', min: 'Minimum {min} tegn' } })
  */
 export function input(...args) {
   const {
@@ -48,6 +51,7 @@ export function input(...args) {
     min,
     max,
     counter,
+    message,
     attrs = {},
     props,
     ...rest
@@ -56,9 +60,18 @@ export function input(...args) {
   const isTextarea = rows != null;
   const cb = getCallback('onSubmit', rest);
   const submitCallback = !isTextarea && getCallback('onSubmit', rest, true);
-  let wrapEl, inputEl, counterEl;
+  let wrapEl, inputEl, counterEl, messageEl;
 
   const submit = () => cb?.call(inputEl, inputEl.value);
+
+  // Get message for a specific error type
+  const getMessage = (errorType) => {
+    if (!message) return null;
+    if (typeof message === 'string') return message;
+    const msg = message[errorType];
+    if (!msg) return null;
+    return msg.replace('{min}', min).replace('{max}', max).replace('{length}', inputEl?.value?.length || 0);
+  };
 
   // Validation
   const getValidator = () => {
@@ -70,14 +83,23 @@ export function input(...args) {
   const checkValid = () => {
     const v = inputEl.value;
     const validator = getValidator();
-    let valid = true;
+    let errorType = null;
     
-    if (validator && !validator(v)) valid = false;
-    if (min != null && v.length < min) valid = false;
-    if (max != null && v.length > max) valid = false;
+    if (validator && !validator(v)) errorType = 'validate';
+    else if (min != null && v.length < min) errorType = 'min';
+    else if (max != null && v.length > max) errorType = 'max';
     
-    wrapEl.classList.toggle('invalid', !valid && v.length > 0);
-    return valid;
+    const isInvalid = errorType && v.length > 0;
+    wrapEl.classList.toggle('invalid', isInvalid);
+    
+    // Update message
+    if (messageEl) {
+      const msg = isInvalid ? getMessage(errorType) : null;
+      messageEl.textContent = msg || '';
+      messageEl.hidden = !msg;
+    }
+    
+    return !errorType;
   };
 
   // Counter update
@@ -89,6 +111,7 @@ export function input(...args) {
     // Color based on limits
     counterEl.classList.remove('warn', 'error', 'ok');
     if (max && len > max) counterEl.classList.add('error');
+    else if (min && len > 0 && len < min) counterEl.classList.add('error');
     else if (max && len > max * 0.9) counterEl.classList.add('warn');
     else if (min && len >= min) counterEl.classList.add('ok');
   };
@@ -140,10 +163,18 @@ export function input(...args) {
           })
         ]
       }),
-      isTextarea && counter && el('div', {
-        class: bem.el('counter'),
-        ref: (e) => { counterEl = e; updateCounter(); }
-      })
+      (message || counter) && row({ class: bem.el('footer'), justify: 'between' }, [
+        message && el('div', {
+          class: bem.el('message'),
+          hidden: true,
+          ref: (e) => messageEl = e
+        }),
+        isTextarea && counter && el('div', {
+          class: bem.el('counter'),
+          end: true,
+          ref: (e) => { counterEl = e; updateCounter(); }
+        })
+      ])
     ]
   });
 
