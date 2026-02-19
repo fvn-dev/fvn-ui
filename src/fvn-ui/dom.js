@@ -528,4 +528,5 @@ export const row = (...args) => createLayout('row', ...args);
  */
 export const col = (...args) => createLayout('col', ...args);
 
+// Layout namespace - extended in index.js with card, dashboard, and text primitives
 export const layout = { row, col, column: col };

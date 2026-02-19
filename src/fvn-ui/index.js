@@ -14,7 +14,7 @@
  */
 import './style.css'
 
-export { dom, colors, el, row, col, layout } from './dom.js'
+export { dom, colors, el, row, col } from './dom.js'
 export { template, processTemplates, autoProcess } from './template.js'
 
 export {
@@ -51,7 +51,20 @@ export {
 
 // Namespaced export for cleaner DX: ui.button(), ui.switch(), etc.
 import * as components from './components/index.js'
-import { layout, dom, el, row, col, colors } from './dom.js'
+import { layout as _layout, dom, el, row, col, colors } from './dom.js'
+
+// Extend layout namespace with container and text components
+export const layout = {
+  ..._layout,
+  card: components.card,
+  dashboard: components.dashboard,
+  label: components.label,
+  header: components.header,
+  title: components.title,
+  description: components.description,
+  divider: components.divider
+};
+
 export const ui = {
   ...components,
   select: components.selectComponent,

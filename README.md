@@ -43,23 +43,43 @@ import { card } from 'fvn-ui/card'
 
 ### Components
 
+**Layout** (`layout.` or direct import)
+| Component | Description |
+|-----------|-------------|
+| `row` / `col` | Flexbox containers (grow by default) |
+| `card` | Container with title, description, content |
+| `dashboard` | View management with navigation |
+| `header` | Title + description group |
+| `title` / `description` | Text primitives |
+| `label` | Form label |
+| `divider` | Horizontal/vertical separator |
+
+**Inputs**
 | Component | Description |
 |-----------|-------------|
 | `button` | Buttons with variants, colors, icons |
-| `card` | Container with title, description, content |
-| `modal` / `tooltip` | Dialogs / popovers |
-| `confirm` | Confirmation dialog |
-| `editable` | Contenteditable with common text input features |
-| `input` / `textarea` | Text input with label and validation |
-| `switch` / `toggle` / `toggleGroup` | Boolean inputs (use `ui.switch()` or `switchComponent`) |
 | `checkbox` | Checkbox |
+| `editable` | Contenteditable with text input features |
+| `input` / `textarea` | Text input with label and validation |
 | `radio` | Radio button group |
-| `select` | Dropdown with filter and multiselect (use `ui.select()` or `selectComponent`) |
-| `tabs` | Tabbed content |
+| `select` | Dropdown with filter and multiselect |
+| `switch` / `toggle` | Boolean inputs |
+| `toggleGroup` | Tab-style button group |
+
+**Overlays**
+| Component | Description |
+|-----------|-------------|
+| `modal` / `tooltip` | Dialogs and popovers |
+| `confirm` | Confirmation dialog with trigger |
 | `collapsible` | Expandable sections |
-| `dashboard` | View management with navigation |
-| `avatar` / `image` / `svg` | Media components |
-| `label` | Text label |
+| `tabs` | Tabbed content |
+
+**Media**
+| Component | Description |
+|-----------|-------------|
+| `avatar` | User avatar |
+| `image` | Image with loading states |
+| `svg` | Icon system |
 
 ### Layout Helpers
 
