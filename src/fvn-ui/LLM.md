@@ -213,6 +213,10 @@ layout.row([
   button({ label: 'Left' }),
   button({ label: 'Right', end: true })  // pushed to end
 ])
+
+// Section: col with vertical padding (for page sections)
+layout.section([...])                    // default block-4 padding
+layout.section({ block: 6 }, [...])      // custom padding
 ```
 
 **Container props:**
@@ -347,6 +351,56 @@ input({ label: 'Bio', rows: 4, placeholder: 'Tell us about yourself' })
 | `onSubmit` | Called on Enter (input only) |
 | `min/max/step` | For number inputs |
 | `pattern/required/maxlength` | HTML5 validation |
+| `validate` | Built-in: `'email'`, `'url'`, `'phone'` or custom function |
+| `min/max` | Character length limits (also colors counter) |
+| `counter` | Show character counter (textarea) |
+| `message` | Error message(s) — string or object |
+
+**Validation examples:**
+
+```js
+// Built-in validators
+input({ label: 'Email', validate: 'email' })
+input({ label: 'Website', validate: 'url' })
+input({ label: 'Phone', validate: 'phone' })  // Norwegian format
+
+// Custom validator function
+input({ label: 'Code', validate: (v) => /^[A-Z]{3}$/.test(v) })
+
+// With error messages
+input({
+  label: 'Email',
+  validate: 'email',
+  message: 'Please enter a valid email'  // shown on validation error
+})
+
+// Multiple message types
+input({
+  label: 'Bio',
+  rows: 4,
+  min: 10,
+  max: 500,
+  counter: true,
+  message: {
+    email: 'Invalid email',      // or use validator name
+    min: 'At least {min} chars',
+    max: 'Maximum {max} chars'
+  }
+})
+```
+
+**Methods:**
+
+```js
+const emailInput = input({ label: 'Email' })
+
+// Manual validation control (for form validation)
+emailInput.error('This field is required')  // mark invalid + show message
+emailInput.ok()                              // clear error state
+
+// Check validation state
+emailInput.isValid()  // returns true/false
+```
 
 ---
 

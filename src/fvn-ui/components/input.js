@@ -181,5 +181,22 @@ export function input(...args) {
 
   root.input = inputEl;
   root.isValid = checkValid;
+  
+  // Manual validation control
+  root.error = (msg) => {
+    wrapEl.classList.add('invalid');
+    if (messageEl && msg) {
+      messageEl.textContent = msg;
+      messageEl.hidden = false;
+    }
+  };
+  root.ok = () => {
+    wrapEl.classList.remove('invalid');
+    if (messageEl) {
+      messageEl.textContent = '';
+      messageEl.hidden = true;
+    }
+  };
+  
   return withValue(root, () => inputEl.value, (v) => { inputEl.value = v; onInput(); });
 }

@@ -90,6 +90,7 @@ ui.card({ content: [...] })  // When you need a bordered container
 | 6+ options | `ui.select({ options: [...] })` |
 | Short text | `ui.input({ label })` |
 | Long text | `ui.input({ label, rows: 4 })` |
+| Validated input | `ui.input({ label, validate: 'email' })` |
 | Action | `ui.button({ label, onClick })` |
 
 ## Layout Pattern
@@ -117,6 +118,21 @@ ui.row([
 ui.col({ center: true }, [
   ui.avatar({ name: 'John' })
 ])
+```
+
+## Input Validation
+
+```js
+// Built-in validators: 'email', 'url', 'phone'
+ui.input({ label: 'Email', validate: 'email', message: 'Invalid email' })
+
+// With counter and limits
+ui.input({ label: 'Bio', rows: 4, min: 10, max: 500, counter: true })
+
+// Manual validation (form validation)
+const field = ui.input({ label: 'Name' })
+field.error('Required')  // mark invalid with message
+field.ok()               // clear error
 ```
 
 ## Layout Shorthands
