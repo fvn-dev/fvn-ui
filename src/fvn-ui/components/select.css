@@ -13,8 +13,9 @@
   color: var(--text);
   cursor: pointer;
 }
-.ui-select__trigger:hover { background: var(--hover-bright); }
-.ui-select__trigger:active { transform: translateY(1px); }
+.ui-select__trigger:hover { 
+  border-color: var(--border-dark); 
+}
 
 .ui-select__trigger .ui-btn {
   padding: 0;
@@ -76,18 +77,23 @@
   border-radius: 0 var(--radius) var(--radius) 0;
   cursor: pointer;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 1px;
+  right: 1px;
+  height: calc(100% - 2px);
   z-index: 2;
 }
 .ui-select__badge:hover {
   background: var(--text);
   color: var(--back);
 }
-.ui-select__badge:hover::before {
-  content: '×';
+.ui-select__badge::before {
+  content: none;
   font-size: 1.5rem;
   font-weight: 300;
+  line-height: 0;
+}
+.ui-select__badge:hover::before {
+  content: '×';
 }
 .ui-select__badge:hover {
   font-size: 0;

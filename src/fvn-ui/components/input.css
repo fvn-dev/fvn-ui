@@ -35,3 +35,11 @@
 .ui-input__wrap.has-value .ui-btn {
   background: var(--hover);
 }
+
+.ui-input:hover {
+  border-color: var(--border-dark);
+}
+.ui-input:focus-visible {
+  border-color: var(--muted);
+  outline: none;
+}

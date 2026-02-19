@@ -42,7 +42,7 @@
   --hsl-back: 0 0% 100%;
   --hsl-text: var(--hsl-black);
   --hsl-muted: 256 15% 15%;
-  --hsl-hover: 240 3.45% 94.31%;
+  --hsl-hover: 210 22.22% 96.47%; /* 240 3.45% 94.31% */
   --hsl-border: var(--hsl-text);
 
   /* Computed colors */
@@ -53,6 +53,7 @@
   --border-opacity: .15;
   --border-opacity-sub: .5;
   --border: hsl(var(--hsl-border) / var(--border-opacity, 1));
+  --border-dark: hsl(var(--hsl-border) / .3);
   --hover: hsl(var(--hsl-hover) / var(--hover-opacity, 1));
   --hover-bright: hsl(var(--hsl-text) / .02);
 
@@ -306,19 +307,6 @@ body.fvn-ui {
   /* Text utilities */
   & .small, & small { font-size: .9em; line-height: 1.25em; }
   & .muted { color: var(--muted); }
-}
-
-/* ---- Focus Ring ---- */
-.ui-editable:not(.ui-plain):focus-visible,
-.ui-btn:focus-visible,
-.ui-input:focus-visible,
-.ui-select:focus-visible,
-.ui-select__trigger:focus-visible,
-.ui-select__item:focus-visible,
-.ui-switch__button:focus-visible,
-.ui-tabs__tab:focus-visible {
-  outline: none;
-  box-shadow: var(--shadow-sm);
 }
 
 /* :root wrapper for specificity boost over component defaults */

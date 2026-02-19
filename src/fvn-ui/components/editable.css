@@ -18,6 +18,14 @@
   padding: 0;
   min-height: auto;
   border-radius: 0;
+  background: transparent;
+}
+
+.ui-editable:not(.ui-plain):hover {
+  border-color: var(--border-dark);
+}
+.ui-editable:not(.ui-plain):focus-visible {
+  border-color: var(--muted);
 }
 
 /* Placeholder via :empty and data attribute */
