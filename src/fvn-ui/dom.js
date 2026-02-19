@@ -264,6 +264,12 @@ export const patch = (node, source, state = {}) => {
       node.dataset[key] = '';
       continue;
     }
+    
+    // Self alignment shorthand: self → data-self
+    if (key === 'self' && val) {
+      node.dataset.self = val;
+      continue;
+    }
 
     // Parent reference
     if (key === 'parent') {

@@ -47,16 +47,18 @@ export const description = (...args) => {
  * @param {boolean} [config.soft] - Softer/muted style
  * @param {boolean} [config.small] - Small text size
  * @param {boolean} [config.muted] - Muted text color
+ * @param {'start'|'center'|'end'} [config.align] - Text alignment
  * @param {string} [config.class] - Additional classes
  * @returns {HTMLLabelElement}
  * @category Layout
  */
 export const label = (...args) => {
-  const { parent, text = '', soft, props, ...rest } = parseArgs(...args);
+  const { parent, text = '', soft, align, props, ...rest } = parseArgs(...args);
   
   return el('label', parent, {
     ...rest,
     class: ['ui-label', soft && 'ui-label--soft', 'block-1', configToClasses(props), rest.class],
+    data: { ...rest.data, align },
     html: rest.html || text
   });
 };
