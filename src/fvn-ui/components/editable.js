@@ -14,12 +14,12 @@ const bem = bemFactory('editable');
  * @param {number} [config.rows] - 1 = single line, > 1 = multiline (sets min-height)
  * @param {boolean} [config.multiline=true] - Allow multiple lines (false = single line)
  * @param {boolean} [config.plainText=false] - Strip formatting on paste
- * @param {Function} [config.onChange] - Called on input with { value, html, element }
- * @param {Function} [config.onInput] - Called on every input event
- * @param {Function} [config.onFocus] - Called on focus
- * @param {Function} [config.onBlur] - Called on blur
- * @param {Function} [config.onKeydown] - Called on keydown
- * @param {Function} [config.onSubmit] - Called on Enter key (single line mode)
+ * @param {Function} [config.onChange] - Called on input with (html, event) - use e.target.textContent for text
+ * @param {Function} [config.onInput] - Called on every input with (html, event)
+ * @param {Function} [config.onFocus] - Called on focus with (event)
+ * @param {Function} [config.onBlur] - Called on blur with (html, event)
+ * @param {Function} [config.onKeydown] - Called on keydown with (event)
+ * @param {Function} [config.onSubmit] - Called on Enter key with (html, event) - single line mode only
  * @param {string} [config.id] - Registers to dom.editable[id] and dom[id]
  * @returns {HTMLDivElement} Wrapper with .value getter/setter for text content
  * @example
@@ -73,9 +73,9 @@ export function editable(...args) {
 
   const handleInput = (e) => {
     normalizeContent();
-    const payload = { value: getValue(), html: getHtml(), element: editableEl, event: e };
-    onInput?.call(editableEl, payload);
-    onChange?.call(editableEl, payload);
+    const html = getHtml();
+    onInput?.call(editableEl, html, e);
+    onChange?.call(editableEl, html, e);
   };
 
   const handleKeydown = (e) => {
@@ -84,7 +84,7 @@ export function editable(...args) {
     // Single line: prevent Enter from creating new lines
     if (isSingleLine && e.key === 'Enter') {
       e.preventDefault();
-      onSubmit?.call(editableEl, { value: getValue(), html: getHtml(), element: editableEl, event: e });
+      onSubmit?.call(editableEl, getHtml(), e);
     }
   };
 
@@ -117,7 +117,7 @@ export function editable(...args) {
 
   const handleBlur = (e) => {
     normalizeContent();
-    onBlur?.call(editableEl, { value: getValue(), html: getHtml(), element: editableEl, event: e });
+    onBlur?.call(editableEl, getHtml(), e);
   };
 
   const editableDiv = el('div', {

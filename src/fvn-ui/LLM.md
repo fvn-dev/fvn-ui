@@ -17,17 +17,15 @@ selectComponent({ onChange: (value, item, event) => console.log(value, item) })
 tabs({ onChange: (value, item, event) => console.log(value, item) })
 collapsible({ onChange: (isOpen, event) => console.log(isOpen) })
 toggle({ onChange: (checked, event) => console.log(checked) })
+editable({ onInput: (html, event) => console.log(html, event.target.textContent) })
 
 // `this` is bound to the element
 input({ onInput(value) { console.log(this.id, value) } })
 ```
 
-**Special cases with object payloads:**
+**Special case - draggable uses object payload:**
 ```js
-// editable - passes object with all context
-editable({ onChange: ({ value, html, element, event }) => ... })
-
-// draggable - passes reorder info
+// draggable - passes reorder info (no event)
 draggable({ onChange: ({ items, from, to }) => ... })
 ```
 
