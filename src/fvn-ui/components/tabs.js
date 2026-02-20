@@ -22,7 +22,7 @@ const getItemValue = (item) => {
  * @param {'round'} [config.shape] - Tab button shape
  * @param {boolean} [config.center] - Center tabs
  * @param {boolean} [config.shade] - Shaded background
- * @param {Function} [config.onChange] - Called with (value, item)
+ * @param {Function} [config.onChange] - Called with (value, item, event)
  * @returns {HTMLDivElement} Tabs element with .value getter/setter
  * @example
  * tabs({ variant: 'outline', items: [{ label: 'Tab 1', render: () => content1 }] })
@@ -81,7 +81,7 @@ export function tabs(...args) {
     output.appendChild(tab);
   };
 
-  const setActive = (v, skipCallback) => {
+  const setActive = (v, e, skipCallback) => {
     current = String(v);
     for (const btn of tabBtns) {
       const isActive = btn.dataset.value === current;
@@ -94,7 +94,7 @@ export function tabs(...args) {
       btn.tabIndex = isActive ? 0 : -1;
     }
     !asButtonGroup && renderPanel(current);
-    !skipCallback && cb?.(current);
+    !skipCallback && cb?.(current, items.find((o) => getItemValue(o) === current), e);
   };
 
   const focusTabAt = (i) => {
@@ -110,8 +110,8 @@ export function tabs(...args) {
       ArrowLeft: () => focusTabAt(idx - 1),
       Home: () => focusTabAt(0),
       End: () => focusTabAt(tabBtns.length - 1),
-      Enter: () => setActive(val),
-      ' ': () => setActive(val)
+      Enter: () => setActive(val, e),
+      ' ': () => setActive(val, e)
     };
     
     const action = keys[e.key];
@@ -154,7 +154,7 @@ export function tabs(...args) {
             dataset: { value: val },
             attrs: { role: 'tab' },
             aria: { selected: 'false' },
-            onmousedown: () => setActive(val),
+            onmousedown: (e) => setActive(val, e),
             onkeydown: (e) => handleKeydown(e, i, val)
           });
           tabBtns.push(btn);
@@ -175,8 +175,8 @@ export function tabs(...args) {
   appendButtons?.append(root.children[0]);
   appendContent?.append(root.children[1]);
 
-  setActive(current, true);
-  withValue(root, () => current, setActive);
+  setActive(current, null, true);
+  withValue(root, () => current, (v) => setActive(v, null));
 
   return root;
 }

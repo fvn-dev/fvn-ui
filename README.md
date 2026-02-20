@@ -125,6 +125,22 @@ row({ grow: false }, [...])    // shrink to content
 | `block: 4` | Vertical padding (1-10) |
 | `inline: 4` | Horizontal padding (1-10) |
 
+### Event Callbacks
+
+All callbacks follow a consistent `(value, ...context, event)` pattern:
+
+```js
+// First arg is always the unwrapped value, last arg is the event
+input({ onInput: (value, event) => console.log(value) })
+checkbox({ onChange: (checked, event) => ... })
+radio({ onChange: (value, item, event) => ... })
+select({ onChange: (value, item, event) => ... })
+tabs({ onChange: (value, item, event) => ... })
+
+// `this` is bound to the element
+input({ onChange(value) { console.log(this.id, value) } })
+```
+
 ### CSS Variables
 
 Common CSS variables available for custom styling. See [style.css](./src/fvn-ui/style.css) for full list.

@@ -2,6 +2,37 @@
 
 A minimalist vanilla JS component library. No framework, no build complexity.
 
+## IMPORTANT: Callback Signature Pattern
+
+All event callbacks follow a consistent `(value, ...context, event)` pattern:
+
+```js
+// First arg is always the unwrapped value, last arg is always the event
+input({ onInput: (value, event) => console.log(value) })
+input({ onChange: (value, event) => console.log(value) })
+checkbox({ onChange: (checked, event) => console.log(checked) })
+switchComponent({ onChange: (checked, event) => console.log(checked) })
+radio({ onChange: (value, item, event) => console.log(value, item) })
+selectComponent({ onChange: (value, item, event) => console.log(value, item) })
+tabs({ onChange: (value, item, event) => console.log(value, item) })
+collapsible({ onChange: (isOpen, event) => console.log(isOpen) })
+toggle({ onChange: (checked, event) => console.log(checked) })
+
+// `this` is bound to the element
+input({ onInput(value) { console.log(this.id, value) } })
+```
+
+**Special cases with object payloads:**
+```js
+// editable - passes object with all context
+editable({ onChange: ({ value, html, element, event }) => ... })
+
+// draggable - passes reorder info
+draggable({ onChange: ({ items, from, to }) => ... })
+```
+
+---
+
 ## IMPORTANT: Native HTML Props Pass Through
 
 All components accept standard HTML attributes which are passed to the underlying element:

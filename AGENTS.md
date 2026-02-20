@@ -25,6 +25,23 @@ ui.card({ title: 'Card', content: [...] })
 6. **Placeholder not value** — Use `placeholder` for hints, not `value`
 7. **Zero custom CSS** — fvn-ui provides complete styling (see below)
 
+## Event Callbacks
+
+All callbacks use consistent `(value, ...context, event)` signature:
+
+```js
+// First arg = unwrapped value, last arg = event
+ui.input({ onInput: (val, e) => console.log(val) })
+ui.checkbox({ onChange: (checked, e) => ... })
+ui.switch({ onChange: (checked, e) => ... })
+ui.radio({ onChange: (value, item, e) => ... })
+ui.select({ onChange: (value, item, e) => ... })
+ui.tabs({ onChange: (value, item, e) => ... })
+
+// `this` = element
+ui.input({ onChange(val) { this.dataset.saved = val } })
+```
+
 ## ⚠️ Styling Philosophy — CRITICAL
 
 **fvn-ui provides complete styling. Do NOT add custom CSS unless absolutely necessary.**

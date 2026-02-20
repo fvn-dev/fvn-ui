@@ -128,11 +128,15 @@ export function input(...args) {
     else if (min && len >= min) counterEl.classList.add('ok');
   };
 
-  const onInput = () => {
+  const onInput = (e) => {
     wrapEl.classList.toggle('has-value', !!inputEl.value);
     if (validate || min != null || max != null) checkValid();
     if (counter) updateCounter();
-    userOnInput?.call(inputEl, inputEl.value);
+    userOnInput?.call(inputEl, inputEl.value, e);
+  };
+
+  const onChange = (e) => {
+    userOnChange?.call(inputEl, inputEl.value, e);
   };
 
   const onKeyup = (e) => {
@@ -148,8 +152,6 @@ export function input(...args) {
     inputEl.value = next;
     inputEl.dispatchEvent(new Event('input', { bubbles: true }));
     inputEl.dispatchEvent(new Event('change', { bubbles: true }));
-    userOnInput?.call(inputEl, inputEl.value);
-    userOnChange?.call(inputEl, inputEl.value);
   };
 
   const inputTag = isTextarea ? 'textarea' : 'input';
@@ -177,7 +179,7 @@ export function input(...args) {
               if (focus) focusAfterRender(e);
             },
             onInput,
-            onChange: userOnChange ? () => userOnChange.call(inputEl, inputEl.value) : undefined,
+            onChange: userOnChange ? onChange : undefined,
             onKeyup: cb && onKeyup,
             onBlur: isNumber && clamp ? () => {
               const val = parseFloat(inputEl.value);

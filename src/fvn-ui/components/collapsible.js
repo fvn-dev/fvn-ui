@@ -12,7 +12,7 @@ const bem = bemFactory('collapsible');
  * @param {string|HTMLElement} [config.content] - Collapsible content
  * @param {boolean} [config.open] - Initially open
  * @param {boolean} [config.disabled] - Disabled state
- * @param {Function} [config.onChange] - Called with (isOpen)
+ * @param {Function} [config.onChange] - Called with (isOpen, event)
  * @param {string} [config.id] - Registers to dom.collapsible[id] and dom[id]
  * @returns {HTMLDivElement} Collapsible element with .value getter/setter for open state
  * @example
@@ -36,14 +36,14 @@ export function collapsible(...args) {
 
   const getIcon = () => svg(state ? 'chevron-down' : 'chevron-right');
 
-  const toggle = () => {
+  const toggle = (e) => {
     if (disabled) {
       return;
     }
     state = !state;
     root.dataset.open = state;
     iconEl.innerHTML = getIcon();
-    cb?.(state);
+    cb?.(state, e);
   };
 
   const root = el('div', parent, {
