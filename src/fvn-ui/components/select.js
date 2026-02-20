@@ -327,22 +327,49 @@ export function selectComponent(...args) {
 
   renderValue();
 
+  // Value getter/setter
+  const valueSetter = (v, e) => {
+    if (multiselect) {
+      selected = new Set(Array.isArray(v) ? v.map(toValue) : v != null ? [toValue(v)] : []);
+      renderValue();
+      e && cb?.call(root, [...selected], getSelectedItems(), e);
+    } else {
+      setValue(v, e);
+    }
+  };
+  
+  // Manual validation control
+  root.error = () => {
+    _manualError = true;
+    selectEl.classList.add('invalid');
+  };
+  root.ok = () => {
+    _manualError = false;
+    selectEl.classList.remove('invalid');
+  };
+  
+  // Reset to initial state
+  root.reset = () => {
+    _manualError = false;
+    selectEl.classList.remove('invalid');
+    if (multiselect) selected.clear(); else selected = null;
+    renderValue();
+    if (isOpen) renderList();
+  };
+  
+  // Validation: check if required field has a selection
+  root.isValid = () => {
+    if (!required) return true;
+    const hasValue = multiselect ? selected.size > 0 : selected != null;
+    selectEl.classList.toggle('invalid', !hasValue);
+    return hasValue;
+  };
+
   if (!adaptive) {
-    return withValue(
-      root, 
-      () => multiselect ? [...selected] : selected, 
-      (v, e) => {
-        if (multiselect) {
-          selected = new Set(Array.isArray(v) ? v.map(toValue) : v != null ? [toValue(v)] : []);
-          renderValue();
-          e && cb?.call(root, [...selected], getSelectedItems(), e);
-        } else {
-          setValue(v, e);
-        }
-      }
-    );
+    return withValue(root, () => multiselect ? [...selected] : selected, valueSetter);
   }
 
+  // Adaptive sizing
   requestAnimationFrame(() => {
     const sizer = valueEl.cloneNode(false);
     Object.assign(sizer.style, { visibility: 'hidden', height: '0', overflow: 'hidden', whiteSpace: 'nowrap' });
@@ -368,36 +395,6 @@ export function selectComponent(...args) {
     renderValue();
     if (isOpen) renderList();
   };
-  
-  // Manual validation control
-  root.error = () => {
-    _manualError = true;
-    selectEl.classList.add('invalid');
-  };
-  root.ok = () => {
-    _manualError = false;
-    selectEl.classList.remove('invalid');
-  };
-  
-  // Validation: check if required field has a selection
-  root.isValid = () => {
-    if (!required) return true;
-    const hasValue = multiselect ? selected.size > 0 : selected != null;
-    selectEl.classList.toggle('invalid', !hasValue);
-    return hasValue;
-  };
 
-  return withValue(
-    root, 
-    () => multiselect ? [...selected] : selected, 
-    (v, e) => {
-      if (multiselect) {
-        selected = new Set(Array.isArray(v) ? v.map(toValue) : v != null ? [toValue(v)] : []);
-        renderValue();
-        e && cb?.call(root, [...selected], getSelectedItems(), e);
-      } else {
-        setValue(v, e);
-      }
-    }
-  );
+  return withValue(root, () => multiselect ? [...selected] : selected, valueSetter);
 }

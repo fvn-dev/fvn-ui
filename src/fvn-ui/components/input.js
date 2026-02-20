@@ -276,5 +276,18 @@ export function input(...args) {
     }
   };
   
+  // Reset to initial state
+  root.reset = () => {
+    inputEl.value = '';
+    _manualError = false;
+    wrapEl.classList.remove('invalid', 'has-value');
+    if (messageEl) {
+      messageEl.textContent = '';
+      messageEl.hidden = true;
+    }
+    if (infoEl) infoEl.hidden = false;
+    if (counterEl) updateCounter();
+  };
+  
   return withValue(root, () => inputEl.value, (v) => { inputEl.value = v; onInput(); });
 }
