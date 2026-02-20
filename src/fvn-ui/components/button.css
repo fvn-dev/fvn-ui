@@ -95,10 +95,16 @@
 .ui-btn--filled:hover:after { 
   opacity: .2;
 }
+
 .ui-btn:disabled { 
-  opacity: .5; 
+  --bg: transparent;
+  --fg: var(--muted);
   cursor: not-allowed; 
 }
+.ui-btn:not(.ui-btn--ghost):not(.ui-btn--minimal):disabled { 
+  border-color: var(--border);
+}
+
 .ui-btn--outline {
   border-color: var(--border);
 }
@@ -128,7 +134,7 @@
   flex-direction: row-reverse;
   pointer-events: none;
   position: relative;
-  padding-left: calc(3.5 * var(--space));
+  padding-left: calc(3 * var(--space));
 
   &::before {
     content: '';
