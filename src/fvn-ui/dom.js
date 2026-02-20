@@ -259,8 +259,8 @@ export const patch = (node, source, state = {}) => {
       continue;
     }
 
-    // Layout child shorthands: end/start → data-end/data-start
-    if ((key === 'end' || key === 'start') && val) {
+    // Layout child shorthands: end/start/bottom/top → data-*
+    if ((key === 'end' || key === 'start' || key === 'bottom' || key === 'top') && val) {
       node.dataset[key] = '';
       continue;
     }

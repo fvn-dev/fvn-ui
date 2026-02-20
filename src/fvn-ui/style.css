@@ -247,11 +247,16 @@ body.fvn-ui {
 .row > [data-self="top"], .col > [data-self="left"] { align-self: flex-start; }
 .row > [data-self="bottom"], .col > [data-self="right"] { align-self: flex-end; }
 
-/* Push to start/end of main axis (margin auto trick) */
+/* Push to start/end (horizontal) */
 .row > [data-end] { margin-left: auto; }
 .row > [data-start] { margin-right: auto; }
-.col > [data-end] { margin-top: auto; }
-.col > [data-start] { margin-bottom: auto; }
+.col > [data-end] { align-self: flex-end; }
+.col > [data-start] { align-self: flex-start; }
+
+/* Push to top/bottom (vertical, col only) */
+.col > [data-bottom] { margin-top: auto; }
+.col > [data-top] { margin-bottom: auto; }
+.col > [data-center] { margin-top: auto; margin-bottom: auto; }
 
 
 /* :root wrapper for specificity boost */
