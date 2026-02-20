@@ -25,6 +25,7 @@ const validators = {
  * @param {number} [config.min] - Minimum length (also used for counter color)
  * @param {number} [config.max] - Maximum length (also used for counter color)
  * @param {boolean} [config.counter] - Show character counter (textarea only)
+ * @param {boolean} [config.required] - Require input to have a value
  * @param {string|Object} [config.message] - Validation error message(s)
  * @param {Function} [config.onSubmit] - Called on Enter key with value (input only)
  * @param {string} [config.id] - Registers to dom.input[id] and dom[id]
@@ -48,6 +49,7 @@ export function input(...args) {
     placeholder,
     focus,
     validate,
+    required,
     min,
     max,
     step = 1,
@@ -92,12 +94,14 @@ export function input(...args) {
     const validator = getValidator();
     let errorType = null;
     
-    if (validator && !validator(v)) errorType = 'validate';
+    // Check required first (value must have length > 0)
+    if (required && (!v || v.length === 0)) errorType = 'required';
+    else if (validator && !validator(v)) errorType = 'validate';
     // Only check length-based min/max for non-number inputs
     else if (!isNumber && min != null && v.length < min) errorType = 'min';
     else if (!isNumber && max != null && v.length > max) errorType = 'max';
     
-    const isInvalid = errorType && v.length > 0;
+    const isInvalid = !!errorType;
     wrapEl.classList.toggle('invalid', isInvalid);
     
     // Update message (validation wins over info)

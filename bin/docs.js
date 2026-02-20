@@ -28,5 +28,3 @@ for (const file of files) {
     console.log(`  ✗ ${file}: ${err.message}`);
   }
 }
-
-console.log('\nDone! Add to .gitignore if needed:\n  AGENTS.md\n  LLM.md');

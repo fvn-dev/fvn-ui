@@ -16,6 +16,7 @@ const bem = bemFactory('select');
  * @param {boolean} [config.multiselect=false] - Allow multiple selections
  * @param {boolean} [config.filter] - Show filter input (defaults to true if items > 10)
  * @param {string} [config.filterPlaceholder='Filter...'] - Filter input placeholder
+ * @param {boolean} [config.required] - Require at least one selection
  * @param {Function} [config.onChange] - Called with (value, item, event) or (values[], items[], event) for multiselect
  * @param {string} [config.id] - Registers to dom.select[id] and dom[id]
  * @returns {HTMLDivElement} Select element with .value getter/setter and .update() method
@@ -39,6 +40,7 @@ export function selectComponent(...args) {
     multiselect = false,
     filter: filterProp,
     filterPlaceholder = 'Filter...',
+    required,
     focus,
     props,
     ...rest
@@ -359,6 +361,14 @@ export function selectComponent(...args) {
   // Manual validation control
   root.error = () => selectEl.classList.add('invalid');
   root.ok = () => selectEl.classList.remove('invalid');
+  
+  // Validation: check if required field has a selection
+  root.isValid = () => {
+    if (!required) return true;
+    const hasValue = multiselect ? selected.size > 0 : selected != null;
+    selectEl.classList.toggle('invalid', !hasValue);
+    return hasValue;
+  };
 
   return withValue(
     root, 
