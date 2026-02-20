@@ -69,6 +69,7 @@ export function input(...args) {
   const userOnInput = getCallback('onInput', rest);
   const userOnChange = getCallback('onChange', rest);
   let wrapEl, inputEl, counterEl, messageEl, infoEl;
+  let _manualError = false;
 
   const submit = () => cb?.call(inputEl, inputEl.value);
 
@@ -133,8 +134,17 @@ export function input(...args) {
   };
 
   const onInput = (e) => {
+    // Clear manual error on user interaction
+    if (_manualError) {
+      _manualError = false;
+      wrapEl.classList.remove('invalid');
+      if (messageEl) {
+        messageEl.textContent = '';
+        messageEl.hidden = true;
+      }
+    }
     wrapEl.classList.toggle('has-value', !!inputEl.value);
-    if (validate || min != null || max != null) checkValid();
+    if (validate || required || min != null || max != null) checkValid();
     if (counter) updateCounter();
     userOnInput?.call(inputEl, inputEl.value, e);
   };
@@ -250,6 +260,7 @@ export function input(...args) {
   
   // Manual validation control
   root.error = (msg) => {
+    _manualError = true;
     wrapEl.classList.add('invalid');
     if (messageEl && msg) {
       messageEl.textContent = msg;
@@ -257,6 +268,7 @@ export function input(...args) {
     }
   };
   root.ok = () => {
+    _manualError = false;
     wrapEl.classList.remove('invalid');
     if (messageEl) {
       messageEl.textContent = '';

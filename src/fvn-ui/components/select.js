@@ -53,6 +53,7 @@ export function selectComponent(...args) {
   let selectEl, triggerEl, valueEl, listEl, filterEl, badgeEl, cleanupOutside;
   let isOpen = false;
   let filterText = '';
+  let _manualError = false;
   
   // Convert index to value if needed
   const toValue = (v) => Number.isInteger(v) && items[v] ? String(items[v].value) : String(v);
@@ -167,12 +168,22 @@ export function selectComponent(...args) {
   };
 
   const setValue = (v, e) => {
+    // Clear manual error on user selection
+    if (_manualError) {
+      _manualError = false;
+      selectEl.classList.remove('invalid');
+    }
     selected = v;
     renderValue();
     cb?.call(root, selected, getSelectedItems(), e);
   };
   
   const toggleValue = (v, e) => {
+    // Clear manual error on user selection
+    if (_manualError) {
+      _manualError = false;
+      selectEl.classList.remove('invalid');
+    }
     const strVal = String(v);
     if (selected.has(strVal)) {
       selected.delete(strVal);
@@ -359,8 +370,14 @@ export function selectComponent(...args) {
   };
   
   // Manual validation control
-  root.error = () => selectEl.classList.add('invalid');
-  root.ok = () => selectEl.classList.remove('invalid');
+  root.error = () => {
+    _manualError = true;
+    selectEl.classList.add('invalid');
+  };
+  root.ok = () => {
+    _manualError = false;
+    selectEl.classList.remove('invalid');
+  };
   
   // Validation: check if required field has a selection
   root.isValid = () => {

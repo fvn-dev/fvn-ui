@@ -380,6 +380,7 @@ input({ label: 'Bio', rows: 4, placeholder: 'Tell us about yourself' })
 | `onSubmit` | Called on Enter (input only) |
 | `min/max/step` | For number inputs |
 | `pattern/required/maxlength` | HTML5 validation |
+| `required` | Require input to have a value (validates via `isValid()`) |
 | `validate` | Built-in: `'email'`, `'url'`, `'phone'` or custom function |
 | `min/max` | Character length limits (also colors counter) |
 | `counter` | Show character counter (textarea) |
@@ -388,6 +389,10 @@ input({ label: 'Bio', rows: 4, placeholder: 'Tell us about yourself' })
 **Validation examples:**
 
 ```js
+// Required field
+input({ label: 'Name', required: true })
+input({ label: 'Name', required: true, message: { required: 'Name is required' } })
+
 // Built-in validators
 input({ label: 'Email', validate: 'email' })
 input({ label: 'Website', validate: 'url' })
@@ -509,6 +514,32 @@ selectComponent({
   filter: true,
   options: tagOptions
 })
+
+// Required validation
+const country = selectComponent({
+  label: 'Country',
+  required: true,
+  options: countries
+})
+country.isValid()  // false if nothing selected
+```
+
+| Prop | Description |
+|------|-------------|
+| `options` | Array of `{ value, label }` objects |
+| `value` | Initially selected value(s) |
+| `placeholder` | Placeholder text |
+| `multiselect` | Allow multiple selections |
+| `filter` | Show filter input |
+| `required` | Require at least one selection |
+
+**Methods:**
+
+```js
+const sel = selectComponent({ label: 'Country', required: true, options })
+sel.isValid()     // returns true if has selection (when required)
+sel.error()       // mark as invalid
+sel.ok()          // clear invalid state
 ```
 
 **Via ui namespace:** `ui.select({ ... })`

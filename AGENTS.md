@@ -140,11 +140,20 @@ ui.col({ center: true }, [
 ## Input Validation
 
 ```js
+// Required fields
+ui.input({ label: 'Name', required: true })
+ui.select({ label: 'Country', required: true, options: countries })
+
 // Built-in validators: 'email', 'url', 'phone'
 ui.input({ label: 'Email', validate: 'email', message: 'Invalid email' })
 
 // With counter and limits
 ui.input({ label: 'Bio', rows: 4, min: 10, max: 500, counter: true })
+
+// Check validation (works with required, validate, min/max)
+const name = ui.input({ label: 'Name', required: true })
+const country = ui.select({ label: 'Country', required: true, options })
+if (name.isValid() && country.isValid()) { /* submit */ }
 
 // Manual validation (form validation)
 const field = ui.input({ label: 'Name' })

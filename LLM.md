@@ -386,6 +386,7 @@ input({ label: 'Bio', rows: 4, placeholder: 'Tell us about yourself' })
 | `rows` | If set, renders `<textarea>` |
 | `onSubmit` | Called on Enter (input only) |
 | `min/max/step` | For number inputs |
+| `required` | Require input to have a value (validates via `isValid()`) |
 | `pattern/required/maxlength` | HTML5 validation |
 
 ---
@@ -520,6 +521,32 @@ selectComponent({
   filter: true,
   options: tagOptions
 })
+
+// Required validation
+const country = selectComponent({
+  label: 'Country',
+  required: true,
+  options: countries
+})
+country.isValid()  // false if nothing selected
+```
+
+| Prop | Description |
+|------|-------------|
+| `options` | Array of `{ value, label }` objects |
+| `value` | Initially selected value(s) |
+| `placeholder` | Placeholder text |
+| `multiselect` | Allow multiple selections |
+| `filter` | Show filter input |
+| `required` | Require at least one selection |
+
+**Methods:**
+
+```js
+const sel = selectComponent({ label: 'Country', required: true, options })
+sel.isValid()     // returns true if has selection (when required)
+sel.error()       // mark as invalid
+sel.ok()          // clear invalid state
 ```
 
 **Via ui namespace:** `ui.select({ ... })`
