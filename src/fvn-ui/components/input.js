@@ -64,6 +64,8 @@ export function input(...args) {
   const isNumber = type === 'number';
   const cb = getCallback('onSubmit', rest);
   const submitCallback = !isTextarea && getCallback('onSubmit', rest, true);
+  const userOnInput = getCallback('onInput', rest);
+  const userOnChange = getCallback('onChange', rest);
   let wrapEl, inputEl, counterEl, messageEl, infoEl;
 
   const submit = () => cb?.call(inputEl, inputEl.value);
@@ -130,6 +132,7 @@ export function input(...args) {
     wrapEl.classList.toggle('has-value', !!inputEl.value);
     if (validate || min != null || max != null) checkValid();
     if (counter) updateCounter();
+    userOnInput?.call(inputEl, inputEl.value);
   };
 
   const onKeyup = (e) => {
@@ -144,6 +147,9 @@ export function input(...args) {
     if (max != null) next = Math.min(max, next);
     inputEl.value = next;
     inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+    inputEl.dispatchEvent(new Event('change', { bubbles: true }));
+    userOnInput?.call(inputEl, inputEl.value);
+    userOnChange?.call(inputEl, inputEl.value);
   };
 
   const inputTag = isTextarea ? 'textarea' : 'input';
@@ -171,6 +177,7 @@ export function input(...args) {
               if (focus) focusAfterRender(e);
             },
             onInput,
+            onChange: userOnChange ? () => userOnChange.call(inputEl, inputEl.value) : undefined,
             onKeyup: cb && onKeyup,
             onBlur: isNumber && clamp ? () => {
               const val = parseFloat(inputEl.value);
