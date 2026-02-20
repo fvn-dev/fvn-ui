@@ -161,10 +161,18 @@ When using AI coding assistants with fvn-ui, copy the docs to your project for b
 
 #### Quick Setup (all tools)
 ```bash
-# Copy documentation to project root
-cp node_modules/fvn-ui/AGENTS.md .
-cp node_modules/fvn-ui/LLM.md .
+# Using npx (recommended)
+npx fvn-ui
+
+# Or add to package.json scripts
+{
+  "scripts": {
+    "docs": "fvn-ui"
+  }
+}
 ```
+
+This copies `AGENTS.md` and `LLM.md` to your project root.
 
 #### Tool-Specific Rules
 
