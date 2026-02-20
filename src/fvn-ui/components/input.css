@@ -32,7 +32,7 @@
   padding: var(--input-padding);
   border-radius: 0 var(--radius) var(--radius) 0;
 }
-.ui-input__wrap.has-value .ui-btn {
+.ui-input__wrap.has-value .ui-btn:not(.ui-input__num-btn) {
   background: var(--hover);
 }
 
@@ -65,4 +65,37 @@
 /* Validation message */
 .ui-input__message {
   color: var(--red);
+}
+
+/* Number input */
+.ui-input--number {
+  -moz-appearance: textfield;
+  padding-right: 70px;
+}
+.ui-input--number::-webkit-outer-spin-button,
+.ui-input--number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.ui-input__num-btns {
+  display: flex;
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  height: calc(100% - 2px);
+  gap: 0;
+}
+.ui-input__num-btn {
+  position: static !important;
+  height: 100% !important;
+  border: none !important;
+  border-radius: 0 !important;
+  flex-shrink: 0;
+  border-left: 1px solid var(--border) !important;
+}
+.ui-input__num-btn:last-child {
+  border-radius: 0 var(--radius) var(--radius) 0 !important;
+}
+.ui-input__num-btn:hover {
+  background: var(--hover);
 }

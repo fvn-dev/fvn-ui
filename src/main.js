@@ -338,13 +338,14 @@ function inputPresentation() {
       text.label('Character counter'),
       layout.row([
         textarea({
-          label: 'With max',
+          label: 'With max and clamp',
           placeholder: 'Max 50 characters...',
           counter: true,
+          clamp: true,
           max: 50
         }),
         textarea({
-          label: 'With min & max (and message)',
+          label: 'With min, max and message',
           placeholder: 'Min 10, max 50...',
           counter: true,
           min: 10,

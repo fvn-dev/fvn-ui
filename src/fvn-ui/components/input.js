@@ -50,6 +50,8 @@ export function input(...args) {
     validate,
     min,
     max,
+    step = 1,
+    clamp,
     counter,
     message,
     attrs = {},
@@ -58,6 +60,7 @@ export function input(...args) {
   } = parseArgs(...args);
 
   const isTextarea = rows != null;
+  const isNumber = type === 'number';
   const cb = getCallback('onSubmit', rest);
   const submitCallback = !isTextarea && getCallback('onSubmit', rest, true);
   let wrapEl, inputEl, counterEl, messageEl;
@@ -87,8 +90,9 @@ export function input(...args) {
     let errorType = null;
     
     if (validator && !validator(v)) errorType = 'validate';
-    else if (min != null && v.length < min) errorType = 'min';
-    else if (max != null && v.length > max) errorType = 'max';
+    // Only check length-based min/max for non-number inputs
+    else if (!isNumber && min != null && v.length < min) errorType = 'min';
+    else if (!isNumber && max != null && v.length > max) errorType = 'max';
     
     const isInvalid = errorType && v.length > 0;
     wrapEl.classList.toggle('invalid', isInvalid);
@@ -127,9 +131,19 @@ export function input(...args) {
     if (e.key === 'Enter') submit();
   };
 
+  // Number input increment/decrement
+  const adjustNumber = (delta) => {
+    const current = parseFloat(inputEl.value) || 0;
+    let next = current + delta * step;
+    if (min != null) next = Math.max(min, next);
+    if (max != null) next = Math.min(max, next);
+    inputEl.value = next;
+    inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+  };
+
   const inputTag = isTextarea ? 'textarea' : 'input';
   const inputAttrs = isTextarea
-    ? { rows, id, placeholder, attrs }
+    ? { rows, id, placeholder, attrs: { ...attrs, maxlength: clamp ? max : undefined } }
     : { type, id, value, placeholder, attrs };
 
   const root = col(parent, {
@@ -138,21 +152,50 @@ export function input(...args) {
     children: [
       label && textLabel({ text: label, soft: true }),
       el('div', {
-        class: [bem.el('wrap'), bem.core('size', size)],
+        class: [bem.el('wrap'), bem.core('size', size), isNumber && bem.el('wrap--number')],
         ref: (e) => wrapEl = e,
         children: [
           el(inputTag, {
             ...rest,
             ...inputAttrs,
             ...noSpellcheck,
-            class: [bem(), submitCallback && bem('submit'), 'ui-border', rest.class],
+            class: [bem(), submitCallback && bem('submit'), isNumber && bem('number'), 'ui-border', rest.class],
             ref: (e) => {
               inputEl = e;
               if (isTextarea && value) e.textContent = value;
               if (focus) focusAfterRender(e);
             },
             onInput,
-            onKeyup: cb && onKeyup
+            onKeyup: cb && onKeyup,
+            onBlur: isNumber && clamp ? () => {
+              const val = parseFloat(inputEl.value);
+              if (isNaN(val)) return;
+              if (min != null && val < min) inputEl.value = min;
+              else if (max != null && val > max) inputEl.value = max;
+            } : undefined
+          }),
+          isNumber && el('div', {
+            class: bem.el('num-btns'),
+            children: [
+              button({
+                icon: 'minus',
+                muted: true,
+                variant: 'ghost',
+                size,
+                class: bem.el('num-btn'),
+                attrs: { 'aria-label': 'Decrease', tabindex: -1 },
+                onClick: () => adjustNumber(-1)
+              }),
+              button({
+                icon: 'plus',
+                muted: true,
+                variant: 'ghost',
+                size,
+                class: bem.el('num-btn'),
+                attrs: { 'aria-label': 'Increase', tabindex: -1 },
+                onClick: () => adjustNumber(1)
+              })
+            ]
           }),
           submitCallback && button({
             icon: icon || 'enter',
