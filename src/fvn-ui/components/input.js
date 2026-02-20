@@ -54,6 +54,7 @@ export function input(...args) {
     clamp,
     counter,
     message,
+    info,
     attrs = {},
     props,
     ...rest
@@ -63,7 +64,7 @@ export function input(...args) {
   const isNumber = type === 'number';
   const cb = getCallback('onSubmit', rest);
   const submitCallback = !isTextarea && getCallback('onSubmit', rest, true);
-  let wrapEl, inputEl, counterEl, messageEl;
+  let wrapEl, inputEl, counterEl, messageEl, infoEl;
 
   const submit = () => cb?.call(inputEl, inputEl.value);
 
@@ -97,11 +98,15 @@ export function input(...args) {
     const isInvalid = errorType && v.length > 0;
     wrapEl.classList.toggle('invalid', isInvalid);
     
-    // Update message
+    // Update message (validation wins over info)
     if (messageEl) {
       const msg = isInvalid ? getMessage(errorType) : null;
       messageEl.textContent = msg || '';
       messageEl.hidden = !msg;
+    }
+    // Show/hide info based on validation state
+    if (infoEl) {
+      infoEl.hidden = isInvalid;
     }
     
     return !errorType;
@@ -207,11 +212,16 @@ export function input(...args) {
           })
         ]
       }),
-      (message || counter) && row({ class: bem.el('footer'), justify: 'between' }, [
+      (message || info || counter) && row({ class: bem.el('footer'), justify: 'between' }, [
         message && el('div', {
           class: bem.el('message'),
           hidden: true,
           ref: (e) => messageEl = e
+        }),
+        info && el('div', {
+          class: bem.el('info'),
+          text: info,
+          ref: (e) => infoEl = e
         }),
         isTextarea && counter && el('div', {
           class: bem.el('counter'),

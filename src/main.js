@@ -330,7 +330,8 @@ function inputPresentation() {
           label: 'Phone (with message)',
           placeholder: '92 60 47 33',
           validate: 'phone',
-          message: 'Invalid phone number'
+          message: 'Invalid phone number',
+          info: 'General info message'
         })
       ])
     ]),

@@ -67,6 +67,11 @@
   color: var(--red);
 }
 
+/* Info text */
+.ui-input__info {
+  color: var(--muted);
+}
+
 /* Number input */
 .ui-input--number {
   -moz-appearance: textfield;
