@@ -110,7 +110,7 @@ const exampleOptions = [
 // --->
 
 function buttonPresentation() {
-  const a = layout.row([
+  const a = layout.row({ gap: 2 }, [
     button({ label: 'Default' }),
     button({ label: 'Primary', variant: 'primary' }),
     button({ label: 'Secondary', variant: 'secondary' }),
@@ -118,7 +118,7 @@ function buttonPresentation() {
     button({ label: 'Ghost', variant: 'ghost' }),
     button({ label: 'Minimal', variant: 'minimal' })
   ]);
-  const b = layout.row([
+  const b = layout.row({ gap: 2 }, [
     button({ label: 'Colored', color: 'red' }),
     button({ label: 'Colored outline', variant: 'outline', color: 'primary' }),
     button({ label: 'Ghost round', shape: 'round', variant: 'ghost', color: 'yellow' }),
@@ -128,14 +128,14 @@ function buttonPresentation() {
       setTimeout(() => this.toggleLoading(), 3000);
     }}),
   ]);
-  const c = layout.row([
+  const c = layout.row({ gap: 2 }, [
     button({ icon: 'settings', label: 'Settings' }),
     button({ icon: 'search', label: 'Search', shape: 'round', variant: 'secondary' }),
     button({ icon: 'settings', variant: 'outline' }),
     button({ icon: 'settings', shape: 'round', color: 'red', variant: 'outline' }),
     button({ icon: 'settings', shape: 'round', variant: 'ghost' })
   ]);
-  const d = layout.row([
+  const d = layout.row({ gap: 2 }, [
     button({ label: 'Random', color: colors }),
     button({ label: 'Green', color: 'green', variant: 'outline' }),
     button({ label: 'Yellow', color: 'yellow' }),

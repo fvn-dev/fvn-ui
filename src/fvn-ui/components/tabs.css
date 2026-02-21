@@ -62,7 +62,7 @@
     gap: 0;
 }
 .ui-tabs--outline + .ui-tabs__panel {
-  margin-top: calc(-1 * var(--space-2));
+  margin-top: calc(-1 * var(--gap));
 }
 .ui-tabs--outline:not([data-centered]) + .ui-tabs__panel {
     border-top-left-radius: 0;

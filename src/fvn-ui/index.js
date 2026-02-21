@@ -65,11 +65,38 @@ export const layout = {
   divider: components.divider
 };
 
+/**
+ * Dark mode toggle helper
+ * @returns {{ isDark: boolean, icons: [string, string], toggle: () => boolean }}
+ * @example
+ * // In dashboard actions
+ * const dm = ui.darkmode()
+ * dashboard({ actions: [{ icon: dm.icons, action: dm.toggle }] })
+ * 
+ * // Manual toggle
+ * ui.darkmode().toggle()
+ */
+export const darkmode = (() => {
+  const isDark = () => document.documentElement.classList.contains('dark');
+  const toggle = on => {
+    return document.documentElement.classList.toggle('dark', !!on);
+  };
+  if (matchMedia('(prefers-color-scheme: dark)').matches) {
+    toggle(true);
+  }
+  return {
+    isDark,
+    icons: isDark() ? ['sun', 'moon'] : ['moon', 'sun'],
+    toggle
+  }
+})();
+
 export const ui = {
   ...components,
   select: components.selectComponent,
   switch: components.switchComponent,
   layout,
+  darkmode,
   dom,
   el,
   row,
@@ -78,7 +105,3 @@ export const ui = {
 };
 
 document.body.classList.add('fvn-ui');
-
-if (matchMedia('(prefers-color-scheme: dark)').matches) {
-  document.documentElement.classList.add('dark');
-}
