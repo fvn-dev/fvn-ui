@@ -276,7 +276,7 @@ export function input(...args) {
     }
   };
   
-  // Reset to initial state
+  // Reset to initial state (pristine, no validation errors shown)
   root.reset = () => {
     inputEl.value = '';
     _manualError = false;
@@ -286,7 +286,7 @@ export function input(...args) {
       messageEl.hidden = true;
     }
     if (infoEl) infoEl.hidden = false;
-    if (counterEl) updateCounter();
+    if (counter) updateCounter();
   };
   
   return withValue(root, () => inputEl.value, (v) => { inputEl.value = v; onInput(); });

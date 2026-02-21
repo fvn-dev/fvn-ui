@@ -5,9 +5,9 @@ Minimal vanilla JS component library with layout helpers. Zero dependencies.
 
 ### Quick Start
 
-**Via [CDN](https://unpkg.com/fvn-ui/dist/ui.js)**
+**Via [CDN](https://unpkg.com/fvn-ui@latest/dist/ui.js)**
 ```html
-<script src="https://unpkg.com/fvn-ui/dist/ui.js"></script>
+<script src="https://unpkg.com/fvn-ui@latest/dist/ui.js"></script>
 <script>
   // direct
   ui.card()
@@ -21,20 +21,20 @@ Minimal vanilla JS component library with layout helpers. Zero dependencies.
 npm install fvn-ui
 ```
 
-```js
-import { layout, button, switchComponent } from 'fvn-ui'
-```
-
-Or use the `ui` namespace for cleaner access (also avoids reserved words like `switch`):
+With a bundler (Vite, webpack, esbuild):
 ```js
 import { ui } from 'fvn-ui'
 
 ui.button({ label: 'Save' })
 ui.switch({ label: 'Dark mode' })
-ui.layout.row([ ... ])
 ```
 
-Tree-shakeable imports:
+Without a bundler (native ES modules):
+```js
+import { ui } from 'https://unpkg.com/fvn-ui@latest/dist/ui.js'
+```
+
+Tree-shakeable imports (bundler only):
 ```js
 import 'fvn-ui/style.css'
 import { button } from 'fvn-ui/button'
