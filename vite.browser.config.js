@@ -34,7 +34,7 @@ function cssInlinePlugin() {
   };
 }
 
-// Config for building the browser IIFE bundle with CSS inlined
+// Config for building browser bundles with CSS inlined
 export default defineConfig({
   build: {
     outDir: 'dist',
@@ -42,8 +42,8 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/fvn-ui/browser.js'),
       name: 'fvnUI',
-      formats: ['iife'],
-      fileName: () => 'ui.js'
+      formats: ['iife', 'es'],
+      fileName: (format) => format === 'es' ? 'ui.esm.js' : 'ui.js'
     },
     cssCodeSplit: false,
     minify: 'esbuild'

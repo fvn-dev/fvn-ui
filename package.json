@@ -1,6 +1,6 @@
 {
   "name": "fvn-ui",
-  "version": "0.1.0-alpha.46",
+  "version": "0.1.0-alpha.47",
   "description": "Minimalist vanilla JS component library",
   "type": "module",
   "sideEffects": [
@@ -43,6 +43,7 @@
   "files": [
     "src/fvn-ui",
     "dist/ui.js",
+    "dist/ui.esm.js",
     "bin",
     "AGENTS.md",
     "LLM.md",

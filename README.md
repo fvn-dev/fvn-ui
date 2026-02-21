@@ -31,7 +31,7 @@ ui.switch({ label: 'Dark mode' })
 
 Without a bundler (native ES modules):
 ```js
-import { ui } from 'https://unpkg.com/fvn-ui@latest/dist/ui.js'
+import { ui } from 'https://unpkg.com/fvn-ui@latest/dist/ui.esm.js'
 ```
 
 Tree-shakeable imports (bundler only):
