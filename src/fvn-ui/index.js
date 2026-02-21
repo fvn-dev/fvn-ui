@@ -77,17 +77,19 @@ export const layout = {
  * ui.darkmode().toggle()
  */
 export const darkmode = (() => {
+  const getIcons = () => isDark() ? ['sun', 'moon'] : ['moon', 'sun'];
   const isDark = () => document.documentElement.classList.contains('dark');
   const toggle = on => {
-    return document.documentElement.classList.toggle('dark', !!on);
+    return document.documentElement.classList.toggle('dark', on);
   };
   if (matchMedia('(prefers-color-scheme: dark)').matches) {
     toggle(true);
   }
   return {
     isDark,
-    icons: isDark() ? ['sun', 'moon'] : ['moon', 'sun'],
-    toggle
+    getIcons,
+    toggle,
+    menuItem: { icon: getIcons(), action: () => toggle() }
   }
 })();
 
