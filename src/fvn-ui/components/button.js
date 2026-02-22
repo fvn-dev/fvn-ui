@@ -91,10 +91,10 @@ export function button(...args) {
       }),
       label && el('div', { html: label })
     ],
-    setLabel(text, duration = 5000) {
+    setLabel(text, duration) {
       this.disabled = true;
-      this.textContent = text;
-      if (duration) {
+      this.textContent = text || label;
+      if (Number.isInteger(duration)) {
         setTimeout(() => {
           this.disabled = false;
           this.textContent = label;

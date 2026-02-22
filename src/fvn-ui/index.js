@@ -93,6 +93,10 @@ export const darkmode = (() => {
   }
 })();
 
+const init = (container = document.body) => {
+  container.classList.add('fvn-ui');
+};
+
 export const ui = {
   ...components,
   select: components.selectComponent,
@@ -103,7 +107,8 @@ export const ui = {
   el,
   row,
   col,
-  colors
+  colors,
+  init
 };
 
-document.body.classList.add('fvn-ui');
+!globalThis._uiManualInit && init();

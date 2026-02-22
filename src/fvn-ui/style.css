@@ -2,15 +2,15 @@
 @import url('https://rsms.me/inter/inter.css');
 
 /* Inter font feature settings for crispness */
-:root {
+.fvn-ui {
   font-feature-settings: 'liga' 1, 'calt' 1; /* Enable ligatures and contextual alternates */
 }
 @supports (font-variation-settings: normal) {
-  :root { font-family: 'Inter var', sans-serif; }
+  .fvn-ui { font-family: 'Inter var', sans-serif; }
 }
 
 /* ---- Tokens ---- */
-:root {
+.fvn-ui {
   --core: 15px;
   --icon-size-default: calc(1.2 * var(--core));
   --radius: calc(var(--core) * .375);
@@ -260,7 +260,7 @@ body.fvn-ui {
 
 
 /* :root wrapper for specificity boost */
-:root {
+.fvn-ui {
   /* Keep: used by components */
   & .w-full { width: 100%; }
   & .h-full { height: 100%; }
@@ -315,7 +315,7 @@ body.fvn-ui {
 }
 
 /* :root wrapper for specificity boost over component defaults */
-:root {
+.fvn-ui {
   & .ui-inverted {
     --back: hsl(var(--hsl-text));
     --text: hsl(var(--hsl-back));
