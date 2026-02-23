@@ -62,6 +62,10 @@ export function button(...args) {
   const icons = Array.isArray(icon) ? icon : (icon ? [icon] : []);
   const iconRefs = [];
 
+  if (description && !icons.length) {
+    icons.push('arrow-right');
+  }
+  
   const text = [
     label && el('div', { html: label, children: [description && el('div', { html: description, class: bem.el('description') })] }),
     description && el('div', { html: description, class: bem.el('description') })
