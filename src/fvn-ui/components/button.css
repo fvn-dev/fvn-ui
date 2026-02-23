@@ -30,7 +30,7 @@
   pointer-events: none;
 }
 .ui-btn--list-item {
-  gap: var(--space-3);
+  gap: var(--space-4);
   padding: 0 var(--space-4) 0 0;
   flex-direction: row-reverse;
   width: 100%;
@@ -40,7 +40,7 @@
   background: var(--back);
   color: var(--text);
   padding-right: var(--space-8);
-  padding-left: var(--space-3);
+  padding-left: var(--space-4);
   padding-block: var(--space-2);
   border-radius: var(--radius) 0 0 var(--radius);
 }
@@ -52,8 +52,9 @@
   border-color: hsl(var(--hsl-border) / .15) !important;
 }
 .ui-btn--list-item > .col > div:last-child {
-  font-weight: 300;
+  font-weight: 400;
   font-size: 90%;
+  color: var(--muted);
 }
 .ui-btn--muted {
   color: var(--muted);

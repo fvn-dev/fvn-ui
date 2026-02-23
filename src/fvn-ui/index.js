@@ -1,5 +1,8 @@
 /*
   TODO
+    - bug: el({ children }) not working?
+    - bug: row|col does not allow { class }
+    - add label option to toggle (switch)
     - move "dashboard" component under layout category?
     - Add clamping functionality to number input component? custom arrows
     - "copy text" icon option for input/textarea

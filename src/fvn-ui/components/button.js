@@ -65,9 +65,9 @@ export function button(...args) {
   if (description && !icons.length) {
     icons.push('arrow-right');
   }
-  
+
   const text = [
-    label && el('div', { html: label, children: [description && el('div', { html: description, class: bem.el('description') })] }),
+    label && el('div', { html: label }),
     description && el('div', { html: description, class: bem.el('description') })
   ];
 
@@ -105,7 +105,6 @@ export function button(...args) {
       description ? col(text) : text
     ],
     setLabel(text, duration) {
-      this.disabled = true;
       this.textContent = text || label;
       if (Number.isInteger(duration)) {
         setTimeout(() => {
@@ -114,6 +113,14 @@ export function button(...args) {
         }, duration);
       }
     },
+    disable(text) {
+      this.disabled = true;
+      this.textContent = text || label;
+    },
+    enable() {
+      this.disabled = false;
+      this.textContent = label;
+    },    
     toggleLoading(text) {
       this.classList.toggle('loading', typeof text === 'string');
       this.textContent = text || label;
