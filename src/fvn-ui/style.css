@@ -258,6 +258,12 @@ body.fvn-ui {
 .col > [data-top] { margin-bottom: auto; }
 .col > [data-center] { margin-top: auto; margin-bottom: auto; }
 
+.col.reverse {
+  flex-direction: column-reverse;
+}
+.row.reverse {
+  flex-direction: row-reverse;
+}
 
 /* :root wrapper for specificity boost */
 .fvn-ui {

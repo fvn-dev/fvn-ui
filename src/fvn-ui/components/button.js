@@ -1,4 +1,4 @@
-import { el, parseArgs, configToClasses, bemFactory } from '../dom.js'
+import { el, col, parseArgs, configToClasses, bemFactory } from '../dom.js'
 import { svg } from './svg.js'
 import './button.css'
 
@@ -28,6 +28,8 @@ export function button(...args) {
   const {
     parent,
     label = '',
+    description = '',
+    reverse = false,
     icon,
     variant = 'default',
     shape,
@@ -60,6 +62,11 @@ export function button(...args) {
   const icons = Array.isArray(icon) ? icon : (icon ? [icon] : []);
   const iconRefs = [];
 
+  const text = [
+    label && el('div', { html: label, children: [description && el('div', { html: description, class: bem.el('description') })] }),
+    description && el('div', { html: description, class: bem.el('description') })
+  ];
+
   const btn = el('button', parent, {
     ...rest,
     type,
@@ -75,6 +82,8 @@ export function button(...args) {
       size && bem.core('size', size),
       muted && bem('muted'),
       loading && 'loading',
+      reverse && bem('reverse'),
+      description && bem('list-item'),
       configToClasses(props),
       rest.class
     ],
@@ -89,7 +98,7 @@ export function button(...args) {
           ref: e => iconRefs[i] = e
         }))
       }),
-      label && el('div', { html: label })
+      description ? col(text) : text
     ],
     setLabel(text, duration) {
       this.disabled = true;

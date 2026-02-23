@@ -472,6 +472,7 @@ const createLayout = (direction, ...args) => {
     wrap,
     grow,
     distribute,
+    reverse,
     width,
     children, 
     style = {},
@@ -505,6 +506,7 @@ const createLayout = (direction, ...args) => {
     ...rest,
     class: [
       direction,
+      reverse && 'reverse',
       width === 'full' && 'w-full',
       rest.class
     ],

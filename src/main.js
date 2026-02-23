@@ -116,7 +116,7 @@ function buttonPresentation() {
     button({ label: 'Secondary', variant: 'secondary' }),
     button({ label: 'Outline', variant: 'outline' }),
     button({ label: 'Ghost', variant: 'ghost' }),
-    button({ label: 'Minimal', variant: 'minimal' })
+    button({ label: 'Minimal', variant: 'minimal' }),
   ]);
   const b = layout.row({ gap: 2 }, [
     button({ label: 'Colored', color: 'red' }),
@@ -143,6 +143,14 @@ function buttonPresentation() {
     button({ label: 'Blue', color: 'blue', variant: 'ghost' }),
     button({ label: 'Pink', color: 'pink', shape: 'round' })
   ]);
+  const e = layout.col({ gap: 2 }, [
+    button({ label: 'Ghost', description: 'This is a list-item button', variant: 'ghost', icon: 'arrow-right' }),
+    button({ label: 'Outline', description: 'This is an list-item button', variant: 'outline', icon: 'arrow-right' }),
+    button({ label: 'Minimal', description: 'This is an list-item button', variant: 'minimal', icon: 'arrow-right' }),
+    button({ label: 'Default', description: 'This is a list-item button', icon: 'arrow-right' }),
+    button({ label: 'Primary', description: 'This is a list-item button', variant: 'primary', icon: 'arrow-right' })
+  ]);
+
   
   return tabs({
     border: false,
@@ -165,6 +173,10 @@ function buttonPresentation() {
         label: 'Colors',
         render: () => d
       },      
+      {
+        label: 'List-item',
+        render: () => e
+      }      
     ]
   })  
 }
