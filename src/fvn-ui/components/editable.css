@@ -27,6 +27,9 @@
 .ui-editable:not(.ui-plain):focus-visible {
   border-color: var(--muted);
 }
+.ui-editable.invalid {
+  border-color: var(--red);
+}
 
 /* Placeholder via :empty and data attribute */
 .ui-editable:empty::before {
@@ -60,6 +63,28 @@
   flex-direction: column;
   gap: var(--space-2);
   width: 100%;
+}
+
+.ui-editable__footer {
+  font-size: .8em;
+}
+.ui-editable__message {
+  color: var(--red);
+}
+.ui-editable__info {
+  color: var(--muted);
+}
+.ui-editable__counter {
+  color: var(--muted);
+}
+.ui-editable__counter.ok {
+  color: var(--green);
+}
+.ui-editable__counter.warn {
+  color: var(--orange);
+}
+.ui-editable__counter.error {
+  color: var(--red);
 }
 
 .ui-editable__toolbar {

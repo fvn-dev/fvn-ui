@@ -714,8 +714,23 @@ editable({ multiline: false })  // same as rows: 1
 | `rows` | 1 = single line, >1 = sets min-height |
 | `multiline` | `false` = single line mode |
 | `plainText` | Strip formatting on paste |
-| `onChange` | Called with `{ value, html, element }` |
+| `required` | Require text content to be non-empty |
+| `validate` | Built-in: `'email'`, `'url'`, `'phone'` or custom function |
+| `min/max` | Character length limits |
+| `message` | Error message(s) — string or object |
+| `info` | Helper text shown when valid |
+| `onChange` | Called with `(html, event)` |
 | `onSubmit` | Called on Enter (single line only) |
+
+**Methods:**
+
+```js
+const ed = editable({ required: true, message: { required: 'Required' } })
+ed.isValid()   // returns true/false
+ed.error('Custom error')
+ed.ok()
+ed.reset()
+```
 
 ---
 

@@ -1,16 +1,10 @@
 import { el, col, row, getCallback, withValue, parseArgs, configToClasses, bemFactory, noSpellcheck, focusAfterRender } from '../dom.js'
 import { button } from './button.js'
 import { label as textLabel } from './text.js'
+import { createValidationController, createCounterController } from './validation.js'
 import './input.css'
 
 const bem = bemFactory('input');
-
-// Built-in validators
-const validators = {
-  email: (v) => !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
-  url: (v) => !v || /^https?:\/\/.+/.test(v),
-  phone: (v) => !v || /^(\+47|0047)?\s*\d{2}\s*\d{2}\s*\d{2}\s*\d{2}$/.test(v.replace(/[\s-]/g, ' ').trim()),
-};
 
 /**
  * Creates a text input or textarea with optional label and submit handling
@@ -69,83 +63,48 @@ export function input(...args) {
   const userOnInput = getCallback('onInput', rest);
   const userOnChange = getCallback('onChange', rest);
   let wrapEl, inputEl, counterEl, messageEl, infoEl;
-  let _manualError = false;
 
   const submit = () => cb?.call(inputEl, inputEl.value);
 
-  // Get message for a specific error type
-  const getMessage = (errorType) => {
-    if (!message) return null;
-    if (typeof message === 'string') return message;
-    // Support both generic 'validate' key and specific validator name (e.g., 'email')
-    const msg = message[errorType] || (errorType === 'validate' && typeof validate === 'string' && message[validate]);
-    if (!msg) return null;
-    return msg.replace('{min}', min).replace('{max}', max).replace('{length}', inputEl?.value?.length || 0);
-  };
-
-  // Validation
-  const getValidator = () => {
-    if (typeof validate === 'function') return validate;
-    if (typeof validate === 'string') return validators[validate];
-    return null;
-  };
-
-  const checkValid = () => {
-    const v = inputEl.value;
-    const validator = getValidator();
-    let errorType = null;
-    
-    // Check required first (value must have length > 0)
-    if (required && (!v || v.length === 0)) errorType = 'required';
-    else if (validator && !validator(v)) errorType = 'validate';
-    // Only check length-based min/max for non-number inputs
-    else if (!isNumber && min != null && v.length < min) errorType = 'min';
-    else if (!isNumber && max != null && v.length > max) errorType = 'max';
-    
-    const isInvalid = !!errorType;
-    wrapEl.classList.toggle('invalid', isInvalid);
-    
-    // Update message (validation wins over info)
-    if (messageEl) {
-      const msg = isInvalid ? getMessage(errorType) : null;
-      messageEl.textContent = msg || '';
-      messageEl.hidden = !msg;
+  const validation = createValidationController({
+    validate,
+    required,
+    min,
+    max,
+    message,
+    checkLength: !isNumber,
+    getValue: () => inputEl?.value || '',
+    setInvalid: (isInvalid) => wrapEl?.classList.toggle('invalid', isInvalid),
+    setMessage: (text, visible) => {
+      if (!messageEl) return;
+      messageEl.textContent = text;
+      messageEl.hidden = !visible;
+    },
+    onInvalidChange: (isInvalid) => {
+      if (infoEl) infoEl.hidden = isInvalid;
     }
-    // Show/hide info based on validation state
-    if (infoEl) {
-      infoEl.hidden = isInvalid;
-    }
-    
-    return !errorType;
-  };
+  });
 
-  // Counter update
-  const updateCounter = () => {
-    if (!counterEl) return;
-    const len = inputEl.value.length;
-    counterEl.textContent = max ? `${len}/${max}` : len;
-    
-    // Color based on limits
-    counterEl.classList.remove('warn', 'error', 'ok');
-    if (max && len > max) counterEl.classList.add('error');
-    else if (min && len > 0 && len < min) counterEl.classList.add('error');
-    else if (max && len > max * 0.9) counterEl.classList.add('warn');
-    else if (min && len >= min) counterEl.classList.add('ok');
-  };
+  const counterController = createCounterController({
+    min,
+    max,
+    checkLength: !isNumber,
+    getValue: () => inputEl?.value || '',
+    setCounter: counter
+      ? (text, state) => {
+          if (!counterEl) return;
+          counterEl.textContent = text;
+          counterEl.classList.remove('warn', 'error', 'ok');
+          if (state) counterEl.classList.add(state);
+        }
+      : null
+  });
 
   const onInput = (e) => {
-    // Clear manual error on user interaction
-    if (_manualError) {
-      _manualError = false;
-      wrapEl.classList.remove('invalid');
-      if (messageEl) {
-        messageEl.textContent = '';
-        messageEl.hidden = true;
-      }
-    }
+    validation.clearManualError();
     wrapEl.classList.toggle('has-value', !!inputEl.value);
-    if (validate || required || min != null || max != null) checkValid();
-    if (counter) updateCounter();
+    if (validation.hasRules) validation.check();
+    if (counter) counterController.update();
     userOnInput?.call(inputEl, inputEl.value, e);
   };
 
@@ -195,12 +154,14 @@ export function input(...args) {
             onInput,
             onChange: userOnChange ? onChange : undefined,
             onKeyup: cb && onKeyup,
-            onBlur: isNumber && clamp ? () => {
-              const val = parseFloat(inputEl.value);
-              if (isNaN(val)) return;
-              if (min != null && val < min) inputEl.value = min;
-              else if (max != null && val > max) inputEl.value = max;
-            } : undefined
+            onBlur: isNumber && clamp
+              ? () => {
+                  const val = parseFloat(inputEl.value);
+                  if (isNaN(val)) return;
+                  if (min != null && val < min) inputEl.value = min;
+                  else if (max != null && val > max) inputEl.value = max;
+                }
+              : undefined
           }),
           isNumber && el('div', {
             class: bem.el('num-btns'),
@@ -249,44 +210,23 @@ export function input(...args) {
         isTextarea && counter && el('div', {
           class: bem.el('counter'),
           end: true,
-          ref: (e) => { counterEl = e; updateCounter(); }
+          ref: (e) => { counterEl = e; counterController.update(); }
         })
       ])
     ]
   });
 
   root.input = inputEl;
-  root.isValid = checkValid;
-  
-  // Manual validation control
-  root.error = (msg) => {
-    _manualError = true;
-    wrapEl.classList.add('invalid');
-    if (messageEl && msg) {
-      messageEl.textContent = msg;
-      messageEl.hidden = false;
-    }
-  };
-  root.ok = () => {
-    _manualError = false;
-    wrapEl.classList.remove('invalid');
-    if (messageEl) {
-      messageEl.textContent = '';
-      messageEl.hidden = true;
-    }
-  };
+  root.isValid = validation.check;
+  root.error = validation.error;
+  root.ok = validation.ok;
   
   // Reset to initial state (pristine, no validation errors shown)
   root.reset = () => {
     inputEl.value = '';
-    _manualError = false;
-    wrapEl.classList.remove('invalid', 'has-value');
-    if (messageEl) {
-      messageEl.textContent = '';
-      messageEl.hidden = true;
-    }
-    if (infoEl) infoEl.hidden = false;
-    if (counter) updateCounter();
+    wrapEl.classList.remove('has-value');
+    validation.reset();
+    if (counter) counterController.reset();
   };
   
   return withValue(root, () => inputEl.value, (v) => { inputEl.value = v; onInput(); });

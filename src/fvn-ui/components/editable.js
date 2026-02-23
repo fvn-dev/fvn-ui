@@ -2,6 +2,7 @@ import { el, row, col, parseArgs, configToClasses, bemFactory, noSpellcheck, foc
 import { button } from './button.js'
 import { selectComponent } from './select.js'
 import { label as textLabel } from './text.js'
+import { createValidationController, createCounterController } from './validation.js'
 import './editable.css'
 
 const bem = bemFactory('editable');
@@ -16,6 +17,13 @@ const bem = bemFactory('editable');
  * @param {number} [config.rows] - 1 = single line, > 1 = multiline (sets min-height)
  * @param {boolean} [config.multiline=true] - Allow multiple lines (false = single line)
  * @param {boolean} [config.plainText=false] - Strip formatting on paste
+ * @param {'email'|'url'|'phone'|Function} [config.validate] - Validation rule or custom function
+ * @param {number} [config.min] - Minimum character length
+ * @param {number} [config.max] - Maximum character length
+ * @param {boolean} [config.counter] - Show character counter
+ * @param {boolean} [config.required] - Require text content
+ * @param {string|Object} [config.message] - Validation error message(s)
+ * @param {string} [config.info] - Helper text shown when valid
  * @param {Function} [config.onChange] - Called on input with (html, event) - use e.target.textContent for text
  * @param {Function} [config.onInput] - Called on every input with (html, event)
  * @param {Function} [config.onFocus] - Called on focus with (event)
@@ -23,7 +31,7 @@ const bem = bemFactory('editable');
  * @param {Function} [config.onKeydown] - Called on keydown with (event)
  * @param {Function} [config.onSubmit] - Called on Enter key with (html, event) - single line mode only
  * @param {string} [config.id] - Registers to dom.editable[id] and dom[id]
- * @returns {HTMLDivElement} Wrapper with .value getter/setter for text content
+ * @returns {HTMLDivElement} Wrapper with .value/.html getter-setters and .isValid()
  * @example
  * editable({ placeholder: 'Type here...' })  // multiline by default
  * editable({ label: 'Title', rows: 1, onSubmit: (e) => save(e.value) })  // single line
@@ -43,6 +51,13 @@ export function editable(...args) {
     multiline,
     plainText = false,
     plain = false,
+    validate,
+    required,
+    min,
+    max,
+    counter,
+    message,
+    info,
     focus,
     onChange,
     onInput,
@@ -60,7 +75,7 @@ export function editable(...args) {
   // Calculate min-height from rows (if > 1)
   const minRows = rows && rows > 1 ? rows : null;
 
-  let editableEl;
+  let editableEl, messageEl, infoEl, counterEl;
 
   // Normalize content - ensure there's always something to click
   const normalizeContent = () => {
@@ -74,8 +89,45 @@ export function editable(...args) {
   const getValue = () => editableEl?.textContent || '';
   const getHtml = () => editableEl?.innerHTML || '';
 
+  const counterController = createCounterController({
+    min,
+    max,
+    checkLength: true,
+    getValue,
+    setCounter: counter
+      ? (text, state) => {
+          if (!counterEl) return;
+          counterEl.textContent = text;
+          counterEl.classList.remove('warn', 'error', 'ok');
+          if (state) counterEl.classList.add(state);
+        }
+      : null
+  });
+
+  const validation = createValidationController({
+    validate,
+    required,
+    min,
+    max,
+    message,
+    checkLength: true,
+    getValue,
+    setInvalid: (isInvalid) => editableEl?.classList.toggle('invalid', isInvalid),
+    setMessage: (text, visible) => {
+      if (!messageEl) return;
+      messageEl.textContent = text;
+      messageEl.hidden = !visible;
+    },
+    onInvalidChange: (isInvalid) => {
+      if (infoEl) infoEl.hidden = isInvalid;
+    }
+  });
+
   const handleInput = (e) => {
+    validation.clearManualError();
     normalizeContent();
+    if (validation.hasRules) validation.check();
+    if (counter) counterController.update();
     const html = getHtml();
     onInput?.call(editableEl, html, e);
     onChange?.call(editableEl, html, e);
@@ -157,7 +209,24 @@ export function editable(...args) {
     class: [bem.el('wrap'), configToClasses(props)],
     children: [
       label && textLabel({ text: label, soft: true }),
-      editableDiv
+      editableDiv,
+      (message || info || counter) && row({ class: bem.el('footer'), justify: 'between' }, [
+        message && el('div', {
+          class: bem.el('message'),
+          hidden: true,
+          ref: (e) => messageEl = e
+        }),
+        info && el('div', {
+          class: bem.el('info'),
+          text: info,
+          ref: (e) => infoEl = e
+        }),
+        counter && el('div', {
+          class: bem.el('counter'),
+          end: true,
+          ref: (e) => { counterEl = e; counterController.update(); }
+        })
+      ])
     ]
   });
 
@@ -166,6 +235,9 @@ export function editable(...args) {
     set: (v) => {
       editableEl.innerHTML = v || '';
       normalizeContent();
+      validation.clearManualError();
+      if (validation.hasRules) validation.check();
+      if (counter) counterController.update();
     }
   });
 
@@ -174,8 +246,21 @@ export function editable(...args) {
     set: (v) => {
       editableEl.innerHTML = v || '';
       normalizeContent();
+      validation.clearManualError();
+      if (validation.hasRules) validation.check();
+      if (counter) counterController.update();
     }
   });
+
+  root.isValid = validation.check;
+  root.error = validation.error;
+  root.ok = validation.ok;
+  root.reset = () => {
+    editableEl.innerHTML = '';
+    normalizeContent();
+    validation.reset();
+    if (counter) counterController.reset();
+  };
 
   if (rich) {
     addRichTextUI(root, editableDiv);
@@ -240,7 +325,7 @@ function addRichTextUI(root, editableEl) {
     return editableEl.contains(range.commonAncestorContainer);
   };
 
-  const makeButton = ({ label, icon, onClick, isActive }) => {
+  const makeButton = ({ label: _label, icon, onClick, isActive }) => {
     const btn = button({ icon, variant: 'ghost' });
     btn.addEventListener('mousedown', (e) => e.preventDefault());
     btn.addEventListener('click', () => {

@@ -377,7 +377,16 @@ function inputPresentation() {
           label: 'Rich text',
           placeholder: 'Faux text input...',
           rows: 5,
-          rich: true
+          rich: true,
+          min: 10,
+          max: 50,
+          counter: true,
+          message: {
+            min: 'Minimum {min} characters required',
+            max: 'Maximum {max} characters allowed',
+            validate: (e) => console.log('øøøø', e)
+          },
+          info: 'General info message'          
         }),         
         editable({ 
           label: 'Standard',
