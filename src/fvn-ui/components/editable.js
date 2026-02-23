@@ -1,4 +1,6 @@
-import { el, col, parseArgs, configToClasses, bemFactory, noSpellcheck, focusAfterRender } from '../dom.js'
+import { el, row, col, parseArgs, configToClasses, bemFactory, noSpellcheck, focusAfterRender } from '../dom.js'
+import { button } from './button.js'
+import { selectComponent } from './select.js'
 import { label as textLabel } from './text.js'
 import './editable.css'
 
@@ -37,6 +39,7 @@ export function editable(...args) {
     placeholder = '...',
     value,
     rows,
+    rich = false,
     multiline,
     plainText = false,
     plain = false,
@@ -174,5 +177,251 @@ export function editable(...args) {
     }
   });
 
+  if (rich) {
+    addRichTextUI(editableDiv);
+  }
+
   return root;
+}
+
+function addRichTextUI(editableEl) {
+  editableEl.setAttribute('role', 'textbox');
+  editableEl.setAttribute('aria-multiline', 'true');
+
+  // Ensure there's at least one block so caret works predictably
+  // if (!editableEl.innerHTML.trim()) editableEl.innerHTML = '<p><br></p>';
+
+  // Wrapper
+  const wrapper = document.createElement('div');
+  editableEl.parentNode.insertBefore(wrapper, editableEl);
+  wrapper.appendChild(editableEl);
+
+  // Toolbar
+  const toolbar = row({ gap: 1, class: bem.el('toolbar') });
+  toolbar.setAttribute('role', 'toolbar');
+  wrapper.insertBefore(toolbar, editableEl);
+
+  // --- Selection save/restore (for dialogs like link prompt) ---
+  let isSyncingBlockSelect;
+  let savedRange = null;
+
+  const saveSelection = () => {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return null;
+    const range = sel.getRangeAt(0);
+    if (!editableEl.contains(range.commonAncestorContainer)) return null;
+    savedRange = range.cloneRange();
+    return savedRange;
+  };
+
+  const restoreSelection = () => {
+    if (!savedRange) return false;
+    const sel = window.getSelection();
+    if (!sel) return false;
+    sel.removeAllRanges();
+    sel.addRange(savedRange);
+    return true;
+  };
+
+  toolbar.addEventListener('pointerdown', () => {
+    //saveSelection(editableEl);
+  }, true);
+
+  const focusEditor = () => {
+    editableEl.focus({ preventScroll: true });
+  };
+
+  // --- Command execution ---
+  // execCommand is deprecated but still the simplest cross-browser method for 'minimal UI'
+  const exec = (command, value = null) => {
+    focusEditor();
+    document.execCommand(command, false, value);
+    updateActiveStates();
+    editableEl.dispatchEvent(new Event('input', { bubbles: true }));
+  };
+
+  // --- Helpers ---
+  const isSelectionInEditor = () => {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return false;
+    const range = sel.getRangeAt(0);
+    return editableEl.contains(range.commonAncestorContainer);
+  };
+
+  const makeButton = ({ label, icon, onClick, isActive }) => {
+    const btn = button({ icon, variant: 'ghost' });
+    btn.addEventListener('mousedown', (e) => e.preventDefault());
+    btn.addEventListener('click', () => {
+      if (!isSelectionInEditor()) focusEditor();
+      onClick();
+    });
+
+    btn._rteIsActive = isActive ?? (() => false);
+    return btn;
+  };
+
+  // --- Buttons ---
+  const buttons = [];
+
+  buttons.push(
+    makeButton({
+      label: 'B',
+      icon: 'bold',
+      onClick: () => exec('bold'),
+      isActive: () => document.queryCommandState('bold'),
+    }),
+    makeButton({
+      label: 'I',
+      icon: 'italic',
+      onClick: () => exec('italic'),
+      isActive: () => document.queryCommandState('italic'),
+    }),
+    makeButton({
+      label: '• List',
+      icon: 'list',
+      onClick: () => exec('insertUnorderedList'),
+      isActive: () => document.queryCommandState('insertUnorderedList'),
+    }),
+    makeButton({
+      label: '1. List',
+      icon: 'list-ordered',
+      onClick: () => exec('insertOrderedList'),
+      isActive: () => document.queryCommandState('insertOrderedList'),
+    })
+  );
+
+  const blockSelect = selectComponent({
+    value: 'p',
+    ghost: true,
+    options: [
+      { value: 'p', label: 'Paragraph' },
+      { value: 'h3', label: 'Heading' }
+    ],
+    onchange: (value) => {
+      if (isSyncingBlockSelect) return;
+
+      editableEl.focus({ preventScroll: true });
+      restoreSelection();
+
+      exec('formatBlock', `<${value}>`);      
+    }
+  });
+
+  //blockSelect.addEventListener('mousedown', (e) => e.preventDefault());
+  toolbar.appendChild(blockSelect);
+
+  // Link button (simple prompt)
+  const linkBtn = makeButton({
+    label: 'Link',
+    icon: 'link',
+    onClick: () => {
+      saveSelection();
+      const url = window.prompt('Enter URL (https://...)', 'https://');
+      if (!url) return;
+      restoreSelection();
+      // If selection is collapsed, create link text
+      const sel = window.getSelection();
+      if (sel && sel.rangeCount) {
+        const r = sel.getRangeAt(0);
+        if (r.collapsed) {
+          const textNode = document.createTextNode(url);
+          r.insertNode(textNode);
+          // Select inserted text
+          r.setStartBefore(textNode);
+          r.setEndAfter(textNode);
+          sel.removeAllRanges();
+          sel.addRange(r);
+        }
+      }
+      exec('createLink', url);
+    },
+    isActive: () => document.queryCommandState('createLink'),
+  });
+
+  const unlinkBtn = makeButton({
+    label: 'Unlink',
+    icon: 'unlink',
+    onClick: () => exec('unlink'),
+  });
+
+  const clearBtn = makeButton({
+    label: 'Clear',
+    icon: 'remove-formatting',
+    onClick: () => {
+      exec('removeFormat');
+      exec('unlink');
+    },
+  });
+
+  // Append toolbar elements
+  buttons.forEach((b) => toolbar.appendChild(b));
+  toolbar.appendChild(linkBtn);
+  toolbar.appendChild(unlinkBtn);
+  toolbar.appendChild(clearBtn);
+
+  // --- Active state updates ---
+  const updateActiveStates = () => {
+    let block = 'p';
+
+    try {
+      const cmdValue = document.queryCommandValue('formatBlock');
+      const norm = (cmdValue || '').replace(/[<>]/g, '').toLowerCase();
+      if (['p', 'h3'].includes(norm)) {
+        block = norm;
+      }
+    } catch {}
+
+    // Prevent recursive onchange
+    isSyncingBlockSelect = true;
+    blockSelect.value = block;
+    isSyncingBlockSelect = false;
+
+    // Buttons active state
+    const allButtons = toolbar.querySelectorAll('button.rte-btn');
+    allButtons.forEach((btn) => {
+      const active = typeof btn._rteIsActive === 'function' ? btn._rteIsActive() : false;
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      btn.classList.toggle('is-active', !!active);
+    });
+  };
+
+  // Update states on selection changes, input, focus
+  const onSelectionChange = () => {
+    if (!isSelectionInEditor()) return;
+    updateActiveStates();
+  };
+
+  document.addEventListener('selectionchange', onSelectionChange);
+  editableEl.addEventListener('input', updateActiveStates);
+  editableEl.addEventListener('focus', updateActiveStates);
+  editableEl.addEventListener('keyup', updateActiveStates);
+  editableEl.addEventListener('mouseup', updateActiveStates);
+
+  editableEl.addEventListener('paste', (e) => {
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    exec('insertText', text);
+  });
+
+  // Initial state
+  updateActiveStates();
+
+  // Provide a cleanup + tiny API
+  return {
+    toolbar,
+    destroy() {
+      document.removeEventListener('selectionchange', onSelectionChange);
+      // unwrap
+      wrapper.parentNode.insertBefore(editableEl, wrapper);
+      wrapper.remove();
+    },
+    getHTML() {
+      return editableEl.innerHTML;
+    },
+    setHTML(html) {
+      editableEl.innerHTML = html || '<p><br></p>';
+      updateActiveStates();
+    },
+    focus: focusEditor,
+  };
 }

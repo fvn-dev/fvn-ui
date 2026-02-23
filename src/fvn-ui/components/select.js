@@ -36,6 +36,7 @@ export function selectComponent(...args) {
     value,
     placeholder = 'Select',
     label,
+    ghost,
     adaptive = true,
     multiselect = false,
     filter: filterProp,
@@ -281,7 +282,7 @@ export function selectComponent(...args) {
         children: [
           el('button', {
             type: 'button',
-            class: [bem.el('trigger'), 'ui-border'],
+            class: [bem.el('trigger'), 'ui-border', ghost && bem('ghost')],
             attrs: { 'aria-haspopup': 'listbox', 'aria-expanded': false },
             ref: (e) => {
               triggerEl = e;

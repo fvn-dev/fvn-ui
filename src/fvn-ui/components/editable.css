@@ -61,3 +61,16 @@
   gap: var(--space-2);
   width: 100%;
 }
+
+.ui-editable__toolbar {
+  --text: var(--muted);
+  border: 1px solid var(--border);
+  border-bottom-width: 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.ui-editable__toolbar:hover {
+  --text: hsl(var(--hsl-text));
+}
+.ui-editable__toolbar + .ui-editable {
+    border-radius: 0 0 var(--radius) var(--radius);
+}

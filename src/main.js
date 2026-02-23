@@ -383,7 +383,13 @@ function inputPresentation() {
           placeholder: 'Faux text input...',
           rows: 1,
           plain: true
-        })
+        }),
+        editable({ 
+          label: 'Rich text',
+          placeholder: 'Faux text input...',
+          rows: 5,
+          rich: true
+        }),        
       ])
     ])
   ]);

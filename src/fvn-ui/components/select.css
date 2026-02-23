@@ -21,6 +21,13 @@
   border-color: var(--border-dark); 
 }
 
+.ui-select__trigger.ui-select--ghost { 
+  border: 1px solid transparent;
+}
+.ui-select__trigger.ui-select--ghost:hover { 
+  background: var(--hover); 
+}
+
 .ui-select__trigger .ui-btn {
   padding: 0;
 }
