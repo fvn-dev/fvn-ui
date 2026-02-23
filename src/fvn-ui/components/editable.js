@@ -178,28 +178,20 @@ export function editable(...args) {
   });
 
   if (rich) {
-    addRichTextUI(editableDiv);
+    addRichTextUI(root, editableDiv);
   }
 
   return root;
 }
 
-function addRichTextUI(editableEl) {
+function addRichTextUI(root, editableEl) {
   editableEl.setAttribute('role', 'textbox');
   editableEl.setAttribute('aria-multiline', 'true');
-
-  // Ensure there's at least one block so caret works predictably
-  // if (!editableEl.innerHTML.trim()) editableEl.innerHTML = '<p><br></p>';
-
-  // Wrapper
-  const wrapper = document.createElement('div');
-  editableEl.parentNode.insertBefore(wrapper, editableEl);
-  wrapper.appendChild(editableEl);
 
   // Toolbar
   const toolbar = row({ gap: 1, class: bem.el('toolbar') });
   toolbar.setAttribute('role', 'toolbar');
-  wrapper.insertBefore(toolbar, editableEl);
+  root.insertBefore(toolbar, editableEl);
 
   // --- Selection save/restore (for dialogs like link prompt) ---
   let isSyncingBlockSelect;
@@ -224,7 +216,7 @@ function addRichTextUI(editableEl) {
   };
 
   toolbar.addEventListener('pointerdown', () => {
-    //saveSelection(editableEl);
+    saveSelection(editableEl);
   }, true);
 
   const focusEditor = () => {
@@ -354,10 +346,7 @@ function addRichTextUI(editableEl) {
   });
 
   // Append toolbar elements
-  buttons.forEach((b) => toolbar.appendChild(b));
-  toolbar.appendChild(linkBtn);
-  toolbar.appendChild(unlinkBtn);
-  toolbar.appendChild(clearBtn);
+  row(toolbar, [...buttons, linkBtn, unlinkBtn, clearBtn], { end: true, gap: 0 });
 
   // --- Active state updates ---
   const updateActiveStates = () => {
@@ -411,9 +400,7 @@ function addRichTextUI(editableEl) {
     toolbar,
     destroy() {
       document.removeEventListener('selectionchange', onSelectionChange);
-      // unwrap
-      wrapper.parentNode.insertBefore(editableEl, wrapper);
-      wrapper.remove();
+      toolbar.remove();
     },
     getHTML() {
       return editableEl.innerHTML;

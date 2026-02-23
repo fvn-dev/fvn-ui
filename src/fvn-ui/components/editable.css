@@ -73,4 +73,5 @@
 }
 .ui-editable__toolbar + .ui-editable {
     border-radius: 0 0 var(--radius) var(--radius);
+    margin-top: calc(-1 * var(--space-2));
 }

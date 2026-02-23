@@ -374,6 +374,12 @@ function inputPresentation() {
       text.label('Contenteditable'),
       layout.col([
         editable({ 
+          label: 'Rich text',
+          placeholder: 'Faux text input...',
+          rows: 5,
+          rich: true
+        }),         
+        editable({ 
           label: 'Standard',
           placeholder: 'Faux text input...',
           rows: 1,
@@ -383,13 +389,7 @@ function inputPresentation() {
           placeholder: 'Faux text input...',
           rows: 1,
           plain: true
-        }),
-        editable({ 
-          label: 'Rich text',
-          placeholder: 'Faux text input...',
-          rows: 5,
-          rich: true
-        }),        
+        })       
       ])
     ])
   ]);

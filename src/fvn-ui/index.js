@@ -2,6 +2,7 @@
   TODO
     - bug: el({ children }) not working?
     - bug: row|col does not allow { class }
+    - add hover info-tip option for all components (eg. for buttons with icon only)
     - add label option to toggle (switch)
     - move "dashboard" component under layout category?
     - Add clamping functionality to number input component? custom arrows
