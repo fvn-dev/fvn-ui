@@ -1,6 +1,6 @@
 {
   "name": "fvn-ui",
-  "version": "0.1.0-alpha.58",
+  "version": "0.1.0-alpha.59",
   "description": "Minimalist vanilla JS component library",
   "type": "module",
   "sideEffects": [
@@ -34,6 +34,7 @@
     "./image": "./src/fvn-ui/components/image.js",
     "./label": "./src/fvn-ui/components/label.js",
     "./radio": "./src/fvn-ui/components/radio.js",
+    "./upload": "./src/fvn-ui/components/upload.js",
     "./svg": "./src/fvn-ui/components/svg.js",
     "./dom": "./src/fvn-ui/dom.js"
   },

@@ -11,12 +11,12 @@ import './text.css'
  * @category Layout
  */
 export const title = (...args) => {
-  const { parent, text = '', large, props, ...rest } = parseArgs(...args);
-  const tag = large ? 'h1' : 'div';
+  const { parent, text = '', large, small, props, ...rest } = parseArgs(...args);
+  const tag = large ? 'h2' : 'div';
   
   return el(tag, parent, {
     ...rest,
-    class: ['ui-title', large && 'ui-title--large', configToClasses(props), rest.class],
+    class: ['ui-title', (large && 'ui-title--large' || small && 'ui-title--small'), configToClasses(props), rest.class],
     html: rest.html || text
   });
 };

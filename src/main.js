@@ -400,6 +400,16 @@ function inputPresentation() {
           plain: true
         })       
       ])
+    ]),
+    layout.section([
+      text.label('File input'),
+      ui.upload({
+        label: 'Upload',
+        type: 'any',
+        cb(files) {
+          console.log('cb Uploaded files:', files);
+        }
+      })
     ])
   ]);
 }
@@ -554,11 +564,6 @@ function tabsPresentation() {
 // ---> 
 
 function miscPresentation() {
-  const box = (label) => el('div', { 
-    text: label, 
-    style: { padding: '8px 16px', background: 'var(--shade)', borderRadius: 'var(--radius)' } 
-  });
-  
   return layout.col({ gap: 6 }, [
     layout.row({ grow: false }, colors.map(c => el(`<div data-ui-col="${c}" class="color-swatch">${c}</div>`))),
     text.header({ title: 'Large header', description: 'With a description', large: true }),
@@ -580,7 +585,7 @@ function miscPresentation() {
         variant: 'outline',
         style: { alignSelf: 'flex-end' }
       })     
-    ]),
+    ])
   ]);
 }
 

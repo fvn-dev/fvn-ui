@@ -11,6 +11,7 @@ import { dialog as _dialog } from './dialog.js'
 import { draggable as _draggable } from './draggable.js'
 import { image as _image } from './image.js'
 import { input as _input } from './input.js'
+import { upload as _upload } from './upload.js'
 import { checkbox as _checkbox } from './checkbox.js'
 import { radio as _radio } from './radio.js'
 import { selectComponent as _selectComponent } from './select.js'
@@ -71,6 +72,7 @@ export const dialog = bootstrap(_dialog, 'dialog');
 export const draggable = bootstrap(_draggable, 'draggable');
 export const image = bootstrap(_image, 'image');
 export const input = bootstrap(_input, 'input');
+export const upload = bootstrap(_upload, 'upload');
 
 /**
  * Creates a modal dialog

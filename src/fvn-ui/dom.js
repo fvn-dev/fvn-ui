@@ -78,8 +78,8 @@ export const getCallback = (preferred, obj, skipFallback) => {
     ? preferred 
     : obj[preferred.toLowerCase()] 
       ? preferred.toLowerCase()
-      : !skipFallback && (obj.callback || obj.cb);
-  if (!key) return null;
+      : !skipFallback && (obj.callback ? 'callback' : obj.cb && 'cb');
+  if (!key) return;
   const cb = obj[key];
   delete obj[key];
   return cb;

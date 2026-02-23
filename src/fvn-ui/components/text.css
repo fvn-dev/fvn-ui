@@ -16,6 +16,11 @@
   font-size: 1.5em;
 }
 
+.ui-title--small {
+  font-weight: 500;
+  font-size: 1em !important;
+}
+
 /* Description - secondary text, usually paired with title */
 .ui-description {
   line-height: 1.4;

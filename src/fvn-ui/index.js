@@ -45,6 +45,7 @@ export {
   textarea,
   toggle,
   tooltip,
+  upload,
 
   // Text primitives
   text,
