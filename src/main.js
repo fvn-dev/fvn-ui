@@ -1,7 +1,7 @@
 import './main.css';
 import apiDocs from '../docs/api.json';
 import { version } from '../package.json';
-import { dom, el, editable, draggable, dashboard, layout, card, input, textarea, selectComponent, switchComponent, tabs, toggleGroup, confirm, toggle, tooltip, button, checkbox, radio, avatar, colors, collapsible, text } from './fvn-ui'
+import { ui, dom, el, editable, draggable, dashboard, layout, card, input, textarea, selectComponent, switchComponent, tabs, toggleGroup, confirm, toggle, tooltip, button, checkbox, radio, avatar, colors, collapsible, text } from './fvn-ui'
 
 function init() {
   const darkmodeIcons = [ 'moon', 'sun' ];
@@ -16,7 +16,7 @@ function init() {
     menu: [
       { icon: 'doc', view: 'doc' },
       { icon: [ 'rabbit', 'bird' ], action: () => document.body.classList.toggle('shaded') },
-      { icon: darkmodeIcons, action: () => document.documentElement.classList.toggle('dark') }
+      ui.darkmode.menuItem
     ],
     views: {
       default: () => presentation(),
@@ -136,12 +136,12 @@ function buttonPresentation() {
     button({ icon: 'settings', shape: 'round', variant: 'ghost' })
   ]);
   const d = layout.row({ gap: 2 }, [
-    button({ label: 'Random', color: colors }),
+    button({ label: 'Red', color: 'red' }), // colors
     button({ label: 'Green', color: 'green', variant: 'outline' }),
     button({ label: 'Yellow', color: 'yellow' }),
     button({ label: 'Orange', color: 'orange' }),
     button({ label: 'Blue', color: 'blue', variant: 'ghost' }),
-    button({ label: 'Pink', color: 'pink', shape: 'round' })
+    button({ color: 'pink', shape: 'round', icon: 'heart' })
   ]);
   const e = layout.col({ gap: 2 }, [
     button({ label: 'Ghost', description: 'This is a list-item button', variant: 'ghost', icon: 'arrow-right' }),

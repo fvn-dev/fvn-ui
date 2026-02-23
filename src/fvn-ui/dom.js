@@ -74,11 +74,11 @@ export const focusAfterRender = (el) => {
 };
 
 export const getCallback = (preferred, obj, skipFallback) => {
-  const key = obj[preferred] ? preferred 
-    : obj[preferred.toLowerCase()] ? preferred.toLowerCase()
-    : !skipFallback && obj.callback ? 'callback'
-    : !skipFallback && obj.cb ? 'cb'
-    : null;
+  const key = obj[preferred] 
+    ? preferred 
+    : obj[preferred.toLowerCase()] 
+      ? preferred.toLowerCase()
+      : !skipFallback && (obj.callback || obj.cb);
   if (!key) return null;
   const cb = obj[key];
   delete obj[key];

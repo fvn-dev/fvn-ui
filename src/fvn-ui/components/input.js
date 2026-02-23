@@ -62,10 +62,10 @@ export function input(...args) {
     ...rest
   } = parseArgs(...args);
 
-  const isTextarea = rows != null;
+  const isTextarea = rows && rows > 1;
   const isNumber = type === 'number';
-  const cb = getCallback('onSubmit', rest);
   const submitCallback = !isTextarea && getCallback('onSubmit', rest, true);
+  const cb = getCallback('onSubmit', rest);
   const userOnInput = getCallback('onInput', rest);
   const userOnChange = getCallback('onChange', rest);
   let wrapEl, inputEl, counterEl, messageEl, infoEl;

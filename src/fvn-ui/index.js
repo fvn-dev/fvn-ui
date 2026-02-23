@@ -2,6 +2,7 @@
   TODO
     - bug: el({ children }) not working?
     - bug: row|col does not allow { class }
+    - add counter min/max to editable
     - add hover info-tip option for all components (eg. for buttons with icon only)
     - add label option to toggle (switch)
     - move "dashboard" component under layout category?
@@ -80,11 +81,13 @@ export const layout = {
  * // Manual toggle
  * ui.darkmode().toggle()
  */
+let container = document.body;
+
 export const darkmode = (() => {
   const getIcons = () => isDark() ? ['sun', 'moon'] : ['moon', 'sun'];
-  const isDark = () => document.documentElement.classList.contains('dark');
+  const isDark = () => container.classList.contains('dark');
   const toggle = on => {
-    return document.documentElement.classList.toggle('dark', on);
+    return container.classList.toggle('dark', on);
   };
   if (matchMedia('(prefers-color-scheme: dark)').matches) {
     toggle(true);
@@ -97,8 +100,9 @@ export const darkmode = (() => {
   }
 })();
 
-const init = (container = document.body) => {
-  container.classList.add('fvn-ui');
+const init = (root = document.body) => {
+  container = root;
+  root.classList.add('fvn-ui');
 };
 
 export const ui = {

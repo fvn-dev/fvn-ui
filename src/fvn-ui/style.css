@@ -139,11 +139,6 @@
 svg {
   shape-rendering: geometricPrecision;
 }
-button, input, select, textarea { 
-  font: inherit; 
-  font-weight: 400;
-  font-size: calc(.9 * var(--core));
-}
 
 body.fvn-ui {
   margin: 0;
@@ -155,6 +150,12 @@ body.fvn-ui {
   font-optical-sizing: auto;
   font-weight: 400;
   font-size: var(--core);
+
+  & button, input, select, textarea { 
+    font: inherit; 
+    font-weight: 400;
+    font-size: calc(.9 * var(--core));
+  }
 
   &.shaded {
     --shade: color-mix(in hsl, hsl(var(--hsl-shade)), var(--shade-mix) 3%);

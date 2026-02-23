@@ -47,9 +47,12 @@
 .ui-btn--list-item.ui-btn--filled > .col {
   color: var(--bg, var(--text));
 }
-.ui-btn--list-item:not(.ui-btn--sub),
-.ui-btn--list-item.ui-btn--sub:hover {
+.ui-btn--list-item.ui-btn--sub:hover,
+.ui-btn--list-item:not(.ui-btn--sub) {
   border-color: hsl(var(--hsl-border) / .15) !important;
+}
+.ui-btn--list-item.ui-btn--outline:hover {
+  border-color: hsl(var(--hsl-border) / .35) !important;
 }
 .ui-btn--list-item > .col > div:last-child {
   font-weight: 400;
