@@ -119,7 +119,7 @@ function buttonPresentation() {
     button({ label: 'Minimal', variant: 'minimal' }),
   ]);
   const b = layout.row({ gap: 2 }, [
-    button({ label: 'Colored', color: 'red' }),
+    button({ label: 'Colored with tooltip', color: 'red', tip: 'This is a tooltip' }),
     button({ label: 'Colored outline', variant: 'outline', color: 'primary' }),
     button({ label: 'Ghost round', shape: 'round', variant: 'ghost', color: 'yellow' }),
     button({ label: 'Primary round', shape: 'round',color: 'primary' }),
@@ -513,7 +513,7 @@ function collapsiblePresentation() {
 function draggablePresentation() {
   return draggable({
     plain: false,
-    items: exampleOptions.map(({ label }) => text.title(label)),
+    items: exampleOptions.map(({ label }) => text.title(label, { small: true })),
     onChange: ({ items, from, to }) => console.log('Reordered:', from, '→', to, { items })
   });
 }
@@ -564,12 +564,16 @@ function tabsPresentation() {
 // ---> 
 
 function miscPresentation() {
-  return layout.col({ gap: 6 }, [
+  return layout.col({ gap: 2 }, [
     layout.row({ grow: false }, colors.map(c => el(`<div data-ui-col="${c}" class="color-swatch">${c}</div>`))),
-    text.header({ title: 'Large header', description: 'With a description', large: true }),
-    text.header({ title: 'Normal header', description: 'with a description' }),
-    text.label('Label'), 
-    text.label('Soft label', { soft: true }),
+    layout.section([
+      text.header({ block: 2, title: 'Large header', description: 'With a description', large: true }),
+      text.header({ block: 2, title: 'Normal header', description: 'with a description' }),
+    ]),
+    layout.row({ gap: 2 },[
+      text.label('Label'), 
+      text.label('Soft label', { soft: true })
+    ]),
     layout.row({ gap: 4 }, [
       selectComponent({
         //label: 'Pick a fruit',

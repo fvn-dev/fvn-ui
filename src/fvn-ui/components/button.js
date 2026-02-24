@@ -1,8 +1,10 @@
 import { el, col, parseArgs, configToClasses, bemFactory } from '../dom.js'
+import { dialog } from './dialog.js'
 import { svg } from './svg.js'
 import './button.css'
 
 const bem = bemFactory('btn');
+const TIP_DELAY_MS = 450;
 
 /**
  * Creates a button element
@@ -16,6 +18,8 @@ const bem = bemFactory('btn');
  * @param {'primary'|'red'|'green'|'blue'|'pink'|'yellow'|'orange'|string[]} [config.color] - Color or array for random
  * @param {boolean} [config.disabled] - Disabled state
  * @param {boolean} [config.muted] - Muted appearance
+ * @param {string} [config.tip] - Hover/focus infotip text
+ * @param {boolean} [config.tipInverted] - Use inverted infotip style
  * @param {Function} [config.onClick] - Click handler
  * @param {string} [config.id] - Registers to dom.button[id] and dom[id]
  * @returns {HTMLButtonElement} Button element with toggleLoading() and setLabel() methods
@@ -37,6 +41,8 @@ export function button(...args) {
     color,
     muted,
     loading,
+    tip,
+    tipInverted,
     type = 'button',
     disabled,
     attrs = {},
@@ -151,6 +157,54 @@ export function button(...args) {
     btn.addEventListener('click', () => {
       if (btn.disabled) return;
       clickHandlers.forEach(h => h());
+    });
+  }
+
+  if (tip) {
+    let showTimer = null;
+    let tipDialog = null;
+
+    const clearShowTimer = () => {
+      if (!showTimer) return;
+      clearTimeout(showTimer);
+      showTimer = null;
+    };
+
+    const ensureTipDialog = () => {
+      if (tipDialog) return tipDialog;
+      tipDialog = dialog({
+        type: 'tooltip',
+        anchor: btn,
+        inverted: tipInverted,
+        content: el('div', {
+          class: bem.el('tip'),
+          text: tip
+        })
+      });
+      return tipDialog;
+    };
+
+    const showTip = () => {
+      if (btn.disabled) return;
+      ensureTipDialog().show(btn);
+    };
+
+    const hideTip = () => {
+      clearShowTimer();
+      tipDialog?.hide?.();
+    };
+
+    btn.addEventListener('mouseenter', () => {
+      clearShowTimer();
+      showTimer = setTimeout(showTip, TIP_DELAY_MS);
+    });
+
+    btn.addEventListener('mouseleave', hideTip);
+    btn.addEventListener('focus', showTip);
+    btn.addEventListener('blur', hideTip);
+    btn.addEventListener('pointerdown', hideTip);
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') hideTip();
     });
   }
 

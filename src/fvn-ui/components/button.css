@@ -21,6 +21,9 @@
   font-size: .9em;
   transition: var(--core-transition);
 }
+.fvn-ui .ui-btn {
+  font-weight: 500;
+}
 .ui-btn--reverse {
   flex-direction: row-reverse;
 }
@@ -180,6 +183,12 @@
     position: absolute;
     left: var(--space);
   }
+}
+
+.ui-btn__tip {
+  font-size: .8em;
+  line-height: 1.2;
+  max-width: 220px;
 }
 
 @keyframes loadingSpin {

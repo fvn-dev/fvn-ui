@@ -572,6 +572,7 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
       icon,
       variant: 'ghost',
       class: ['rte-btn', bem.el('rte-btn')],
+      tip: icon.charAt(0).toUpperCase() + icon.substring(1).replace('-', ' '),
       attrs: { 'aria-pressed': 'false' }
     });
     btn.addEventListener('mousedown', (e) => e.preventDefault());
