@@ -116,3 +116,7 @@
 .ui-editable--rich b {
   font-weight: 700 !important;
 }
+
+.ui-editable__tooltip {
+  min-width: 300px;
+}

@@ -592,7 +592,7 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
   buttons.push(
     makeButton({
       option: 'heading',
-      icon: 'type',
+      icon: 'heading',
       onClick: () => {
         let blockEl = getCurrentBlockElement();
         if (!blockEl) blockEl = createBlockAtCaret('div');
@@ -720,6 +720,7 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
 
     return dialog({
       type: 'tooltip',
+      class: bem.el('tooltip'),
       anchor: anchorEl,
       position: 'bottom',
       content,
