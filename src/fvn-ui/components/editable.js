@@ -48,6 +48,8 @@ export function editable(...args) {
     value,
     rows,
     rich = false,
+    richInclude,
+    richExclude,
     multiline,
     plainText = false,
     plain = false,
@@ -263,15 +265,26 @@ export function editable(...args) {
   };
 
   if (rich) {
-    addRichTextUI(root, editableDiv);
+    addRichTextUI(root, editableDiv, richInclude, richExclude);
   }
 
   return root;
 }
 
-function addRichTextUI(root, editableEl) {
+// ---> rich text editor
+
+function addRichTextUI(root, editableEl, richInclude, richExclude) {
   editableEl.setAttribute('role', 'textbox');
   editableEl.setAttribute('aria-multiline', 'true');
+
+  const available = ['type', 'bold', 'italic', 'list', 'link', 'clear'];
+  let applied = Array.isArray(richInclude) 
+    ? available.filter(option => richInclude.includes(option)) 
+    : available;
+
+  if (Array.isArray(richExclude)) { 
+    applied = applied.filter(option => !richExclude.includes(option));
+  }
 
   // Toolbar
   const toolbar = row({ gap: 1, class: bem.el('toolbar') });
@@ -325,7 +338,11 @@ function addRichTextUI(root, editableEl) {
     return editableEl.contains(range.commonAncestorContainer);
   };
 
-  const makeButton = ({ label: _label, icon, onClick, isActive }) => {
+  const makeButton = ({ label, icon, onClick, isActive }) => {
+    const isMandatory = applied.length && label === 'clear';
+    if (!isMandatory && !applied.find(opt => label.includes(opt))) {
+      return;
+    }
     const btn = button({ icon, variant: 'ghost' });
     btn.addEventListener('mousedown', (e) => e.preventDefault());
     btn.addEventListener('click', () => {
@@ -342,54 +359,57 @@ function addRichTextUI(root, editableEl) {
 
   buttons.push(
     makeButton({
-      label: 'B',
+      label: 'bold',
       icon: 'bold',
       onClick: () => exec('bold'),
       isActive: () => document.queryCommandState('bold'),
     }),
     makeButton({
-      label: 'I',
+      label: 'italic',
       icon: 'italic',
       onClick: () => exec('italic'),
       isActive: () => document.queryCommandState('italic'),
     }),
     makeButton({
-      label: '• List',
+      label: 'list',
       icon: 'list',
       onClick: () => exec('insertUnorderedList'),
       isActive: () => document.queryCommandState('insertUnorderedList'),
     }),
     makeButton({
-      label: '1. List',
+      label: 'list-ordered',
       icon: 'list-ordered',
       onClick: () => exec('insertOrderedList'),
       isActive: () => document.queryCommandState('insertOrderedList'),
     })
   );
 
-  const blockSelect = selectComponent({
-    value: 'p',
-    ghost: true,
-    options: [
-      { value: 'p', label: 'Paragraph' },
-      { value: 'h3', label: 'Heading' }
-    ],
-    onchange: (value) => {
-      if (isSyncingBlockSelect) return;
+  let blockSelect = { value: '' };
+  if (applied.includes('type')) {
+    blockSelect = selectComponent({
+      value: 'p',
+      ghost: true,
+      options: [
+        { value: 'p', label: 'Paragraph' },
+        { value: 'h3', label: 'Heading' }
+      ],
+      onchange: (value) => {
+        if (isSyncingBlockSelect) return;
 
-      editableEl.focus({ preventScroll: true });
-      restoreSelection();
+        editableEl.focus({ preventScroll: true });
+        restoreSelection();
 
-      exec('formatBlock', `<${value}>`);      
-    }
-  });
+        exec('formatBlock', `<${value}>`);      
+      }
+    });
 
-  //blockSelect.addEventListener('mousedown', (e) => e.preventDefault());
-  toolbar.appendChild(blockSelect);
+    //blockSelect.addEventListener('mousedown', (e) => e.preventDefault());
+    toolbar.appendChild(blockSelect);
+  }
 
   // Link button (simple prompt)
   const linkBtn = makeButton({
-    label: 'Link',
+    label: 'link',
     icon: 'link',
     onClick: () => {
       saveSelection();
@@ -416,13 +436,13 @@ function addRichTextUI(root, editableEl) {
   });
 
   const unlinkBtn = makeButton({
-    label: 'Unlink',
+    label: 'unlink',
     icon: 'unlink',
     onClick: () => exec('unlink'),
   });
 
   const clearBtn = makeButton({
-    label: 'Clear',
+    label: 'clear',
     icon: 'remove-formatting',
     onClick: () => {
       exec('removeFormat');

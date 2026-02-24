@@ -279,7 +279,7 @@ export function upload(...args) {
   const clear = () => {
     currentPayload = null;
     if (inputEl) inputEl.value = '';
-    if (fileNameEl) fileNameEl.textContent = 'No file selected';
+    if (fileNameEl) fileNameEl.textContent = hint;
     if (rootEl) rootEl.dataset.hasValue = 'false';
     if (dropEl) dropEl.classList.remove('drag-over');
     setPreviewIcon(previewIconEl, iconForType(normalizedType));
