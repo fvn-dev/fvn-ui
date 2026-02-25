@@ -236,8 +236,14 @@ export function upload(...args) {
   const acceptValue = accept || ACCEPT_BY_TYPE[normalizedType];
 
   let rootEl, dropEl, inputEl, fileNameEl, previewIconEl;
-  let badgeElement = button({ label: 'ext', badge: true, hidden: true, color: 'yellow' });
   let currentPayload = null;
+
+  let badgeElement = el('span', { 
+    _render: (file, err) => {
+      badgeElement.innerHTML = '';
+      button(badgeElement, { label: getExt(file.name), badge: true, color: !!err ? 'red' : 'green' });
+    }
+  });
 
   const validation = createValidationController({
     required,
@@ -257,22 +263,26 @@ export function upload(...args) {
     if (!file) return;
     validation.clearManualError();
 
+    let error;
+
     if (file && isBlockedFile(file)) {
-      validation.error('This file type is blocked for security reasons.');
-      return;
+      error = 'This file type is blocked for security reasons.';
     }
 
     if (!isAllowedByType(file, normalizedType)) {
       const targetLabel = normalizedType === 'any' ? 'supported file' : `${normalizedType} file`;
-      validation.error(`Please choose a valid ${targetLabel}.`);
-      return;
+      error = `Please choose a valid ${targetLabel}.`;
+    }
+
+    if (error) {
+      badgeElement._render(file, true);
+      return validation.error(error);
     }
 
     validation.ok();
     currentPayload = createUploadPayload(file);
     if (fileNameEl) {
-      badgeElement.setLabel(getExt(file.name));
-      badgeElement.hidden = false;
+      badgeElement._render(file);
       fileNameEl.textContent = file.name;
     }
     if (rootEl) rootEl.dataset.hasValue = 'true';

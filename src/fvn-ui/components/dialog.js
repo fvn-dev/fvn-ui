@@ -247,10 +247,7 @@ export function dialog(...args) {
       ...rest,
       class: [bem(), 'ui-dialog-component', configToClasses(props), rest.class],
       onClick: (e) => {
-        const r = root.getBoundingClientRect();
-        const inDialog = r.top <= e.clientY && e.clientY <= r.bottom
-                        && r.left <= e.clientX && e.clientX <= r.right;
-        if (!inDialog) {
+        if (e.target === root) {
           close();
         }
       },

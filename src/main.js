@@ -116,7 +116,7 @@ function buttonPresentation() {
     button({ label: 'Secondary', variant: 'secondary' }),
     button({ label: 'Outline', variant: 'outline' }),
     button({ label: 'Ghost', variant: 'ghost' }),
-    button({ label: 'Minimal', variant: 'minimal' }),
+    button({ label: 'Minimal', variant: 'minimal' })
   ]);
   const b = layout.row({ gap: 2 }, [
     button({ label: 'Colored with tooltip', color: 'red', tip: 'This is a tooltip' }),
@@ -405,7 +405,7 @@ function inputPresentation() {
       text.label('File input'),
       ui.upload({
         label: 'Upload',
-        type: 'any',
+        type: 'image',
         cb(files) {
           console.log('cb Uploaded files:', files);
         }

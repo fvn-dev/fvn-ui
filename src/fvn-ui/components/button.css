@@ -30,9 +30,10 @@
 .ui-btn--badge {
   padding: .5em;
   text-transform: uppercase;
-  letter-spacing: .05em;
+  letter-spacing: .1em;
   pointer-events: none;
-  font-size: 85% !important;
+  font-weight: 700 !important;
+  font-size: 75% !important;
   line-height: 1 !important;
 }
 .ui-btn > div {
