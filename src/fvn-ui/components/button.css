@@ -27,6 +27,14 @@
 .ui-btn--reverse {
   flex-direction: row-reverse;
 }
+.ui-btn--badge {
+  padding: .5em;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  pointer-events: none;
+  font-size: 85% !important;
+  line-height: 1 !important;
+}
 .ui-btn > div {
   position: relative;
   z-index: 1;

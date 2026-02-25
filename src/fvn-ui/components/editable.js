@@ -292,7 +292,7 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
   editableEl.setAttribute('role', 'textbox');
   editableEl.setAttribute('aria-multiline', 'true');
 
-  const available = ['heading', 'bold', 'italic', 'list', 'link', 'clear'];
+  const available = ['heading', 'bold', 'italic', 'underline', 'list', 'link', 'clear'];
   let applied = Array.isArray(richInclude) 
     ? available.filter((option) => richInclude.includes(option))
     : available;
@@ -477,6 +477,10 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
     return queryState('italic');
   };
 
+  const isUnderlineActive = () => {
+    return queryState('underline');
+  };
+
   const getSelectedLink = () => {
     const node = getSelectionNode();
     return node?.closest?.('a') || null;
@@ -564,8 +568,8 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
   };
 
   const makeButton = ({ option, icon, onClick, isActive }) => {
-    const isMandatory = applied.length && option === 'clear';
-    if (!isMandatory && !applied.includes(option)) {
+    //const isMandatory = applied.length && option === 'clear';
+    if (!applied.includes(option)) { // !isMandatory &&
       return;
     }
     const btn = button({
@@ -632,6 +636,12 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
       onClick: () => toggleInlineCommand('italic', isItalicActive, 'i,em'),
       isActive: isItalicActive,
     }),
+    makeButton({
+      option: 'underline',
+      icon: 'underline',
+      onClick: () => toggleInlineCommand('underline', isUnderlineActive, 'u'),
+      isActive: isUnderlineActive,
+    }),    
     makeButton({
       option: 'list',
       icon: 'list',

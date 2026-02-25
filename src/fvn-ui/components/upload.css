@@ -70,6 +70,22 @@
   flex: 1;
   min-width: 0;
   gap: var(--space-1);
+  overflow: hidden;
+  position: relative;
+
+  & .ui-description {
+    max-width: 70%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  & .ui-btn--badge {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 }
 
 .ui-upload__placeholder {
@@ -95,7 +111,7 @@
 }
 
 .ui-upload__actions {
-  flex-shrink: 0;
+  flex: 0;
 }
 
 .ui-upload__input {

@@ -43,6 +43,7 @@ export function button(...args) {
     loading,
     tip,
     tipInverted,
+    badge,
     type = 'button',
     disabled,
     attrs = {},
@@ -94,6 +95,7 @@ export function button(...args) {
       loading && 'loading',
       reverse && bem('reverse'),
       description && bem('list-item'),
+      badge && bem('badge'),
       configToClasses(props),
       rest.class
     ],

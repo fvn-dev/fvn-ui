@@ -236,6 +236,7 @@ export function upload(...args) {
   const acceptValue = accept || ACCEPT_BY_TYPE[normalizedType];
 
   let rootEl, dropEl, inputEl, fileNameEl, previewIconEl;
+  let badgeElement = button({ label: 'ext', badge: true, hidden: true, color: 'yellow' });
   let currentPayload = null;
 
   const validation = createValidationController({
@@ -269,7 +270,11 @@ export function upload(...args) {
 
     validation.ok();
     currentPayload = createUploadPayload(file);
-    if (fileNameEl) fileNameEl.textContent = file.name;
+    if (fileNameEl) {
+      badgeElement.setLabel(getExt(file.name));
+      badgeElement.hidden = false;
+      fileNameEl.textContent = file.name;
+    }
     if (rootEl) rootEl.dataset.hasValue = 'true';
     setPreviewIcon(previewIconEl, iconForFile(file));
 
@@ -332,7 +337,6 @@ export function upload(...args) {
     if (e.target.closest('button')) return;
     open();
   };
-
   const root = col(parent, {
     ...rest,
     ...attrs,
@@ -370,7 +374,7 @@ export function upload(...args) {
           col({
             class: bem.el('content'),
             children: [
-              title(placeholder, { small: true }),
+              title(placeholder, { small: true, children: [ badgeElement ] }),
               description(hint, { 
                 small: true,
                 muted: true,

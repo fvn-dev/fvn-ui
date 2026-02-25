@@ -36,6 +36,7 @@ export function selectComponent(...args) {
     value,
     placeholder = 'Select',
     label,
+    grow,
     ghost,
     adaptive = true,
     multiselect = false,
@@ -271,7 +272,7 @@ export function selectComponent(...args) {
   const root = col(parent, {
     ...rest,
     gap: 2,
-    grow: false,  // Don't grow in flex containers by default
+    grow: !!grow,  // Don't grow in flex containers by default
     class: [configToClasses(props), rest.class],
     children: [
       label && text.label({ text: label, soft: true }),

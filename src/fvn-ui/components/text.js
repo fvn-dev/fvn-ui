@@ -1,6 +1,19 @@
 import { el, col, parseArgs, configToClasses } from '../dom.js'
 import './text.css'
 
+const htmlOrText = str => {
+  return str.includes('<') ? { html: str } : { text: str };
+};
+
+const appendChildren = (node, children) => {
+  if (!children) return;
+  for (const child of children.flat()) {
+    if (child) {
+      node.append(child instanceof Node ? child : String(child));
+    }
+  }
+};
+
 /**
  * Creates a title element (h1 for large, div otherwise)
  * @param {string} [content] - Title text
@@ -11,14 +24,17 @@ import './text.css'
  * @category Layout
  */
 export const title = (...args) => {
-  const { parent, text = '', large, small, props, ...rest } = parseArgs(...args);
-  const tag = large ? 'h2' : 'div';
-  
-  return el(tag, parent, {
+  const { parent, text = '', large, props, children, ...rest } = parseArgs(...args);
+  const tag = large ? 'h1' : 'div';
+
+  const node = el(tag, parent, {
     ...rest,
-    class: ['ui-title', (large && 'ui-title--large' || small && 'ui-title--small'), configToClasses(props), rest.class],
-    html: rest.html || text
+    class: ['ui-title', large && 'ui-title--large', configToClasses(props), rest.class],
+    ...htmlOrText(text)
   });
+
+  appendChildren(node, children);
+  return node;
 };
 
 /**
@@ -31,13 +47,16 @@ export const title = (...args) => {
  * @category Layout
  */
 export const description = (...args) => {
-  const { parent, text = '', small = true, props, ...rest } = parseArgs(...args);
-  
-  return el('p', parent, {
+  const { parent, text = '', small = true, props, children, ...rest } = parseArgs(...args);
+
+  const node = el('p', parent, {
     ...rest,
     class: ['ui-description', 'muted', small && 'small', configToClasses(props), rest.class],
-    html: rest.html || text
+    ...htmlOrText(text)
   });
+
+  appendChildren(node, children);
+  return node;
 };
 
 /**
@@ -53,14 +72,17 @@ export const description = (...args) => {
  * @category Layout
  */
 export const label = (...args) => {
-  const { parent, text = '', soft, align, props, ...rest } = parseArgs(...args);
-  
-  return el('label', parent, {
+  const { parent, text = '', soft, align, props, children, ...rest } = parseArgs(...args);
+
+  const node = el('label', parent, {
     ...rest,
     class: ['ui-label', soft && 'ui-label--soft', 'block-1', configToClasses(props), rest.class],
     data: { ...rest.data, align },
-    html: rest.html || text
+    ...htmlOrText(text)
   });
+
+  appendChildren(node, children);
+  return node;
 };
 
 /**

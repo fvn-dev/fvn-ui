@@ -187,6 +187,7 @@ body.fvn-ui {
     text-decoration: underline;
   }  
 
+  & [hidden],
   & .ui-hidden {
     display: none;
   }
