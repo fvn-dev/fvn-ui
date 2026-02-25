@@ -43,7 +43,7 @@ export function tabs(...args) {
     shade,
     padding,
     width,
-    asButtonGroup,
+    asToggleGroup,
     props,
     ...rest
   } = parseArgs(...args);
@@ -53,8 +53,8 @@ export function tabs(...args) {
   const tabBtns = [];
 
   const isCentered = rest.align === 'center' || rest.center;
-  const isColorizable = ['border', 'ghost'].includes(variant);
-  const buttonVariant = variant === 'border' ? 'outline' : (variant || 'none');
+  const isColorizable = asToggleGroup || ['border', 'ghost'].includes(variant);
+  const buttonVariant = variant === 'border' ? 'outline' : (variant || (asToggleGroup ? 'default' : 'none'));
   const withBorder = border !== false && !shade;
 
   let output;
@@ -89,11 +89,11 @@ export function tabs(...args) {
       const item = items.find((o) => getItemValue(o) === btn.dataset.value) || {};
       const col = item.color || color;
       btn.dataset.uiCol = isActive && col && isColorizable
-        ? `${variant !== 'ghost' ? 'sub-' : ''}${col}` 
+        ? `${variant !== 'ghost' && buttonVariant !== 'default' ? 'sub-' : ''}${col}` 
         : '';
       btn.tabIndex = isActive ? 0 : -1;
     }
-    !asButtonGroup && renderPanel(current);
+    !asToggleGroup && renderPanel(current);
     !skipCallback && cb?.(current, items.find((o) => getItemValue(o) === current), e);
   };
 
@@ -139,6 +139,7 @@ export function tabs(...args) {
         class: [
           bem.el('buttons'), 
           bem(variant || 'default'),
+          asToggleGroup && bem('toggle-group'),
           isCentered && 'ma',
         ],
         style: isCentered ? { '--jc': 'center' } : undefined,
@@ -147,6 +148,7 @@ export function tabs(...args) {
         children: items.map((o, i) => {
           const val = getItemValue(o);
           const btn = button({
+            class: asToggleGroup && buttonVariant === 'default' && (color || o.color) && 'colorized',
             variant: buttonVariant,
             label: o.label,
             icon: o.icon,
@@ -161,7 +163,7 @@ export function tabs(...args) {
           return btn;
         })
       }),
-      !asButtonGroup && el('div', { 
+      !asToggleGroup && el('div', { 
         class: [
           bem.el('panel'), 
           withBorder && 'border',

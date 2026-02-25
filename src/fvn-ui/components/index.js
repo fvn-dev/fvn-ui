@@ -126,7 +126,7 @@ export const toggle = bootstrap(_toggle, 'toggle');
  *   callback: (index) => console.log('Selected:', index)
  * })
  */
-export const toggleGroup = bootstrap(_tabs, 'toggleGroup', { asButtonGroup: true });
+export const toggleGroup = bootstrap(_tabs, 'toggleGroup', { asToggleGroup: true });
 
 /**
  * Creates a tooltip/popover

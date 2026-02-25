@@ -203,7 +203,7 @@ function togglesPresentation() {
       ]),
       layout.col({ gap: 3 }, [
         toggle({ options: ['Off', 'On'] }),
-        toggle({ options: ['With', 'Color'], color: 'primary', checked: true })       
+        toggle({ label: 'With label', options: ['With', 'Color'], color: 'primary', checked: true })       
       ])
     ]),
     
@@ -214,7 +214,6 @@ function togglesPresentation() {
       toggleGroup({
         variant: 'ghost',
         color: 'blue',
-        width: 'auto',
         active: 0,
         items: [
           { label: 'One', icon: 'moon' },
@@ -226,14 +225,20 @@ function togglesPresentation() {
         variant: 'ghost',
         shape: 'round',
         shade: true,
-        width: 'auto',
-        callback: (active) => { txt2.innerHTML = 'Callback from ' + active; },
         items: [
           { label: 'One', icon: 'moon', color: 'green' },
           { label: 'Two', icon: 'sun', color: 'pink' },
           { label: 'Three', icon: 'user', color: 'yellow' }
         ]
-      })
+      }),   
+      toggleGroup({
+        active: 0,
+        items: [
+          { label: 'One', icon: 'moon' },
+          { label: 'Two', icon: 'sun' },
+          { label: 'Three', icon: 'user' }
+        ]
+      }),       
     ])
   ]);
 }

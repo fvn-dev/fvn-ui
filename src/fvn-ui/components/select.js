@@ -56,6 +56,8 @@ export function selectComponent(...args) {
   let isOpen = false;
   let filterText = '';
   let _manualError = false;
+  let adaptiveRaf = 0;
+  let adaptiveObserver = null;
   
   // Convert index to value if needed
   const toValue = (v) => Number.isInteger(v) && items[v] ? String(items[v].value) : String(v);
@@ -142,6 +144,54 @@ export function selectComponent(...args) {
     }
   };
 
+  const clearAdaptiveObserver = () => {
+    if (!adaptiveObserver) return;
+    adaptiveObserver.disconnect();
+    adaptiveObserver = null;
+  };
+
+  const clearAdaptiveRaf = () => {
+    if (!adaptiveRaf) return;
+    cancelAnimationFrame(adaptiveRaf);
+    adaptiveRaf = 0;
+  };
+
+  const applyAdaptiveWidth = () => {
+    if (!adaptive || !selectEl || !triggerEl || !valueEl) return false;
+    if (selectEl.offsetWidth <= 0) return false;
+
+    const sizer = valueEl.cloneNode(false);
+    Object.assign(sizer.style, { visibility: 'hidden', height: '0', overflow: 'hidden', whiteSpace: 'nowrap' });
+    sizer.textContent = items.reduce((a, b) => a.label.length > b.label.length ? a : b, { label: placeholder }).label;
+    triggerEl.appendChild(sizer);
+    selectEl.style.minWidth = `${selectEl.offsetWidth}px`;
+    sizer.remove();
+    clearAdaptiveObserver();
+    return true;
+  };
+
+  const scheduleAdaptiveWidth = () => {
+    if (!adaptive) return;
+    clearAdaptiveRaf();
+    clearAdaptiveObserver();
+    if (applyAdaptiveWidth()) return;
+
+    adaptiveRaf = requestAnimationFrame(() => {
+      adaptiveRaf = 0;
+      if (applyAdaptiveWidth()) return;
+      if (typeof ResizeObserver !== 'function' || adaptiveObserver || !selectEl) return;
+
+      adaptiveObserver = new ResizeObserver(() => {
+        if (!selectEl?.isConnected) {
+          clearAdaptiveObserver();
+          return;
+        }
+        applyAdaptiveWidth();
+      });
+      adaptiveObserver.observe(selectEl);
+    });
+  };
+
   const setOpen = (next) => {
     isOpen = !!next;
     selectEl.dataset.open = isOpen;
@@ -155,6 +205,7 @@ export function selectComponent(...args) {
       return;
     }
 
+    scheduleAdaptiveWidth();
     renderList();
     highlightedIndex = multiselect ? 0 : Math.max(0, getIndexByValue(selected));
     focusHighlighted();
@@ -371,17 +422,8 @@ export function selectComponent(...args) {
     return withValue(root, () => multiselect ? [...selected] : selected, valueSetter);
   }
 
-  // Adaptive sizing
-  requestAnimationFrame(() => {
-    const sizer = valueEl.cloneNode(false);
-    Object.assign(sizer.style, { visibility: 'hidden', height: '0', overflow: 'hidden', whiteSpace: 'nowrap' });
-    sizer.textContent = items.reduce((a, b) => a.label.length > b.label.length ? a : b, { label: placeholder }).label;
-    triggerEl.appendChild(sizer);
-    requestAnimationFrame(() => {
-      selectEl.style.minWidth = `${selectEl.offsetWidth}px`;
-      sizer.remove();
-    });
-  });
+  // Adaptive sizing (supports initially hidden containers, e.g. collapsible/tabs)
+  scheduleAdaptiveWidth();
 
   root.update = function({ options: newOptions, items: newItems, value: newValue } = {}) {
     if (newOptions || newItems) {
@@ -395,6 +437,7 @@ export function selectComponent(...args) {
       }
     }
     renderValue();
+    scheduleAdaptiveWidth();
     if (isOpen) renderList();
   };
 

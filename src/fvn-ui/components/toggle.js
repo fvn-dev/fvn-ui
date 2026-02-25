@@ -1,4 +1,5 @@
-import { el, getCallback, withValue, parseArgs, configToClasses, bemFactory } from '../dom.js'
+import { el, col, getCallback, withValue, parseArgs, configToClasses, bemFactory } from '../dom.js'
+import { label as textLabel } from './text.js'
 import './toggle.css'
 
 const bem = bemFactory('toggle');
@@ -22,6 +23,7 @@ export function toggle(...args) {
     parent,
     options = ['Off', 'On'],
     checked,
+    label,
     disabled,
     color = 'default',
     id,
@@ -43,7 +45,8 @@ export function toggle(...args) {
     setState(!state, e);
   };
 
-  const root = el('nav', parent, {
+  const container = col(parent, [ label && textLabel(label) ], { gap: 2 });
+  const root = el('nav', container, {
     ...rest,
     class: [bem(), configToClasses(props), rest.class],
     data: { checked: state, uiCol: color },
@@ -56,5 +59,5 @@ export function toggle(...args) {
     ]
   });
 
-  return withValue(root, () => state, setState);
+  return withValue(container, () => state, setState);
 }

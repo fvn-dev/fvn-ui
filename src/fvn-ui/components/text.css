@@ -33,6 +33,7 @@
   font-size: 0.875em;
   font-weight: 500;
   color: var(--text);
+  min-height: auto;
 }
 
 .ui-label--soft {

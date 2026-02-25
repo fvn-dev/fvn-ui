@@ -48,7 +48,7 @@
 .ui-tabs--default .ui-btn {
   --input-padding: calc(var(--space) * .5) calc(var(--space) * .75);
 }
-.ui-tabs--default .ui-btn[aria-selected="true"] {
+.ui-tabs--default .ui-btn:not(.colorized)[aria-selected="true"] {
   background: hsl(var(--hsl-white)) !important;
   color: hsl(var(--hsl-black)) !important;
   box-shadow: 0 1px 4px rgba(0,0,0,.2);
@@ -64,6 +64,7 @@
 .ui-tabs--outline + .ui-tabs__panel {
   margin-top: calc(-1 * var(--gap));
 }
+
 .ui-tabs--outline:not([data-centered]) + .ui-tabs__panel {
     border-top-left-radius: 0;
 }
@@ -72,10 +73,10 @@
     border-color: transparent;
     border-radius: 0;
 }
-.ui-tabs--outline .ui-btn:first-child {
+.ui-tabs--outline:not(.ui-tabs--toggle-group) .ui-btn:first-child {
     border-top-left-radius: var(--radius);
 }
-.ui-tabs--outline .ui-btn:last-child {
+.ui-tabs--outline:not(.ui-tabs--toggle-group) .ui-btn:last-child {
     border-top-right-radius: var(--radius);
 }
 .ui-tabs--outline .ui-btn[aria-selected="false"] {
@@ -93,7 +94,7 @@
   --bg: var(--shade-back, var(--back));
   border-color: var(--border);
 }
-.ui-tabs--outline .ui-btn[aria-selected="true"]:after {
+.ui-tabs--outline:not(.ui-tabs--toggle-group) .ui-btn[aria-selected="true"]:after {
   content: '';
   background: var(--bg);
   bottom: 0;
@@ -122,9 +123,11 @@
     background: none;
     gap: 0;
 }
+/*
 .ui-tabs--border:not([data-centered]) + .ui-tabs__panel {
     border-top-left-radius: 0;
 }
+*/
 .ui-tabs--border .ui-btn {
     border-color: transparent;
     border-width: 2px;
