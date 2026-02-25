@@ -7,6 +7,11 @@ import { createValidationController, createCounterController } from './validatio
 import './editable.css'
 
 const bem = bemFactory('editable');
+const parseLimitArgs = (minOrConfig, maxValue) => (
+  minOrConfig && typeof minOrConfig === 'object' && !Array.isArray(minOrConfig)
+    ? { min: minOrConfig.min, max: minOrConfig.max }
+    : { min: minOrConfig, max: maxValue }
+);
 
 /**
  * Creates a editable element with input-like behavior
@@ -32,7 +37,7 @@ const bem = bemFactory('editable');
  * @param {Function} [config.onKeydown] - Called on keydown with (event)
  * @param {Function} [config.onSubmit] - Called on Enter key with (html, event) - single line mode only
  * @param {string} [config.id] - Registers to dom.editable[id] and dom[id]
- * @returns {HTMLDivElement} Wrapper with .value/.html getter-setters and .isValid()
+ * @returns {HTMLDivElement} Wrapper with .value/.html getter-setters, .isValid(), and .setLimits()
  * @example
  * editable({ placeholder: 'Type here...' })  // multiline by default
  * editable({ label: 'Title', rows: 1, onSubmit: (e) => save(e.value) })  // single line
@@ -79,6 +84,8 @@ export function editable(...args) {
   const minRows = rows && rows > 1 ? rows : null;
 
   let editableEl, messageEl, infoEl, counterEl;
+  let currentMin = min;
+  let currentMax = max;
 
   // Normalize content - ensure there's always something to click
   const normalizeContent = () => {
@@ -106,8 +113,8 @@ export function editable(...args) {
   const getHtml = () => editableEl?.innerHTML || '';
 
   const counterController = createCounterController({
-    min,
-    max,
+    min: currentMin,
+    max: currentMax,
     checkLength: true,
     getValue,
     setCounter: counter
@@ -123,8 +130,8 @@ export function editable(...args) {
   const validation = createValidationController({
     validate,
     required,
-    min,
-    max,
+    min: currentMin,
+    max: currentMax,
     message,
     checkLength: true,
     getValue,
@@ -272,6 +279,19 @@ export function editable(...args) {
   root.isValid = validation.check;
   root.error = validation.error;
   root.ok = validation.ok;
+  root.setLimits = (minOrConfig, maxValue) => {
+    const { min: nextMin, max: nextMax } = parseLimitArgs(minOrConfig, maxValue);
+
+    if (nextMin !== undefined) currentMin = nextMin;
+    if (nextMax !== undefined) currentMax = nextMax;
+
+    validation.setLimits({ min: nextMin, max: nextMax });
+    counterController.setLimits({ min: nextMin, max: nextMax });
+
+    validation.check();
+    if (counter) counterController.update();
+  };
+
   root.reset = () => {
     editableEl.innerHTML = '';
     normalizeContent();

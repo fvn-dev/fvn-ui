@@ -5,6 +5,11 @@ import { createValidationController, createCounterController } from './validatio
 import './input.css'
 
 const bem = bemFactory('input');
+const parseLimitArgs = (minOrConfig, maxValue) => (
+  minOrConfig && typeof minOrConfig === 'object' && !Array.isArray(minOrConfig)
+    ? { min: minOrConfig.min, max: minOrConfig.max }
+    : { min: minOrConfig, max: maxValue }
+);
 
 /**
  * Creates a text input or textarea with optional label and submit handling
@@ -23,7 +28,7 @@ const bem = bemFactory('input');
  * @param {string|Object} [config.message] - Validation error message(s)
  * @param {Function} [config.onSubmit] - Called on Enter key with value (input only)
  * @param {string} [config.id] - Registers to dom.input[id] and dom[id]
- * @returns {HTMLDivElement} Input wrapper with .value getter/setter and .isValid()
+ * @returns {HTMLDivElement} Input wrapper with .value getter/setter, .isValid(), and .setLimits()
  * @example
  * input({ label: 'Email', validate: 'email' })
  * input({ label: 'Bio', rows: 4, counter: true, max: 500 })
@@ -63,14 +68,16 @@ export function input(...args) {
   const userOnInput = getCallback('onInput', rest);
   const userOnChange = getCallback('onChange', rest);
   let wrapEl, inputEl, counterEl, messageEl, infoEl;
+  let currentMin = min;
+  let currentMax = max;
 
   const submit = () => cb?.call(inputEl, inputEl.value);
 
   const validation = createValidationController({
     validate,
     required,
-    min,
-    max,
+    min: currentMin,
+    max: currentMax,
     message,
     checkLength: !isNumber,
     getValue: () => inputEl?.value || '',
@@ -86,8 +93,8 @@ export function input(...args) {
   });
 
   const counterController = createCounterController({
-    min,
-    max,
+    min: currentMin,
+    max: currentMax,
     checkLength: !isNumber,
     getValue: () => inputEl?.value || '',
     setCounter: counter
@@ -120,8 +127,8 @@ export function input(...args) {
   const adjustNumber = (delta) => {
     const current = parseFloat(inputEl.value) || 0;
     let next = current + delta * step;
-    if (min != null) next = Math.max(min, next);
-    if (max != null) next = Math.min(max, next);
+    if (currentMin != null) next = Math.max(currentMin, next);
+    if (currentMax != null) next = Math.min(currentMax, next);
     inputEl.value = next;
     inputEl.dispatchEvent(new Event('input', { bubbles: true }));
     inputEl.dispatchEvent(new Event('change', { bubbles: true }));
@@ -129,7 +136,7 @@ export function input(...args) {
 
   const inputTag = isTextarea ? 'textarea' : 'input';
   const inputAttrs = isTextarea
-    ? { rows, id, placeholder, attrs: { ...attrs, maxlength: clamp ? max : undefined } }
+    ? { rows, id, placeholder, attrs: { ...attrs, maxlength: clamp ? currentMax : undefined } }
     : { type, id, value, placeholder, attrs };
 
   const root = col(parent, {
@@ -158,8 +165,8 @@ export function input(...args) {
               ? () => {
                   const val = parseFloat(inputEl.value);
                   if (isNaN(val)) return;
-                  if (min != null && val < min) inputEl.value = min;
-                  else if (max != null && val > max) inputEl.value = max;
+                  if (currentMin != null && val < currentMin) inputEl.value = currentMin;
+                  else if (currentMax != null && val > currentMax) inputEl.value = currentMax;
                 }
               : undefined
           }),
@@ -220,6 +227,23 @@ export function input(...args) {
   root.isValid = validation.check;
   root.error = validation.error;
   root.ok = validation.ok;
+  root.setLimits = (minOrConfig, maxValue) => {
+    const { min: nextMin, max: nextMax } = parseLimitArgs(minOrConfig, maxValue);
+
+    if (nextMin !== undefined) currentMin = nextMin;
+    if (nextMax !== undefined) currentMax = nextMax;
+
+    validation.setLimits({ min: nextMin, max: nextMax });
+    counterController.setLimits({ min: nextMin, max: nextMax });
+
+    if (isTextarea && clamp && inputEl) {
+      if (currentMax == null) inputEl.removeAttribute('maxlength');
+      else inputEl.setAttribute('maxlength', String(currentMax));
+    }
+
+    validation.check();
+    if (counter) counterController.update();
+  };
   
   // Reset to initial state (pristine, no validation errors shown)
   root.reset = () => {

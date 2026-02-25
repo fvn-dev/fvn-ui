@@ -141,6 +141,23 @@ tabs({ onChange: (value, item, event) => ... })
 input({ onChange(value) { console.log(this.id, value) } })
 ```
 
+### Runtime Limit Updates
+
+`input()` and `editable()` support runtime limit updates for validation/counters.
+
+```js
+const bio = ui.input({ label: 'Bio', rows: 4, counter: true, min: 10, max: 500 })
+bio.setLimits(5, 300)
+bio.setLimits({ max: 120 })  // min unchanged
+bio.setLimits({ min: null }) // clear min
+
+const notes = ui.editable({ label: 'Notes', counter: true, min: 10, max: 500 })
+notes.setLimits({ max: 200 })
+```
+
+`setLimits(...)` accepts `(min, max)` or `{ min, max }`.
+`undefined` keeps existing bounds, `null` clears a bound.
+
 ### CSS Variables
 
 Common CSS variables available for custom styling. See [style.css](./src/fvn-ui/style.css) for full list.

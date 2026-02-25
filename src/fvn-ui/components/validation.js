@@ -40,18 +40,27 @@ export function createCounterController({
   getValue,
   setCounter
 }) {
+  let currentMin = min;
+  let currentMax = max;
+
   const update = () => {
     if (!setCounter) return;
     const value = String(getValue?.() ?? '');
     const length = value.length;
-    const text = max != null ? `${length}/${max}` : String(length);
-    const state = resolveCounterState({ length, min, max, checkLength });
+    const text = currentMax != null ? `${length}/${currentMax}` : String(length);
+    const state = resolveCounterState({ length, min: currentMin, max: currentMax, checkLength });
     setCounter(text, state);
+  };
+
+  const setLimits = ({ min: nextMin, max: nextMax } = {}) => {
+    if (nextMin !== undefined) currentMin = nextMin;
+    if (nextMax !== undefined) currentMax = nextMax;
   };
 
   return {
     update,
-    reset: update
+    reset: update,
+    setLimits
   };
 }
 
@@ -68,8 +77,10 @@ export function createValidationController({
   onInvalidChange
 }) {
   const validator = resolveValidator(validate);
-  const hasRules = !!(required || validator || (checkLength && (min != null || max != null)));
+  let currentMin = min;
+  let currentMax = max;
   let manualError = false;
+  const hasRules = () => !!(required || validator || (checkLength && (currentMin != null || currentMax != null)));
 
   const apply = ({ errorType = null, manualMessage } = {}) => {
     const value = String(getValue?.() ?? '');
@@ -79,7 +90,7 @@ export function createValidationController({
     if (setMessage) {
       const msg = manualMessage != null
         ? manualMessage
-        : (isInvalid ? resolveValidationMessage({ message, errorType, validate, min, max, length: value.length }) : null);
+        : (isInvalid ? resolveValidationMessage({ message, errorType, validate, min: currentMin, max: currentMax, length: value.length }) : null);
       setMessage(msg || '', !!msg);
     }
 
@@ -91,8 +102,8 @@ export function createValidationController({
     const value = String(getValue?.() ?? '');
     if (required && value.length === 0) return 'required';
     if (validator && !validator(value)) return 'validate';
-    if (checkLength && min != null && value.length < min) return 'min';
-    if (checkLength && max != null && value.length > max) return 'max';
+    if (checkLength && currentMin != null && value.length < currentMin) return 'min';
+    if (checkLength && currentMax != null && value.length > currentMax) return 'max';
     return null;
   };
 
@@ -124,12 +135,24 @@ export function createValidationController({
     apply();
   };
 
-  return {
-    hasRules,
+  const setLimits = ({ min: nextMin, max: nextMax } = {}) => {
+    if (nextMin !== undefined) currentMin = nextMin;
+    if (nextMax !== undefined) currentMax = nextMax;
+  };
+
+  const api = {
     check,
     clearManualError,
     error,
     ok,
-    reset
+    reset,
+    setLimits
   };
+
+  Object.defineProperty(api, 'hasRules', {
+    enumerable: true,
+    get: hasRules
+  });
+
+  return api;
 }

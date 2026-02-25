@@ -434,7 +434,15 @@ emailInput.ok()                              // clear error state
 
 // Check validation state
 emailInput.isValid()  // returns true/false
+
+// Update length limits at runtime (revalidates + refreshes counter immediately)
+emailInput.setLimits(5, 300)
+emailInput.setLimits({ max: 120 }) // min unchanged
+emailInput.setLimits({ min: null }) // clear min limit
 ```
+
+`setLimits(...)` accepts `(min, max)` or `{ min, max }`.
+`undefined` keeps existing bounds, `null` clears a bound.
 
 ---
 
@@ -730,7 +738,15 @@ ed.isValid()   // returns true/false
 ed.error('Custom error')
 ed.ok()
 ed.reset()
+
+// Update length limits at runtime (revalidates + refreshes counter immediately)
+ed.setLimits(5, 300)
+ed.setLimits({ max: 120 }) // min unchanged
+ed.setLimits({ min: null }) // clear min limit
 ```
+
+`setLimits(...)` accepts `(min, max)` or `{ min, max }`.
+`undefined` keeps existing bounds, `null` clears a bound.
 
 ---
 
