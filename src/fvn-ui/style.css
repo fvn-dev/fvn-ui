@@ -1,12 +1,26 @@
 /* ---- Font ---- */
-@import url('https://rsms.me/inter/inter.css');
+/* @import url('https://rsms.me/inter/inter.css'); */
+@import url('https://fonts.googleapis.com/css2?display=swap&family=Geist:wght@100..900');
 
-/* Inter font feature settings for crispness */
-.fvn-ui {
-  font-feature-settings: 'liga' 1, 'calt' 1; /* Enable ligatures and contextual alternates */
+:root {
+  /* --ui-test-font: "Inter"; */
+  --ui-primary-font: "Geist";
+  --ui-font: var(--ui-test-font, var(--ui-primary-font)),
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
 }
+
+.fvn-ui {
+  font-family: var(--ui-font);
+  font-feature-settings: "liga" 1, "calt" 1;
+  font-optical-sizing: auto;
+  font-synthesis: none;
+}
+
 @supports (font-variation-settings: normal) {
-  .fvn-ui { font-family: 'Inter var', sans-serif; }
+  :root {
+    --ui-test-font: "Inter var";
+  }
 }
 
 /* ---- Tokens ---- */
@@ -26,7 +40,7 @@
   --space-8: calc(var(--core) * 3);
   --space-9: calc(var(--core) * 4);
   --space-10: calc(var(--core) * 5);
-  --space: var(--space-4);
+  --space: var(--space-3);
   --padding: var(--space-8);
 
   /* Presets */
@@ -142,7 +156,6 @@ svg {
 
 body.fvn-ui {
   margin: 0;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background: var(--back);
   color: var(--text);
   padding: var(--padding);
@@ -197,7 +210,7 @@ body.fvn-ui {
 
 /* Layout primitives */
 .row, .col {
-  --gap: var(--space-4);  /* Reset per container to prevent inheritance */
+  --gap: var(--space-2);  /* Reset per container to prevent inheritance */
   --jc: flex-start;
   display: flex;
   flex: 1;           /* Grow by default */
