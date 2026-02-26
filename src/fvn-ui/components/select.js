@@ -49,6 +49,7 @@ export function selectComponent(...args) {
   } = parseArgs(...args);
 
   let items = itemsProp || options || [];
+  for (let i = 0; i < items.length; i++) items[i].label ||= '';
   const showFilter = Number.isInteger(filterProp) ? items.length > filterProp : !!filterProp;
   const cb = getCallback('onChange', rest);
 
@@ -110,6 +111,10 @@ export function selectComponent(...args) {
   const renderList = () => {
     listEl.innerHTML = '';
     for (const it of items) {
+      if (it.separator) {
+        listEl.appendChild(el('div', { class: bem.el('separator') }));
+        continue;
+      }
       const isSelected = multiselect 
         ? selected.has(String(it.value))
         : String(it.value) === String(selected);

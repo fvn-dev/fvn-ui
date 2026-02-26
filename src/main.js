@@ -279,7 +279,7 @@ function selectPresentation() {
         value: 1
       }),
       selectComponent({
-        label: '&nbsp;',
+        label: '<span>&nbsp;</span>',
         options: exampleOptions.slice(0, 5),
         placeholder: 'Pick a fruit',
         onchange(value) {
@@ -297,7 +297,13 @@ function selectPresentation() {
       value: [1, 4],
       options: exampleOptions,
       placeholder: 'Pick fruits'
-    })    
+    }),
+    selectComponent({
+      label: 'With separator',
+      value: [1, 4],
+      options: [ ...exampleOptions.slice(0,5), { separator: true }, ...exampleOptions.slice(6,10) ],
+      placeholder: 'Pick fruits'
+    })   
   ]);
 }
 

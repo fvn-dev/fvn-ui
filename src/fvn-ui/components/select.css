@@ -39,7 +39,11 @@
   transform: translatey(-50%);
 }
 
-
+.ui-select__separator {
+  height: 0;
+  border-top: 1px dashed var(--border);
+  margin: calc(var(--space) * .5) 0;
+}
 .ui-select__value {
   display: inline-flex;
   min-width: 0;
