@@ -1,6 +1,7 @@
 .ui-upload {
   width: 100%;
   gap: var(--space-2);
+  color: var(--text);
 }
 
 .ui-upload__drop {
