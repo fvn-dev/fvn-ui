@@ -532,7 +532,6 @@ export function createProseMirrorAdapter({
       updateToolbarState()
 
       emitInput(createInputEvent(true), markdownInput)
-      requestAnimationFrame(() => markdownInput.focus())
       return markdownMode
     }
 
@@ -559,7 +558,6 @@ export function createProseMirrorAdapter({
     markdownCacheDoc = null
 
     emitInput(createInputEvent(true), editableEl)
-    focusRichEditor()
     return markdownMode
   }
 

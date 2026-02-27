@@ -124,7 +124,7 @@
   top: calc(100% - 1px);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: transparent;
+  background: var(--back);
   box-shadow: var(--shadow-md);
   overflow: hidden;
   transform-origin: top;
