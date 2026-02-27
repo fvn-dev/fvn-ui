@@ -392,6 +392,7 @@ function inputPresentation() {
           min: 10,
           max: 50,
           counter: true,
+          value: '<a href=\"https://www.fvn.no/mening/debatt/i/pWOAgj/slik-skriver-du-et-godt-meningsinnlegg\">Slik skriver du et godt debattinnlegg</a>',
           message: {
             min: 'Minimum {min} characters required',
             max: 'Maximum {max} characters allowed',

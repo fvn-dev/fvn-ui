@@ -767,7 +767,9 @@ export function createProseMirrorAdapter({
     }
   }
 
-  const initialDoc = htmlToDoc(editableEl.innerHTML || '')
+  const initialHtml = editableEl.innerHTML || ''
+  const initialDoc = htmlToDoc(initialHtml)
+  editableEl.innerHTML = ''
   const view = new EditorView(editableEl, {
     state: createState(initialDoc, plugins),
     dispatchTransaction,
