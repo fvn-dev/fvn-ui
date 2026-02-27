@@ -101,6 +101,8 @@ export function dialog(...args) {
       variant: variant || 'modal', 
       type: type || variant || 'modal',
       position, arrow, content, inverted,
+      closeOnBackdrop,
+      closeOnEscape,
       anchor: anchorEl,
       _isChildOfAnchor: !!(anchorEl && isHoverTrigger)
     });
