@@ -8,7 +8,7 @@
   border-radius: var(--radius);
   padding: var(--input-padding);
   color: var(--text);
-  background: var(--back);
+  background: transparent;
   width: 100%;
   font: inherit;
   resize: vertical;

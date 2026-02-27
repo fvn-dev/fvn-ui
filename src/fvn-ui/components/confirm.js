@@ -67,6 +67,8 @@ export function confirm(...args) {
     variant: dlgVariant,
     anchor: trigger,
     inverted,
+    closeOnBackdrop: false,
+    closeOnEscape: false,
     content: (close) => [
       header({ title, description, class: bem.el('inner') }),
       el('div', {

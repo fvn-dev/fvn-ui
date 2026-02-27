@@ -17,6 +17,8 @@ const dialogCache = new WeakMap(); // cache toggled dialogs
  * @param {'top'|'bottom'|'left'|'right'} [config.position='bottom'] - Popover position
  * @param {boolean} [config.arrow=true] - Show arrow on popover
  * @param {boolean} [config.inverted] - Dark/inverted style
+ * @param {boolean} [config.closeOnBackdrop=true] - Close modal when backdrop is clicked
+ * @param {boolean} [config.closeOnEscape=true] - Close dialog when Escape is pressed
  * @param {Function} [config.onOpen] - Called when dialog opens
  * @param {Function} [config.onClose] - Called when dialog closes
  * @returns {HTMLElement} Dialog element with show(), hide(), toggle(), isOpen
@@ -41,6 +43,8 @@ export function dialog(...args) {
     open: shouldOpen, // alias for toggled
     hover, // if true, close on mouseleave from anchor/dialog
     inverted,
+    closeOnBackdrop = true,
+    closeOnEscape = true,
     _isChildOfAnchor, // internal: tooltip is child of anchor for hover persistence
     props,
     ...rest
@@ -68,41 +72,42 @@ export function dialog(...args) {
       anchorEl = anchor;
     }
     
-    // For hover tooltips: use cache to prevent re-render spam
-    // For click/modals: always create fresh (content may have changed)
-    if (anchorEl && isHoverTrigger) {
+    // Reuse cached dialog per anchor when possible
+    if (anchorEl) {
       const cached = dialogCache.get(anchorEl);
-      if (cached) {
-        if (!cached.isOpen) cached.show();
+      if (cached?.isConnected) {
+        // Keep content fresh for event-driven dialogs
+        if (content !== undefined) {
+          cached.setContent?.(content);
+        }
+        if (isHoverTrigger) {
+          if (!cached.isOpen) cached.show(anchorEl);
+        } else {
+          cached.toggle(anchorEl);
+        }
         return cached;
       }
-      
-      // Hover tooltips: append to anchor so tooltip persists when hovering it
-      anchorEl.style.position = anchorEl.style.position || 'relative';
-      
-      const newDialog = dialog({ 
-        ...rest, 
-        parent: anchorEl, 
-        variant, type, position, arrow, content, inverted,
-        anchor: anchorEl,
-        _isChildOfAnchor: true
-      });
-      dialogCache.set(anchorEl, newDialog);
-      newDialog.show();
-      
-      return newDialog;
     }
-    
-    // Click-triggered or no anchor: create fresh modal/tooltip, append to body
+
+    // Hover tooltips: append to anchor so tooltip persists when hovering it
+    if (anchorEl && isHoverTrigger) {
+      anchorEl.style.position = anchorEl.style.position || 'relative';
+    }
+
+    // Click-triggered or no-anchor: create fresh dialog (and cache if anchor exists)
     const newDialog = dialog({ 
       ...rest, 
-      parent: document.body, 
+      parent: anchorEl && isHoverTrigger ? anchorEl : document.body,
       variant: variant || 'modal', 
       type: type || variant || 'modal',
       position, arrow, content, inverted,
-      anchor: anchorEl
+      anchor: anchorEl,
+      _isChildOfAnchor: !!(anchorEl && isHoverTrigger)
     });
-    newDialog.show();
+    if (anchorEl) {
+      dialogCache.set(anchorEl, newDialog);
+    }
+    newDialog.show(anchorEl);
     return newDialog;
   }
 
@@ -113,6 +118,7 @@ export function dialog(...args) {
   let cleanupOutside;
   let arrowEl;
   let currentAnchor = anchor;
+  let resizeHandlerBound = false;
 
   const effectiveTye = type || variant;
   const isModal = effectiveTye === 'modal';
@@ -122,6 +128,9 @@ export function dialog(...args) {
       return;
     }
     e.preventDefault();
+    if (!closeOnEscape) {
+      return;
+    }
     close();
   };
 
@@ -133,6 +142,10 @@ export function dialog(...args) {
     isModal ? root.close() : (root.dataset.open = 'false');
     cleanupOutside?.();
     document.removeEventListener('keydown', onKeydown, true);
+    if (resizeHandlerBound) {
+      window.removeEventListener('resize', positionPopover);
+      resizeHandlerBound = false;
+    }
     cbClose?.();
   };
 
@@ -160,6 +173,10 @@ export function dialog(...args) {
     } else {
       positionPopover();
       root.dataset.open = 'true';
+      if (!resizeHandlerBound) {
+        window.addEventListener('resize', positionPopover);
+        resizeHandlerBound = true;
+      }
       // Exclude anchor from outside click detection so toggle works
       cleanupOutside = onOutsideClick(root, (e) => {
         if (currentAnchor?.contains(e.target)) return; // Let toggle handle anchor clicks
@@ -184,11 +201,26 @@ export function dialog(...args) {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     
-    // Flip vertically if needed
-    const pos = (position === 'bottom' && anchor.bottom + ph + gap > vh) ? 'top'
-              : (position === 'top' && anchor.top - ph - gap < 0) ? 'bottom'
-              : position;
+    const spaceBelow = Math.max(0, vh - anchor.bottom - gap - pad);
+    const spaceAbove = Math.max(0, anchor.top - gap - pad);
+
+    // Flip or choose best-fit side for tall content
+    let pos = position;
+    if (position === 'bottom' && ph > spaceBelow) {
+      pos = spaceAbove > spaceBelow ? 'top' : 'bottom';
+    } else if (position === 'top' && ph > spaceAbove) {
+      pos = spaceBelow >= spaceAbove ? 'bottom' : 'top';
+    }
     root.dataset.position = pos;
+
+    const maxHeight = Math.max(120, pos === 'bottom' ? spaceBelow : spaceAbove);
+    root.style.maxHeight = '';
+    root.style.overflowY = 'visible';
+    if (contentEl) {
+      const contentMaxHeight = Math.max(80, maxHeight - 24);
+      contentEl.style.maxHeight = `${contentMaxHeight}px`;
+      contentEl.style.overflowY = 'auto';
+    }
     
     // Calculate left position (clamped to viewport)
     const anchorCenterX = anchor.left + anchor.width / 2;
@@ -205,7 +237,9 @@ export function dialog(...args) {
     } else {
       // Fixed positioning
       root.style.left = `${left}px`;
-      root.style.top = pos === 'bottom' ? `${anchor.bottom + gap}px` : `${anchor.top - ph - gap}px`;
+      const preferredTop = pos === 'bottom' ? anchor.bottom + gap : anchor.top - ph - gap;
+      const clampedTop = Math.max(pad, Math.min(vh - pad - Math.min(ph, maxHeight), preferredTop));
+      root.style.top = `${clampedTop}px`;
       root.style.bottom = 'auto';
     }
     root.style.transform = 'none';
@@ -247,7 +281,13 @@ export function dialog(...args) {
       ...rest,
       class: [bem(), 'ui-dialog-component', configToClasses(props), rest.class],
       onClick: (e) => {
-        if (e.target === root) {
+        if (e.target === root && closeOnBackdrop) {
+          close();
+        }
+      },
+      onCancel: (e) => {
+        e.preventDefault();
+        if (closeOnEscape) {
           close();
         }
       },

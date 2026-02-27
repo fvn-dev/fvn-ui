@@ -5,6 +5,8 @@
   border: none;
   border-radius: var(--radius);
   width: min(520px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  overflow: auto;
   box-shadow: var(--shadow-md);
   background: var(--back);
   color: var(--text);

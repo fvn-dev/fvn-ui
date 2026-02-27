@@ -423,10 +423,6 @@ export function selectComponent(...args) {
     return hasValue;
   };
 
-  if (!adaptive) {
-    return withValue(root, () => multiselect ? [...selected] : selected, valueSetter);
-  }
-
   // Adaptive sizing (supports initially hidden containers, e.g. collapsible/tabs)
   scheduleAdaptiveWidth();
 

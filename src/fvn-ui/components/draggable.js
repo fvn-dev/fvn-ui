@@ -65,6 +65,7 @@ export function draggable(...args) {
     const wrapper = el('div', {
       class: [bem.el('item'), plain && bem('plain'), index && bem('index'), item.disabled && bem('disabled')],
       draggable: 'true',
+      tabIndex: -1,
       children: handlePosition === 'left' 
         ? [handle, contentWrap]
         : [contentWrap, handle]

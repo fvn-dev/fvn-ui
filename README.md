@@ -158,6 +158,21 @@ notes.setLimits({ max: 200 })
 `setLimits(...)` accepts `(min, max)` or `{ min, max }`.
 `undefined` keeps existing bounds, `null` clears a bound.
 
+### Editable Markdown Mode
+
+`editable({ rich: true })` includes a toolbar toggle for raw markdown editing.
+
+```js
+const ed = ui.editable({ label: 'Body', rich: true })
+
+ed.toMarkdown()
+ed.toSlackMarkdown()
+ed.fromMarkdown('## Heading\n- Item')
+
+ed.toggleMarkdownMode() // rich <-> markdown editor
+ed.isMarkdownMode()     // true/false
+```
+
 ### CSS Variables
 
 Common CSS variables available for custom styling. See [style.css](./src/fvn-ui/style.css) for full list.

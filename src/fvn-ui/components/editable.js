@@ -2,6 +2,7 @@ import { el, row, col, parseArgs, configToClasses, bemFactory, noSpellcheck, foc
 import { button } from './button.js'
 import { dialog } from './dialog.js'
 import { input } from './input.js'
+import { toggle } from './toggle.js'
 import { label as textLabel } from './text.js'
 import { createValidationController, createCounterController } from './validation.js'
 import './editable.css'
@@ -12,6 +13,223 @@ const parseLimitArgs = (minOrConfig, maxValue) => (
     ? { min: minOrConfig.min, max: minOrConfig.max }
     : { min: minOrConfig, max: maxValue }
 );
+
+const normalizeText = (value) => String(value || '').replace(/\u00a0/g, ' ');
+
+const normalizeInlineBreaks = (value) => normalizeText(value)
+  .replace(/[ \t]+\n/g, '\n')
+  .replace(/\n{3,}/g, '\n\n')
+  .trim();
+
+const escapeHtml = (value = '') => String(value)
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;');
+
+const escapeAttr = (value = '') => escapeHtml(value).replace(/`/g, '&#96;');
+
+const renderInlineMarkdown = (value = '') => {
+  let text = escapeHtml(value);
+  const linkTokens = [];
+  const storeLink = (href, label) => {
+    const token = `@@LINK${linkTokens.length}@@`;
+    linkTokens.push(`<a href="${escapeAttr(href)}">${escapeHtml(label.trim() || href)}</a>`);
+    return token;
+  };
+
+  text = text.replace(/<((?:https?|mailto):[^|>\s]+)\|([^>]+)>/gi, (_, href, label) => storeLink(href, label));
+
+  text = text.replace(/\[([^\]\n]+)\]\(([^)\s]+)\)/g, (_, label, href) => storeLink(href, label));
+
+  text = text.replace(/(\*\*|__)([^*\n_][\s\S]*?)\1/g, '<strong>$2</strong>');
+  text = text.replace(/(^|[^*])\*([^*\n][\s\S]*?)\*(?!\*)/g, '$1<strong>$2</strong>');
+  text = text.replace(/~~([^~\n][\s\S]*?)~~/g, '<s>$1</s>');
+  text = text.replace(/(^|[^~])~([^~\n][\s\S]*?)~(?!~)/g, '$1<s>$2</s>');
+  text = text.replace(/(^|[^_])_([^_\n][\s\S]*?)_(?!_)/g, '$1<em>$2</em>');
+
+  linkTokens.forEach((linkHtml, idx) => {
+    text = text.split(`@@LINK${idx}@@`).join(linkHtml);
+  });
+
+  return text;
+};
+
+const toMarkdownFromHtml = (html = '', { slackFormat = false } = {}) => {
+  const root = document.createElement('div');
+  root.innerHTML = html;
+
+  const formatLink = (text, href) => {
+    const label = (text || href || '').trim();
+    const url = String(href || '').trim();
+    if (!url) return label;
+    return slackFormat ? `<${url}|${label}>` : `[${label}](${url})`;
+  };
+
+  const renderInline = (node) => {
+    if (!node) return '';
+    if (node.nodeType === Node.TEXT_NODE) return normalizeText(node.textContent);
+    if (node.nodeType !== Node.ELEMENT_NODE) return '';
+
+    const tag = node.tagName.toLowerCase();
+    if (tag === 'br') return '\n';
+    if (/^(h[1-6]|p|div|blockquote|pre|ul|ol|li|table)$/.test(tag)) {
+      return normalizeText([...node.childNodes].map(renderInline).join(' '));
+    }
+
+    const inner = [...node.childNodes].map(renderInline).join('');
+    if (tag === 'strike' || tag === 's' || tag === 'del') return inner.trim() ? `~${inner}~` : inner;
+    if (tag === 'blockquote') return inner.trim() ? `> ${inner}` : inner;
+    if (tag === 'strong' || tag === 'b') return inner.trim() ? `*${inner}*` : inner;
+    if (tag === 'em' || tag === 'i') return inner.trim() ? `_${inner}_` : inner;
+    if (tag === 'a') return formatLink(inner || node.textContent || node.getAttribute('href'), node.getAttribute('href'));
+    return inner;
+  };
+
+  const isBlockNode = (node) => (
+    node?.nodeType === Node.ELEMENT_NODE
+    && /^(h[1-6]|p|div|blockquote|pre|ul|ol|li|table)$/.test(node.tagName.toLowerCase())
+  );
+
+  const renderList = (listEl) => [...listEl.children]
+    .filter((child) => child.tagName?.toLowerCase() === 'li')
+    .map((li) => {
+      const text = normalizeInlineBreaks([...li.childNodes].map(renderInline).join(''));
+      return text ? `- ${text.replace(/\n+/g, ' ')}` : '';
+    })
+    .filter(Boolean)
+    .join('\n');
+
+  const renderContainer = (node) => {
+    const parts = [];
+    let inlineBuffer = '';
+    const flushInline = () => {
+      const text = normalizeInlineBreaks(inlineBuffer);
+      if (text) parts.push(text);
+      inlineBuffer = '';
+    };
+
+    for (const child of node.childNodes) {
+      if (isBlockNode(child)) {
+        flushInline();
+        const block = renderBlock(child);
+        if (block) parts.push(block);
+      } else {
+        inlineBuffer += renderInline(child);
+      }
+    }
+
+    flushInline();
+    return parts.join('\n\n');
+  };
+
+  const renderBlock = (node) => {
+    if (!node) return '';
+    if (node.nodeType === Node.TEXT_NODE) return normalizeInlineBreaks(node.textContent);
+    if (node.nodeType !== Node.ELEMENT_NODE) return '';
+
+    const tag = node.tagName.toLowerCase();
+    if (/^h[1-6]$/.test(tag)) {
+      const text = normalizeInlineBreaks([...node.childNodes].map(renderInline).join('')).replace(/\n+/g, ' ');
+      return text ? `## ${text}` : '';
+    }
+    if (tag === 'ul' || tag === 'ol') return renderList(node);
+    if (tag === 'li') {
+      const text = normalizeInlineBreaks([...node.childNodes].map(renderInline).join(''));
+      return text ? `- ${text.replace(/\n+/g, ' ')}` : '';
+    }
+    if (tag === 'blockquote') {
+      const text = normalizeInlineBreaks([...node.childNodes].map(renderInline).join('')).replace(/\n+/g, '\n> ');
+      return text ? `> ${text}` : '';
+    }
+    return renderContainer(node);
+  };
+
+  return [...root.childNodes]
+    .map(renderBlock)
+    .filter(Boolean)
+    .join('\n\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+};
+
+const toHtmlFromMarkdown = (markdown = '') => {
+  const lines = String(markdown || '').replace(/\r\n?/g, '\n').split('\n');
+  const blocks = [];
+  let paragraphLines = [];
+  let quoteLines = [];
+  let listLines = [];
+
+  const flushParagraph = () => {
+    if (!paragraphLines.length) return;
+    const html = paragraphLines.map((line) => renderInlineMarkdown(line.trim())).join('<br>');
+    blocks.push(`<div>${html || '<br>'}</div>`);
+    paragraphLines = [];
+  };
+
+  const flushQuote = () => {
+    if (!quoteLines.length) return;
+    const html = quoteLines.map((line) => renderInlineMarkdown(line.trim())).join('<br>');
+    blocks.push(`<blockquote>${html || '<br>'}</blockquote>`);
+    quoteLines = [];
+  };
+
+  const flushList = () => {
+    if (!listLines.length) return;
+    const items = listLines
+      .map((line) => `<li>${renderInlineMarkdown(line.trim())}</li>`)
+      .join('');
+    blocks.push(`<ul>${items}</ul>`);
+    listLines = [];
+  };
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    const headingMatch = line.match(/^\s*(#{1,6})\s+(.+?)\s*$/);
+    const listMatch = line.match(/^\s*[-*+]\s+(.+?)\s*$/);
+    const quoteMatch = line.match(/^\s*>\s?(.*)$/);
+
+    if (!trimmed) {
+      flushParagraph();
+      flushQuote();
+      flushList();
+      continue;
+    }
+
+    if (headingMatch) {
+      flushParagraph();
+      flushQuote();
+      flushList();
+      blocks.push(`<h3>${renderInlineMarkdown(headingMatch[2])}</h3>`);
+      continue;
+    }
+
+    if (listMatch) {
+      flushParagraph();
+      flushQuote();
+      listLines.push(listMatch[1]);
+      continue;
+    }
+
+    if (quoteMatch) {
+      flushParagraph();
+      flushList();
+      quoteLines.push(quoteMatch[1]);
+      continue;
+    }
+
+    flushQuote();
+    flushList();
+    paragraphLines.push(line);
+  }
+
+  flushParagraph();
+  flushQuote();
+  flushList();
+
+  return blocks.join('');
+};
 
 /**
  * Creates a editable element with input-like behavior
@@ -37,7 +255,7 @@ const parseLimitArgs = (minOrConfig, maxValue) => (
  * @param {Function} [config.onKeydown] - Called on keydown with (event)
  * @param {Function} [config.onSubmit] - Called on Enter key with (html, event) - single line mode only
  * @param {string} [config.id] - Registers to dom.editable[id] and dom[id]
- * @returns {HTMLDivElement} Wrapper with .value/.html getter-setters, .isValid(), and .setLimits()
+ * @returns {HTMLDivElement} Wrapper with .value/.html getter-setters, .isValid(), .setLimits(), .toMarkdown(), .toSlackMarkdown(), and .fromMarkdown()
  * @example
  * editable({ placeholder: 'Type here...' })  // multiline by default
  * editable({ label: 'Title', rows: 1, onSubmit: (e) => save(e.value) })  // single line
@@ -84,6 +302,7 @@ export function editable(...args) {
   const minRows = rows && rows > 1 ? rows : null;
 
   let editableEl, messageEl, infoEl, counterEl;
+  let richApi = null;
   let currentMin = min;
   let currentMax = max;
 
@@ -109,8 +328,23 @@ export function editable(...args) {
     }
   };
 
-  const getValue = () => editableEl?.textContent || '';
-  const getHtml = () => editableEl?.innerHTML || '';
+  const getMarkdownValue = () => (
+    richApi?.isMarkdownMode?.()
+      ? richApi.getMarkdown?.() ?? ''
+      : null
+  );
+
+  const getValue = () => {
+    const markdownValue = getMarkdownValue();
+    if (markdownValue != null) return markdownValue;
+    return editableEl?.textContent || '';
+  };
+
+  const getHtml = () => {
+    const markdownValue = getMarkdownValue();
+    if (markdownValue != null) return toHtmlFromMarkdown(markdownValue);
+    return editableEl?.innerHTML || '';
+  };
 
   const counterController = createCounterController({
     min: currentMin,
@@ -152,8 +386,8 @@ export function editable(...args) {
     if (validation.hasRules) validation.check();
     if (counter) counterController.update();
     const html = getHtml();
-    onInput?.call(editableEl, html, e);
-    onChange?.call(editableEl, html, e);
+    onInput?.call(e.target || editableEl, html, e);
+    onChange?.call(e.target || editableEl, html, e);
   };
 
   const handleKeydown = (e) => {
@@ -257,7 +491,11 @@ export function editable(...args) {
   Object.defineProperty(root, 'value', {
     get: getValue,
     set: (v) => {
-      editableEl.innerHTML = v || '';
+      const nextHtml = v || '';
+      editableEl.innerHTML = nextHtml;
+      if (richApi?.isMarkdownMode?.()) {
+        richApi.setMarkdown?.(toMarkdownFromHtml(nextHtml, { slackFormat: false }));
+      }
       normalizeContent();
       validation.clearManualError();
       if (validation.hasRules) validation.check();
@@ -268,7 +506,11 @@ export function editable(...args) {
   Object.defineProperty(root, 'html', {
     get: getHtml,
     set: (v) => {
-      editableEl.innerHTML = v || '';
+      const nextHtml = v || '';
+      editableEl.innerHTML = nextHtml;
+      if (richApi?.isMarkdownMode?.()) {
+        richApi.setMarkdown?.(toMarkdownFromHtml(nextHtml, { slackFormat: false }));
+      }
       normalizeContent();
       validation.clearManualError();
       if (validation.hasRules) validation.check();
@@ -279,6 +521,22 @@ export function editable(...args) {
   root.isValid = validation.check;
   root.error = validation.error;
   root.ok = validation.ok;
+  root.toMarkdown = () => toMarkdownFromHtml(getHtml(), { slackFormat: false });
+  root.toSlackMarkdown = () => toMarkdownFromHtml(getHtml(), { slackFormat: true });
+  root.fromMarkdown = (markdown) => {
+    const html = toHtmlFromMarkdown(markdown);
+    editableEl.innerHTML = html;
+    if (richApi?.isMarkdownMode?.()) {
+      richApi.setMarkdown?.(String(markdown || ''));
+    }
+    normalizeContent();
+    validation.clearManualError();
+    if (validation.hasRules) validation.check();
+    if (counter) counterController.update();
+    return html;
+  };
+  root.toggleMarkdownMode = (force) => richApi?.toggleMarkdownMode?.(force) ?? false;
+  root.isMarkdownMode = () => richApi?.isMarkdownMode?.() ?? false;
   root.setLimits = (minOrConfig, maxValue) => {
     const { min: nextMin, max: nextMax } = parseLimitArgs(minOrConfig, maxValue);
 
@@ -294,13 +552,14 @@ export function editable(...args) {
 
   root.reset = () => {
     editableEl.innerHTML = '';
+    richApi?.setMarkdown?.('');
     normalizeContent();
     validation.reset();
     if (counter) counterController.reset();
   };
 
   if (rich) {
-    addRichTextUI(root, editableDiv, richInclude, richExclude);
+    richApi = addRichTextUI(root, editableDiv, richInclude, richExclude);
   }
 
   return root;
@@ -312,7 +571,7 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
   editableEl.setAttribute('role', 'textbox');
   editableEl.setAttribute('aria-multiline', 'true');
 
-  const available = ['heading', 'bold', 'italic', 'underline', 'list', 'link', 'clear'];
+  const available = ['heading', 'bold', 'italic', 'underline', 'strikethrough', 'quote', 'list', 'link', 'markdown', 'clear'];
   let applied = Array.isArray(richInclude) 
     ? available.filter((option) => richInclude.includes(option))
     : available;
@@ -322,14 +581,18 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
   }
 
   // Toolbar
-  const toolbar = row({ gap: 1, class: bem.el('toolbar') });
+  const toolbar = row({ gap: 1, align: 'center', class: bem.el('toolbar') });
   toolbar.setAttribute('role', 'toolbar');
   root.insertBefore(toolbar, editableEl);
+
+  let markdownMode = false;
+  let markdownValue = '';
 
   // --- Selection save/restore (for dialogs like link prompt) ---
   let savedRange = null;
 
   const saveSelection = () => {
+    if (markdownMode) return null;
     const sel = window.getSelection();
     if (!sel || sel.rangeCount === 0) return null;
     const range = sel.getRangeAt(0);
@@ -339,6 +602,7 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
   };
 
   const restoreSelection = () => {
+    if (markdownMode) return false;
     if (!savedRange) return false;
     const sel = window.getSelection();
     if (!sel) return false;
@@ -353,6 +617,24 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
 
   const focusEditor = () => {
     editableEl.focus({ preventScroll: true });
+  };
+
+  const getMarkdown = () => {
+    if (markdownMode) {
+      markdownValue = editableEl.textContent || '';
+      return markdownValue;
+    }
+    return toMarkdownFromHtml(editableEl.innerHTML, { slackFormat: false });
+  };
+
+  const setMarkdown = (value = '') => {
+    markdownValue = String(value || '');
+    if (markdownMode) {
+      editableEl.textContent = markdownValue;
+    } else {
+      editableEl.innerHTML = toHtmlFromMarkdown(markdownValue);
+    }
+    updateActiveStates();
   };
 
   const queryState = (command) => {
@@ -391,8 +673,6 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
     node.remove();
   };
 
-  const isBlockTag = (tagName = '') => /^(H[1-6]|P|DIV|UL|OL|BLOCKQUOTE|PRE|TABLE)$/i.test(tagName);
-
   const replaceTag = (element, tagName) => {
     const replacement = document.createElement(tagName);
     while (element.firstChild) {
@@ -423,37 +703,50 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
     sel.addRange(range);
   };
 
-  const stripFormattingStyles = (styleText = '') => styleText
-    .split(';')
-    .map((rule) => rule.trim())
-    .filter(Boolean)
-    .filter((rule) => !/^font-weight\s*:/i.test(rule) && !/^font-style\s*:/i.test(rule))
-    .join('; ');
+  const formattingStylePattern = /^(font-weight|font-style|text-decoration)\s*:/i;
+  const hasOnlyFormattingStyles = (styleText = '') => {
+    const rules = String(styleText)
+      .split(';')
+      .map((rule) => rule.trim())
+      .filter(Boolean);
+    return rules.length > 0 && rules.every((rule) => formattingStylePattern.test(rule));
+  };
 
   const normalizeRichMarkup = () => {
     // Flatten duplicated inline formatting wrappers generated by repeated toggles.
-    editableEl.querySelectorAll('b b, b strong, strong b, strong strong, i i, i em, em i, em em').forEach(unwrapNode);
+    editableEl.querySelectorAll('b b, b strong, strong b, strong strong, i i, i em, em i, em em, s s, s strike, strike s, strike strike, del del, s del, del s').forEach(unwrapNode);
 
-    editableEl.querySelectorAll('span[style], b[style], i[style], strong[style], em[style]').forEach((node) => {
+    editableEl.querySelectorAll('span[style], b[style], i[style], strong[style], em[style], s[style], strike[style], del[style]').forEach((node) => {
       const style = node.getAttribute('style') || '';
       const hasBoldStyle = /font-weight\s*:\s*(bold|[6-9]00)/i.test(style);
       const hasItalicStyle = /font-style\s*:\s*italic/i.test(style);
+      const hasStrikeStyle = /text-decoration\s*:\s*line-through/i.test(style);
+      const onlyFormattingStyles = hasOnlyFormattingStyles(style);
 
-      if (node.tagName === 'SPAN' && hasBoldStyle && !hasAncestorTag(node, ['b', 'strong'])) {
+      if (node.tagName === 'SPAN' && onlyFormattingStyles && hasBoldStyle && !hasAncestorTag(node, ['b', 'strong'])) {
         const b = document.createElement('b');
         node.replaceWith(b);
         b.appendChild(node);
       }
 
-      if (node.tagName === 'SPAN' && hasItalicStyle && !hasAncestorTag(node, ['i', 'em'])) {
+      if (node.tagName === 'SPAN' && onlyFormattingStyles && hasItalicStyle && !hasAncestorTag(node, ['i', 'em'])) {
         const i = document.createElement('i');
         node.replaceWith(i);
         i.appendChild(node);
       }
 
-      const nextStyle = stripFormattingStyles(style);
-      if (nextStyle) node.setAttribute('style', nextStyle);
-      else node.removeAttribute('style');
+      if (node.tagName === 'SPAN' && onlyFormattingStyles && hasStrikeStyle && !hasAncestorTag(node, ['s', 'strike', 'del'])) {
+        const s = document.createElement('s');
+        node.replaceWith(s);
+        s.appendChild(node);
+      }
+
+      node.removeAttribute('style');
+    });
+
+    // Normalize all heading levels to h3 in rich mode.
+    editableEl.querySelectorAll('h1, h2, h4, h5, h6').forEach((headingEl) => {
+      replaceTag(headingEl, 'h3');
     });
 
     // Remove invalid heading containers (e.g. h3 wrapping block elements)
@@ -472,7 +765,7 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
       spanEl.remove();
     });
 
-    editableEl.querySelectorAll('b, strong, i, em').forEach((inlineEl) => {
+    editableEl.querySelectorAll('b, strong, i, em, s, strike, del').forEach((inlineEl) => {
       const hasText = !!inlineEl.textContent?.trim();
       const hasBr = !!inlineEl.querySelector?.('br');
       if (!hasText && !hasBr) inlineEl.remove();
@@ -501,6 +794,15 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
     return queryState('underline');
   };
 
+  const isStrikethroughActive = () => {
+    return queryState('strikeThrough');
+  };
+
+  const isQuoteActive = () => {
+    const node = getSelectionNode();
+    return !!node?.closest?.('blockquote');
+  };
+
   const getSelectedLink = () => {
     const node = getSelectionNode();
     return node?.closest?.('a') || null;
@@ -509,6 +811,7 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
   // --- Command execution ---
   // execCommand is deprecated but still the simplest cross-browser method for 'minimal UI'
   const exec = (command, value = null) => {
+    if (markdownMode) return;
     if (!isSelectionInEditor()) {
       focusEditor();
       restoreSelection();
@@ -535,7 +838,10 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
     try {
       const cmdValue = document.queryCommandValue('formatBlock');
       const norm = String(cmdValue || '').replace(/[<>]/g, '').toLowerCase();
-      if (norm) return norm === 'div' ? 'p' : norm;
+      if (norm) {
+        if (/^h[1-6]$/.test(norm)) return 'h3';
+        return norm === 'div' ? 'p' : norm;
+      }
     } catch {}
 
     const sel = window.getSelection();
@@ -545,6 +851,7 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
     if (!editableEl.contains(node)) return 'p';
     const block = node.closest?.('h1,h2,h3,h4,h5,h6,p,div');
     const tag = (block?.tagName || 'p').toLowerCase();
+    if (/^h[1-6]$/.test(tag)) return 'h3';
     return tag === 'div' ? 'p' : tag;
   };
 
@@ -574,20 +881,85 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
     return blockEl;
   };
 
-  const createSiblingBlock = (afterEl, tagName = 'div') => {
-    const blockEl = document.createElement(tagName);
-    blockEl.appendChild(document.createElement('br'));
-    afterEl.insertAdjacentElement('afterend', blockEl);
-    setCaretInBlock(blockEl, false);
-    return blockEl;
-  };
-
   const isCollapsedSelection = () => {
     const sel = window.getSelection();
     return !!(sel && sel.rangeCount && sel.getRangeAt(0).collapsed);
   };
 
-  const makeButton = ({ option, icon, onClick, isActive }) => {
+  const toggleQuote = () => {
+    const quoteEl = getSelectionNode()?.closest?.('blockquote');
+    if (quoteEl && editableEl.contains(quoteEl)) {
+      unwrapNode(quoteEl);
+      normalizeRichMarkup();
+      saveSelection();
+      updateActiveStates();
+      editableEl.dispatchEvent(new Event('input', { bubbles: true }));
+      return;
+    }
+
+    exec('formatBlock', 'blockquote');
+    if (!isQuoteActive()) {
+      exec('formatBlock', '<blockquote>');
+    }
+  };
+
+  const toggleHeading = () => {
+    let blockEl = getCurrentBlockElement();
+    if (!blockEl) {
+      const nextTag = getCurrentBlock() === 'h3' ? 'div' : 'h3';
+      const hasContent = !!editableEl.textContent?.trim();
+      if (hasContent) {
+        blockEl = document.createElement(nextTag);
+        while (editableEl.firstChild) {
+          blockEl.appendChild(editableEl.firstChild);
+        }
+        editableEl.appendChild(blockEl);
+      } else {
+        blockEl = createBlockAtCaret(nextTag);
+      }
+    } else {
+      const currentTag = blockEl.tagName.toLowerCase();
+      const isHeading = /^h[1-6]$/.test(currentTag);
+      const nextTag = isHeading ? 'div' : 'h3';
+      blockEl = replaceTag(blockEl, nextTag);
+    }
+
+    normalizeRichMarkup();
+    setCaretInBlock(blockEl, false);
+    saveSelection();
+    updateActiveStates();
+    editableEl.dispatchEvent(new Event('input', { bubbles: true }));
+  };
+
+  const toggleMarkdownMode = (force) => {
+    const nextMode = typeof force === 'boolean' ? force : !markdownMode;
+    if (nextMode === markdownMode) return markdownMode;
+
+    if (nextMode) {
+      markdownValue = toMarkdownFromHtml(editableEl.innerHTML, { slackFormat: false });
+      markdownMode = true;
+      editableEl.classList.add(bem('markdown'));
+      editableEl.textContent = markdownValue;
+      linkTooltip?.hide?.();
+      updateActiveStates();
+      editableEl.dispatchEvent(new Event('input', { bubbles: true }));
+      requestAnimationFrame(() => focusEditor());
+      return markdownMode;
+    }
+
+    markdownValue = editableEl.textContent || '';
+    markdownMode = false;
+    editableEl.classList.remove(bem('markdown'));
+    editableEl.innerHTML = toHtmlFromMarkdown(markdownValue);
+    normalizeRichMarkup();
+    updateActiveStates();
+    editableEl.dispatchEvent(new Event('input', { bubbles: true }));
+    focusEditor();
+    saveSelection();
+    return markdownMode;
+  };
+
+  const makeButton = ({ option, icon, onClick, isActive, isMarkdownToggle = false }) => {
     //const isMandatory = applied.length && option === 'clear';
     if (!applied.includes(option)) { // !isMandatory &&
       return;
@@ -608,6 +980,7 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
     });
 
     btn._rteIsActive = isActive ?? (() => false);
+    btn._rteMarkdownToggle = isMarkdownToggle;
     return btn;
   };
 
@@ -618,30 +991,7 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
     makeButton({
       option: 'heading',
       icon: 'heading',
-      onClick: () => {
-        let blockEl = getCurrentBlockElement();
-        if (!blockEl) blockEl = createBlockAtCaret('div');
-        const current = blockEl.tagName.toLowerCase();
-        const nextTag = current === 'h3' ? 'div' : 'h3';
-
-        const hasText = !!blockEl.textContent.trim();
-        const hasDirectChildBlocks = [...blockEl.children].some((child) => isBlockTag(child.tagName));
-        if (isCollapsedSelection() && (hasText || hasDirectChildBlocks)) {
-          const sibling = createSiblingBlock(blockEl, nextTag);
-          normalizeRichMarkup();
-          saveSelection();
-          updateActiveStates();
-          editableEl.dispatchEvent(new Event('input', { bubbles: true }));
-          return sibling;
-        }
-
-        const replaced = replaceTag(blockEl, nextTag);
-        normalizeRichMarkup();
-        setCaretInBlock(replaced, false);
-        saveSelection();
-        updateActiveStates();
-        editableEl.dispatchEvent(new Event('input', { bubbles: true }));
-      },
+      onClick: () => toggleHeading(),
       isActive: () => getCurrentBlock() === 'h3',
     }),
     makeButton({
@@ -661,7 +1011,19 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
       icon: 'underline',
       onClick: () => toggleInlineCommand('underline', isUnderlineActive, 'u'),
       isActive: isUnderlineActive,
-    }),    
+    }),
+    makeButton({
+      option: 'strikethrough',
+      icon: 'strikethrough',
+      onClick: () => toggleInlineCommand('strikeThrough', isStrikethroughActive, 's,strike,del'),
+      isActive: isStrikethroughActive,
+    }),
+    makeButton({
+      option: 'quote',
+      icon: 'quote',
+      onClick: () => toggleQuote(),
+      isActive: isQuoteActive,
+    }),
     makeButton({
       option: 'list',
       icon: 'list',
@@ -785,6 +1147,15 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
     onClick: () => exec('unlink'),
   });
 
+  const markdownBtn = toggle({
+    class: bem.el('markdown-toggle'),
+    options: [ 'rick text', 'markdown' ],
+    variant: 'minimal',
+    onchange: () => toggleMarkdownMode(),
+    isActive: () => markdownMode,
+    isMarkdownToggle: true,
+  });
+
   const clearBtn = makeButton({
     option: 'clear',
     icon: 'remove-formatting',
@@ -795,7 +1166,7 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
   });
 
   // Append toolbar elements
-  row(toolbar, [...buttons, linkBtn, unlinkBtn, clearBtn], { end: true, gap: 0 });
+  row(toolbar, [markdownBtn, ...buttons, linkBtn, unlinkBtn, clearBtn], { end: true, gap: 0 });
 
   const forceCaretOutOfInline = (selectors) => {
     const node = getSelectionNode();
@@ -830,7 +1201,12 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
     // Buttons active state
     const allButtons = toolbar.querySelectorAll('.rte-btn');
     allButtons.forEach((btn) => {
-      const active = typeof btn._rteIsActive === 'function' ? btn._rteIsActive() : false;
+      const isMarkdownToggle = !!btn._rteMarkdownToggle;
+      const disabled = markdownMode && !isMarkdownToggle;
+      btn.disabled = disabled;
+      const active = isMarkdownToggle
+        ? markdownMode
+        : (!disabled && typeof btn._rteIsActive === 'function' ? btn._rteIsActive() : false);
       btn.setAttribute('aria-pressed', active ? 'true' : 'false');
       btn.classList.toggle('is-active', !!active);
     });
@@ -838,17 +1214,25 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
 
   // Update states on selection changes, input, focus
   const onSelectionChange = () => {
+    if (markdownMode) return;
     if (!isSelectionInEditor()) return;
     updateActiveStates();
   };
 
+  const syncMarkdownFromEditor = () => {
+    if (!markdownMode) return;
+    markdownValue = editableEl.textContent || '';
+  };
+
   document.addEventListener('selectionchange', onSelectionChange);
+  editableEl.addEventListener('input', syncMarkdownFromEditor);
   editableEl.addEventListener('input', normalizeRichMarkup);
   editableEl.addEventListener('input', updateActiveStates);
   editableEl.addEventListener('focus', updateActiveStates);
   editableEl.addEventListener('keyup', updateActiveStates);
   editableEl.addEventListener('mouseup', updateActiveStates);
   const onRichKeydown = (e) => {
+    if (markdownMode) return;
     if (e.key !== 'Enter' || e.shiftKey || !isSelectionInEditor()) return;
     requestAnimationFrame(() => {
       let changed = false;
@@ -871,6 +1255,12 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
   editableEl.addEventListener('keydown', onRichKeydown);
 
   editableEl.addEventListener('paste', (e) => {
+    if (markdownMode) {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+      document.execCommand('insertText', false, text);
+      return;
+    }
     e.preventDefault();
     const text = (e.clipboardData || window.clipboardData).getData('text/plain');
     exec('insertText', text);
@@ -884,16 +1274,31 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
     toolbar,
     destroy() {
       document.removeEventListener('selectionchange', onSelectionChange);
+      editableEl.removeEventListener('input', syncMarkdownFromEditor);
       editableEl.removeEventListener('keydown', onRichKeydown);
       linkTooltip?.destroy?.();
       toolbar.remove();
     },
     getHTML() {
-      return editableEl.innerHTML;
+      return markdownMode
+        ? toHtmlFromMarkdown(markdownValue)
+        : editableEl.innerHTML;
     },
     setHTML(html) {
-      editableEl.innerHTML = html || '<p><br></p>';
+      const nextHtml = html || '';
+      if (markdownMode) {
+        markdownValue = toMarkdownFromHtml(nextHtml, { slackFormat: false });
+        editableEl.textContent = markdownValue;
+      } else {
+        editableEl.innerHTML = nextHtml;
+      }
       updateActiveStates();
+    },
+    getMarkdown,
+    setMarkdown,
+    toggleMarkdownMode,
+    isMarkdownMode() {
+      return markdownMode;
     },
     focus: focusEditor,
   };

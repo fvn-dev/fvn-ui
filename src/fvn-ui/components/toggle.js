@@ -22,6 +22,7 @@ export function toggle(...args) {
   const {
     parent,
     options = ['Off', 'On'],
+    variant,
     checked,
     label,
     disabled,
@@ -48,7 +49,7 @@ export function toggle(...args) {
   const container = col(parent, [ label && textLabel(label) ], { gap: 2 });
   const root = el('nav', container, {
     ...rest,
-    class: [bem(), configToClasses(props), rest.class],
+    class: [bem(), configToClasses(props), variant && bem(variant), rest.class],
     data: { checked: state, uiCol: color },
     disabled,
     id,

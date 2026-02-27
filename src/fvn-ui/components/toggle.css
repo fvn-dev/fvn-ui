@@ -45,3 +45,35 @@
   color: var(--fg);
   padding: var(--space-2) var(--space-5);
 }
+
+.ui-toggle--minimal {
+    background: transparent;
+    padding: var(--input-padding);
+    gap: var(--space-3);
+}
+.ui-toggle--minimal > div {
+    background: transparent !important;
+    border-bottom: 1px solid transparent;
+    border-radius: 0;
+    padding: 1px 0 !important;
+    color: var(--muted);
+    position: relative;
+}
+.ui-toggle--minimal > div:last-child:before {
+    content: '/';
+    position: absolute;
+    font-size: 150%;
+    font-weight: 300;
+    top: 50%;
+    left: 0;
+    transform: translate(-175%, -50%);
+    color: var(--muted);
+}
+.ui-toggle--minimal[data-checked="true"] div:last-child,
+.ui-toggle--minimal[data-checked="false"] div:first-child {
+    color: var(--text);
+    border-bottom-color: var(--text);
+}
+nav.ui-toggle--minimal > div:hover {
+    color: var(--text) !important;
+}

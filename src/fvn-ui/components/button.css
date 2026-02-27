@@ -87,7 +87,7 @@
 .ui-btn--round {
    --input-padding: calc(var(--space) * .75) calc(var(--space) * 1.75);
   border-radius: 999px;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 .ui-btn--square {
   --input-padding: calc(var(--space) * .75);

@@ -10,7 +10,7 @@
   border: 1px dashed var(--border);
   border-radius: var(--radius);
   padding: var(--space-3);
-  background: var(--back);
+  background: transparent;
   cursor: pointer;
   width: 100%;
   transition: border-color .14s ease, background-color .14s ease;

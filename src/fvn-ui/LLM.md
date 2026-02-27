@@ -721,6 +721,8 @@ editable({ multiline: false })  // same as rows: 1
 | `value` | Initial HTML content |
 | `rows` | 1 = single line, >1 = sets min-height |
 | `multiline` | `false` = single line mode |
+| `rich` | Enable rich text toolbar |
+| `richInclude/richExclude` | Include/exclude rich toolbar actions |
 | `plainText` | Strip formatting on paste |
 | `required` | Require text content to be non-empty |
 | `validate` | Built-in: `'email'`, `'url'`, `'phone'` or custom function |
@@ -738,6 +740,15 @@ ed.isValid()   // returns true/false
 ed.error('Custom error')
 ed.ok()
 ed.reset()
+
+// Convert content
+ed.toMarkdown()
+ed.toSlackMarkdown()
+ed.fromMarkdown('## Heading\n- Item')
+
+// Rich mode only: toggle raw markdown editor in-place
+ed.toggleMarkdownMode()
+ed.isMarkdownMode() // true/false
 
 // Update length limits at runtime (revalidates + refreshes counter immediately)
 ed.setLimits(5, 300)
