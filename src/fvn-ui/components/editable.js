@@ -5,6 +5,8 @@ import './editable.css'
 
 const bem = bemFactory('editable');
 let prosemirrorAdapterPromise;
+const SKIP_VALIDATION_EVENT_PROP = '__fvnSkipValidation';
+const USER_INTERACTION_EVENT_PROP = '__fvnUserInteraction';
 
 const parseLimitArgs = (minOrConfig, maxValue) => (
   minOrConfig && typeof minOrConfig === 'object' && !Array.isArray(minOrConfig)
@@ -398,8 +400,9 @@ export function editable(...args) {
           },
           bem,
           onHtmlInput: (html, target, event) => {
-            const skipValidation = !!event?.__fvnSkipValidation;
-            if (!skipValidation) {
+            const skipValidation = !!event?.[SKIP_VALIDATION_EVENT_PROP];
+            const isUserInteraction = !!event?.isTrusted || !!event?.[USER_INTERACTION_EVENT_PROP];
+            if (!skipValidation && isUserInteraction) {
               hasInteracted = true;
               validation.clearManualError();
               applyValidationState();

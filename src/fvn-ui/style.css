@@ -156,9 +156,12 @@ svg {
 
 body.fvn-ui {
   margin: 0;
-  background: var(--back);
-  color: var(--text);
   padding: var(--padding);
+  background: var(--back);
+}
+
+.fvn-ui {
+  color: var(--text);
   text-rendering: optimizeLegibility;
   font-optical-sizing: auto;
   font-weight: 400;

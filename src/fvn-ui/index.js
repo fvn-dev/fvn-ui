@@ -144,7 +144,6 @@ export const darkmode = (() => {
 const init = (root = document.body) => {
   container = root;
   root.classList.add('fvn-ui');
-  darkmode.sync();
 };
 
 export const ui = {
@@ -162,3 +161,4 @@ export const ui = {
 };
 
 !globalThis._uiManualInit && init();
+darkmode.sync();

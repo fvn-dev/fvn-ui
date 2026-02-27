@@ -16,6 +16,8 @@ import { MarkdownParser, MarkdownSerializer, defaultMarkdownParser, defaultMarkd
 const AVAILABLE_ACTIONS = ['heading', 'bold', 'italic', 'underline', 'strikethrough', 'quote', 'list', 'link', 'markdown', 'clear']
 const SUPPORTED_ACTIONS = new Set(['heading', 'bold', 'italic', 'quote', 'list', 'link', 'markdown', 'clear'])
 const SKIP_VALIDATION_EVENT_PROP = '__fvnSkipValidation'
+const USER_INTERACTION_EVENT_PROP = '__fvnUserInteraction'
+const RICH_ADAPTER_INSTANCE_PROP = '__fvnProseMirrorAdapter'
 const paragraphSpec = markdownSchema.spec.nodes.get('paragraph')
 const schema = new Schema({
   nodes: markdownSchema.spec.nodes.update('paragraph', {
@@ -98,10 +100,13 @@ const resolveActions = (richInclude, richExclude) => {
   return new Set(next)
 }
 
-const createInputEvent = (skipValidation = false) => {
+const createInputEvent = ({ skipValidation = false, userInteraction = false } = {}) => {
   const event = new Event('input', { bubbles: true })
   if (skipValidation) {
     event[SKIP_VALIDATION_EVENT_PROP] = true
+  }
+  if (userInteraction) {
+    event[USER_INTERACTION_EVENT_PROP] = true
   }
   return event
 }
@@ -263,6 +268,15 @@ export function createProseMirrorAdapter({
   onKeydown,
   onReady
 }) {
+  const existingAdapter = editableEl?.[RICH_ADAPTER_INSTANCE_PROP]
+  const preservedHtml = existingAdapter?.getHTML?.()
+  if (existingAdapter?.destroy) {
+    existingAdapter.destroy()
+    if (preservedHtml != null) {
+      editableEl.innerHTML = preservedHtml
+    }
+  }
+
   const actions = resolveActions(richInclude, richExclude)
   const plugins = createPlugins()
   let ready = false
@@ -311,6 +325,7 @@ export function createProseMirrorAdapter({
 
   editableEl.setAttribute('role', 'textbox')
   editableEl.setAttribute('aria-multiline', 'true')
+  editableEl.setAttribute('contenteditable', 'false')
 
   const syncEmptyState = () => {
     editableEl.dataset.empty = isDocEmpty(view.state.doc) ? 'true' : 'false'
@@ -364,7 +379,7 @@ export function createProseMirrorAdapter({
   }
 
   const emitInput = (event, target = editableEl) => {
-    onHtmlInput?.(getHTML(), target, event || new Event('input', { bubbles: true }))
+    onHtmlInput?.(getHTML(), target, event || createInputEvent({ skipValidation: true }))
   }
 
   const captureSelection = () => {
@@ -388,7 +403,11 @@ export function createProseMirrorAdapter({
 
     if (tr.docChanged) {
       htmlOverride = null
-      emitInput(tr.getMeta('fvnEvent'), editableEl)
+      const event = tr.getMeta('fvnEvent')
+        || (view.hasFocus()
+          ? createInputEvent({ userInteraction: true })
+          : createInputEvent({ skipValidation: true }))
+      emitInput(event, editableEl)
     }
 
     updateToolbarState()
@@ -416,7 +435,7 @@ export function createProseMirrorAdapter({
       ? setBlockType(paragraphType)
       : setBlockType(headingType, { level: 3 })
 
-    runCommand(command, new Event('input', { bubbles: true }))
+    runCommand(command, createInputEvent({ userInteraction: true }))
   }
 
   const toggleQuote = () => {
@@ -427,7 +446,7 @@ export function createProseMirrorAdapter({
       ? lift
       : wrapIn(quoteType)
 
-    runCommand(command, new Event('input', { bubbles: true }))
+    runCommand(command, createInputEvent({ userInteraction: true }))
   }
 
   const toggleList = (listType) => {
@@ -438,7 +457,7 @@ export function createProseMirrorAdapter({
       ? liftListItem(itemType)
       : wrapInList(listType)
 
-    runCommand(command, new Event('input', { bubbles: true }))
+    runCommand(command, createInputEvent({ userInteraction: true }))
   }
 
   const applyLink = (href) => {
@@ -462,7 +481,7 @@ export function createProseMirrorAdapter({
       tr = tr.addMark(selection.from, selection.to, linkType.create(attrs))
     }
 
-    tr = tr.setMeta('fvnEvent', new Event('input', { bubbles: true }))
+    tr = tr.setMeta('fvnEvent', createInputEvent({ userInteraction: true }))
     view.dispatch(tr.scrollIntoView())
     return true
   }
@@ -476,7 +495,7 @@ export function createProseMirrorAdapter({
 
     const tr = view.state.tr
       .removeMark(range.from, range.to, linkType)
-      .setMeta('fvnEvent', new Event('input', { bubbles: true }))
+      .setMeta('fvnEvent', createInputEvent({ userInteraction: true }))
 
     view.dispatch(tr.scrollIntoView())
     return true
@@ -497,17 +516,17 @@ export function createProseMirrorAdapter({
     }
 
     if (tr.docChanged || tr.storedMarksSet) {
-      tr = tr.setMeta('fvnEvent', new Event('input', { bubbles: true }))
+      tr = tr.setMeta('fvnEvent', createInputEvent({ userInteraction: true }))
       view.dispatch(tr)
     }
 
     const parentType = $from.parent.type
     if (parentType === schema.nodes.heading && schema.nodes.paragraph) {
-      runCommand(setBlockType(schema.nodes.paragraph), new Event('input', { bubbles: true }))
+      runCommand(setBlockType(schema.nodes.paragraph), createInputEvent({ userInteraction: true }))
     }
 
     if (ancestorActive(view.state, schema.nodes.blockquote)) {
-      runCommand(lift, new Event('input', { bubbles: true }))
+      runCommand(lift, createInputEvent({ userInteraction: true }))
     }
   }
 
@@ -531,7 +550,7 @@ export function createProseMirrorAdapter({
       markdownField.hidden = false
       updateToolbarState()
 
-      emitInput(createInputEvent(true), markdownInput)
+      emitInput(createInputEvent({ skipValidation: true }), markdownInput)
       return markdownMode
     }
 
@@ -557,7 +576,7 @@ export function createProseMirrorAdapter({
     markdownCacheValue = null
     markdownCacheDoc = null
 
-    emitInput(createInputEvent(true), editableEl)
+    emitInput(createInputEvent({ skipValidation: true }), editableEl)
     return markdownMode
   }
 
@@ -598,14 +617,14 @@ export function createProseMirrorAdapter({
   const boldBtn = makeButton({
     option: 'bold',
     icon: 'bold',
-    onClick: () => runCommand(toggleMark(schema.marks.strong), new Event('input', { bubbles: true })),
+    onClick: () => runCommand(toggleMark(schema.marks.strong), createInputEvent({ userInteraction: true })),
     isActive: () => markActive(view.state, schema.marks.strong)
   })
 
   const italicBtn = makeButton({
     option: 'italic',
     icon: 'italic',
-    onClick: () => runCommand(toggleMark(schema.marks.em), new Event('input', { bubbles: true })),
+    onClick: () => runCommand(toggleMark(schema.marks.em), createInputEvent({ userInteraction: true })),
     isActive: () => markActive(view.state, schema.marks.em)
   })
 
@@ -818,13 +837,16 @@ export function createProseMirrorAdapter({
   ready = true
   onReady?.()
 
-  return {
+  const api = {
     toolbar,
     destroy() {
       linkTooltip?.destroy?.()
       toolbar.remove()
       markdownField.remove()
       view?.destroy?.()
+      if (editableEl?.[RICH_ADAPTER_INSTANCE_PROP] === api) {
+        editableEl[RICH_ADAPTER_INSTANCE_PROP] = null
+      }
     },
     isReady() {
       return ready
@@ -883,7 +905,7 @@ export function createProseMirrorAdapter({
       markdownCacheDoc = emptyDoc()
       setEditorDoc(emptyDoc())
       if (markdownMode) {
-        emitInput(createInputEvent(true), markdownInput)
+        emitInput(createInputEvent({ skipValidation: true }), markdownInput)
       }
     },
     focus() {
@@ -891,4 +913,7 @@ export function createProseMirrorAdapter({
       else focusRichEditor()
     }
   }
+
+  editableEl[RICH_ADAPTER_INSTANCE_PROP] = api
+  return api
 }
