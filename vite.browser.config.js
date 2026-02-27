@@ -45,6 +45,11 @@ export default defineConfig({
       formats: ['iife', 'es'],
       fileName: (format) => format === 'es' ? 'ui.esm.js' : 'ui.js'
     },
+    rollupOptions: {
+      output: {
+        inlineDynamicImports: true
+      }
+    },
     cssCodeSplit: false,
     minify: 'esbuild'
   },

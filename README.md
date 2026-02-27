@@ -160,7 +160,8 @@ notes.setLimits({ max: 200 })
 
 ### Editable Markdown Mode
 
-`editable({ rich: true })` includes a toolbar toggle for raw markdown editing.
+`editable({ rich: true })` uses a ProseMirror-backed editor with a markdown toggle.
+Rich runtime is lazy-loaded only when `rich: true` is used (source/ESM builds).
 
 ```js
 const ed = ui.editable({ label: 'Body', rich: true })
@@ -172,6 +173,11 @@ ed.fromMarkdown('## Heading\n- Item')
 ed.toggleMarkdownMode() // rich <-> markdown editor
 ed.isMarkdownMode()     // true/false
 ```
+
+- `onInput(html, event)` / `onChange(html, event)` always emit HTML in both modes.
+- Markdown uses CommonMark serialization/parsing.
+- If markdown is unchanged when toggling back, previous HTML output is restored.
+- Unsupported `richInclude/richExclude` actions (`underline`, `strikethrough`) are ignored.
 
 ### CSS Variables
 

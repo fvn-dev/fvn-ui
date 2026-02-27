@@ -702,7 +702,7 @@ list.items  // get current items array
 
 ### `editable({ label, placeholder })`
 
-Contenteditable element with input-like behavior. Supports rich text.
+Contenteditable element with input-like behavior. Rich mode is ProseMirror-backed with CommonMark markdown conversion.
 
 ```js
 // Multiline (default)
@@ -721,14 +721,15 @@ editable({ multiline: false })  // same as rows: 1
 | `value` | Initial HTML content |
 | `rows` | 1 = single line, >1 = sets min-height |
 | `multiline` | `false` = single line mode |
-| `rich` | Enable rich text toolbar |
-| `richInclude/richExclude` | Include/exclude rich toolbar actions |
+| `rich` | Enable rich text toolbar (lazy-loads rich runtime) |
+| `richInclude/richExclude` | Include/exclude toolbar actions (`heading`, `bold`, `italic`, `quote`, `list`, `link`, `clear`, `markdown`) |
 | `plainText` | Strip formatting on paste |
 | `required` | Require text content to be non-empty |
 | `validate` | Built-in: `'email'`, `'url'`, `'phone'` or custom function |
 | `min/max` | Character length limits |
 | `message` | Error message(s) — string or object |
 | `info` | Helper text shown when valid |
+| `onInput` | Called with `(html, event)` in both rich and markdown modes |
 | `onChange` | Called with `(html, event)` |
 | `onSubmit` | Called on Enter (single line only) |
 
@@ -758,6 +759,14 @@ ed.setLimits({ min: null }) // clear min limit
 
 `setLimits(...)` accepts `(min, max)` or `{ min, max }`.
 `undefined` keeps existing bounds, `null` clears a bound.
+
+Notes:
+- Markdown mode is rendered with fvn-ui textarea input styling.
+- Heading toggle is fixed to `h3`.
+- `underline` / `strikethrough` in `richInclude` are ignored (no crash).
+- `toMarkdown()` returns CommonMark output.
+- `toSlackMarkdown()` converts markdown links to Slack format (`<url|text>`).
+- If markdown text is unchanged while toggling back to rich mode, previous HTML output is restored.
 
 ---
 

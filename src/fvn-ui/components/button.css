@@ -179,7 +179,7 @@
   flex-direction: row-reverse;
   pointer-events: none;
   position: relative;
-  padding-left: calc(3 * var(--space));
+  padding-left: calc(3.5 * var(--space));
 
   &::before {
     content: '';

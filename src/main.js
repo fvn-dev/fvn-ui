@@ -125,7 +125,7 @@ function buttonPresentation() {
     button({ label: 'Primary round', shape: 'round',color: 'primary' }),
     button({ label: 'Toggle loading', shape: 'round', variant: 'secondary', onClick(e) {
       this.toggleLoading('');
-      setTimeout(() => this.toggleLoading(), 3000);
+      setTimeout(() => this.toggleLoading(), 300000);
     }}),
   ]);
   const c = layout.row({ gap: 2 }, [

@@ -11,6 +11,7 @@
   overflow-wrap: break-word;
   word-wrap: break-word;
   white-space: pre-wrap;
+  font-size: calc(.9 * var(--core));
 }
 
 .ui-editable.ui-plain {
@@ -42,6 +43,23 @@
 .ui-editable::after {
   content: '\200B'; /* zero-width space - ensures element never truly collapses */
   display: inline;
+}
+
+.ui-editable--rich::after {
+  content: none;
+}
+
+.ui-editable--rich {
+  position: relative;
+}
+
+.ui-editable--rich[data-empty='true']::before {
+  content: attr(data-placeholder);
+  position: absolute;
+  top: var(--input-padding);
+  left: var(--input-padding);
+  color: var(--muted);
+  pointer-events: none;
 }
 
 /* Size variants */
@@ -110,15 +128,29 @@
   border-radius: 0 0 var(--radius) var(--radius);
   margin-top: calc(-1 * var(--space-2));
 }
-.ui-editable--rich h1 {
-  font-weight: 300;
-  font-size: .9em;
+.ui-editable__toolbar ~ .ui-input-root {
+  margin-top: calc(-1 * var(--space-2));
 }
+.ui-editable__toolbar ~ .ui-input-root .ui-input {
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+.ui-editable__toolbar ~ .ui-input-root .ui-input__footer {
+  display: none;
+}
+
 .ui-editable--rich h3 {
   font-weight: 900;
   font-size: 1.35em;
+  margin: 0;
 }
-.ui-editable--rich b {
+.ui-editable--rich p,
+.ui-editable--rich blockquote,
+.ui-editable--rich ul,
+.ui-editable--rich ol {
+  margin: 0;
+}
+.ui-editable--rich b,
+.ui-editable--rich strong {
   font-weight: 700 !important;
 }
 
