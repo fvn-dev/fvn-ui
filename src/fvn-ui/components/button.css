@@ -123,7 +123,7 @@
   background: var(--hover);
   border-color: transparent;
 }
-.ui-btn--hover-sub:hover {
+.fvn-ui .ui-btn--hover-sub:hover {
   --fg: var(--inverted, var(--back));
   --bg: var(--hover);
 }

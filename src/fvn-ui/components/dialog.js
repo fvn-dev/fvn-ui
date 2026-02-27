@@ -1,4 +1,4 @@
-import { el, getCallback, parseArgs, onOutsideClick, configToClasses, bemFactory } from '../dom.js'
+import { el, col, getCallback, parseArgs, onOutsideClick, configToClasses, bemFactory } from '../dom.js'
 import './dialog.css'
 
 const bem = bemFactory('dialog');
@@ -250,7 +250,7 @@ export function dialog(...args) {
     }
   };
 
-  const contentEl = el('div', {
+  const contentEl = col({
     class: bem.el('content'),
     children: content 
       ? typeof content === 'function' 

@@ -38,10 +38,11 @@ export function confirm(...args) {
     confirmColor,
     variant,
     label = 'Open dialog',
-    title = 'Are you absolutely sure?',
-    description = 'This action cannot be undone.',
+    title,
+    description,
     confirm = 'Continue',
     cancel = 'Cancel',
+    small,
     dialogVariant,
     type, // backward compat alias for dialogVariant
     inverted,
@@ -53,7 +54,7 @@ export function confirm(...args) {
   const cbConfirm = getCallback('onConfirm', rest);
   const dlgVariant = dialogVariant || type || 'modal';
 
-  const root = el('div', parent, { ...rest, class: [configToClasses(props), rest.class] });
+  const root = el('div', parent, { ...rest, class: [small && bem('small'), configToClasses(props), rest.class] });
 
   const trigger = button(root, {
     label,
@@ -70,14 +71,15 @@ export function confirm(...args) {
     closeOnBackdrop: false,
     closeOnEscape: false,
     content: (close) => [
-      header({ title, description, class: bem.el('inner') }),
+      (title || description) && header({ title, description, small, class: bem.el('inner') }),
       el('div', {
-        class: bem.el('footer'),
+        class: [ bem.el('footer'), small && bem('small') ],
         children: [
           button({
             label: cancel,
             shape,
-            variant: 'ghost',
+            size: small && 'small',
+            variant: 'outline',
             onclick: () => {
               cbCancel?.();
               close();
@@ -87,6 +89,7 @@ export function confirm(...args) {
             label: confirm,
             color: confirmColor || color,
             shape,
+            size: small && 'small',
             onclick: async function() {
               try {
                 this.disabled = true;

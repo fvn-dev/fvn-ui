@@ -15,8 +15,20 @@
   display: none;
 }
 
+.ui-popover,
+.ui-popover .ui-header {
+  align-items: center;
+}
 /* Dialog sections - uses text.css header() for title/description */
-.ui-dialog__inner { padding: var(--space-4); }
+.ui-dialog__content { 
+  padding: var(--space-4);
+  gap: var(--space-4);
+  align-items: flex-start;
+}
+
+.ui-dialog--small .ui-dialog__content {
+  padding: var(--space-2);
+}
 
 /* Direct row/col children grow to fill dialog */
 .ui-dialog__inner > .row,
@@ -26,7 +38,11 @@
   display: flex;
   justify-content: flex-end;
   gap: var(--space-2);
-  padding: var(--space-4);
+  width: 100%;
+}
+
+.ui-popover .ui-dialog__footer {
+  justify-content: center;
 }
 
 /* ---- Popover (tooltip/dropdown variant) ---- */

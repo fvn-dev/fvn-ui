@@ -24,12 +24,12 @@ const appendChildren = (node, children) => {
  * @category Layout
  */
 export const title = (...args) => {
-  const { parent, text = '', large, props, children, ...rest } = parseArgs(...args);
+  const { parent, text = '', large, small, props, children, ...rest } = parseArgs(...args);
   const tag = large ? 'h1' : 'div';
 
   const node = el(tag, parent, {
     ...rest,
-    class: ['ui-title', large && 'ui-title--large', configToClasses(props), rest.class],
+    class: ['ui-title', large && 'ui-title--large', small && 'ui-title--small', configToClasses(props), rest.class],
     ...htmlOrText(text)
   });
 
@@ -118,7 +118,8 @@ export const header = (...args) => {
     title: titleText, 
     description: descText, 
     large,
-    gap = 2,
+    small,
+    gap,
     ...rest 
   } = parseArgs(...args);
   
@@ -126,10 +127,10 @@ export const header = (...args) => {
   
   return col(parent, {
     ...rest,
-    gap,
+    gap: gap || (small ? 1 : 2),
     class: ['ui-header', rest.class],
     children: [
-      titleText && title(titleText, { large }),
+      titleText && title(titleText, { large, small }),
       descText && description(descText)
     ].filter(Boolean)
   });

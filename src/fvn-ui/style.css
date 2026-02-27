@@ -346,8 +346,8 @@ body.fvn-ui {
     --back: hsl(var(--hsl-text));
     --text: hsl(var(--hsl-back));
     --muted: hsl(var(--hsl-back) / .5);
-    --border: hsl(var(--hsl-text) / var(--border-opacity, .2));
-    --hover: hsl(var(--hsl-text) / var(--hover-opacity, .08));
+    --border: hsl(var(--hsl-white) / var(--border-opacity, .2));
+    --hover: hsl(var(--hsl-white) / var(--hover-opacity, .08));
   }
     
   & [data-ui-col="none"] {
@@ -437,7 +437,7 @@ body.fvn-ui {
 
   /* ---- Size Mods ---- */
   & .ui-size--small {
-    --input-padding: calc(var(--space-3) * .75) var(--space-3);
+    --input-padding: calc(var(--space-2) * .75) var(--space-2);
   }
   & .ui-size--medium {
     --input-padding: calc(var(--space-4) * .75) var(--space-4);

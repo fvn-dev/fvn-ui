@@ -439,6 +439,16 @@ function dialogPresentation() {
       cancel: 'Awesome',
     }),
     confirm({
+      small: true,
+      type: 'tooltip',
+      label: 'Tooltip small',
+      variant: 'outline',
+      //title: 'How do you feel at this very moment?',
+      //description: 'Be honest!',
+      confirm: 'Horrible',
+      cancel: 'Awesome',
+    }),    
+    confirm({
       label: 'Modal',
       variant: 'outline',
       confirmColor: 'red',
@@ -465,10 +475,7 @@ function dialogPresentation() {
         open: e, 
         content: card({
           border: false,
-          padding: 4,
-          style: {
-            width: '300px'
-          },
+          padding: 0,
           justify: 'center',
           align: 'center',
           title: 'How do you feel at this very moment?',
