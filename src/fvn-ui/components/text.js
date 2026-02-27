@@ -49,7 +49,7 @@ export const title = (...args) => {
 export const description = (...args) => {
   const { parent, text = '', small = true, props, children, ...rest } = parseArgs(...args);
 
-  const node = el('p', parent, {
+  const node = el('span', parent, {
     ...rest,
     class: ['ui-description', 'muted', small && 'small', configToClasses(props), rest.class],
     ...htmlOrText(text)

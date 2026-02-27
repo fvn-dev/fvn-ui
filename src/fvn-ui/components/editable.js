@@ -28,7 +28,7 @@ const escapeHtml = (value = '') => String(value)
 
 const fallbackMarkdownToHtml = (markdown = '') => String(markdown || '')
   .split(/\n{2,}/)
-  .map((block) => `<p>${escapeHtml(block).replace(/\n/g, '<br>')}</p>`)
+  .map((block) => `<span data-ui-paragraph>${escapeHtml(block).replace(/\n/g, '<br>')}</span>`)
   .join('');
 
 const fallbackHtmlToMarkdown = (html = '') => {

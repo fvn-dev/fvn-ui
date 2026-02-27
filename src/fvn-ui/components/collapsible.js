@@ -26,6 +26,7 @@ export function collapsible(...args) {
     open,
     disabled,
     content,
+    divider,
     props,
     ...rest
   } = parseArgs(...args);
@@ -48,7 +49,7 @@ export function collapsible(...args) {
 
   const root = el('div', parent, {
     ...rest,
-    class: [bem(), disabled && 'disabled', configToClasses(props), rest.class],
+    class: [bem(), disabled && 'disabled', divider && bem('divider'), configToClasses(props), rest.class],
     data: { open: state },
     children: [
       button({

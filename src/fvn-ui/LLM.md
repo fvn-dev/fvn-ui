@@ -826,7 +826,7 @@ dashboard(document.body, {
 
 ```js
 text.title('Page Title')           // <h2>
-text.description('Subtitle text')  // <p class="muted">
+text.description('Subtitle text')  // <span class="muted">
 text.label('Field Label')          // <label>
 text.header({ title: 'Title', description: 'Desc' })  // title + description group
 text.divider()                      // horizontal rule

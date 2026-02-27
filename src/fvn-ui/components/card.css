@@ -1,8 +1,6 @@
 .ui-card {
   border-radius: var(--radius);
-  background: var(--back);
   color: var(--text);
-  box-shadow: var(--shadow-sm);
 }
 
 /* Direct row/col children grow to fill card body */

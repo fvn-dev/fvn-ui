@@ -5,20 +5,32 @@ import { input } from './input.js'
 import { toggle } from './toggle.js'
 import { EditorState, TextSelection } from 'prosemirror-state'
 import { EditorView } from 'prosemirror-view'
-import { DOMParser as PMDOMParser, DOMSerializer } from 'prosemirror-model'
+import { Schema, DOMParser as PMDOMParser, DOMSerializer } from 'prosemirror-model'
 import { baseKeymap, toggleMark, setBlockType, wrapIn, lift } from 'prosemirror-commands'
 import { keymap } from 'prosemirror-keymap'
 import { history, undo, redo } from 'prosemirror-history'
 import { inputRules, wrappingInputRule, textblockTypeInputRule } from 'prosemirror-inputrules'
 import { wrapInList, liftListItem, splitListItem } from 'prosemirror-schema-list'
-import { defaultMarkdownParser, defaultMarkdownSerializer, schema as markdownSchema } from 'prosemirror-markdown'
+import { MarkdownParser, MarkdownSerializer, defaultMarkdownParser, defaultMarkdownSerializer, schema as markdownSchema } from 'prosemirror-markdown'
 
 const AVAILABLE_ACTIONS = ['heading', 'bold', 'italic', 'underline', 'strikethrough', 'quote', 'list', 'link', 'markdown', 'clear']
 const SUPPORTED_ACTIONS = new Set(['heading', 'bold', 'italic', 'quote', 'list', 'link', 'markdown', 'clear'])
 const SKIP_VALIDATION_EVENT_PROP = '__fvnSkipValidation'
-const schema = markdownSchema
+const paragraphSpec = markdownSchema.spec.nodes.get('paragraph')
+const schema = new Schema({
+  nodes: markdownSchema.spec.nodes.update('paragraph', {
+    ...paragraphSpec,
+    parseDOM: [
+      { tag: 'span[data-ui-paragraph]' }
+    ],
+    toDOM: () => ['span', { 'data-ui-paragraph': '' }, 0]
+  }),
+  marks: markdownSchema.spec.marks
+})
 const domParser = PMDOMParser.fromSchema(schema)
 const domSerializer = DOMSerializer.fromSchema(schema)
+const markdownParser = new MarkdownParser(schema, defaultMarkdownParser.tokenizer, defaultMarkdownParser.tokens)
+const markdownSerializer = new MarkdownSerializer(defaultMarkdownSerializer.nodes, defaultMarkdownSerializer.marks)
 
 const escapeHtml = (value = '') => String(value)
   .replace(/&/g, '&amp;')
@@ -29,7 +41,7 @@ const escapeHtml = (value = '') => String(value)
 
 const textToHtml = (text = '') => {
   const lines = String(text || '').replace(/\r\n?/g, '\n').split('\n')
-  return lines.map((line) => `<p>${line ? escapeHtml(line) : '<br>'}</p>`).join('')
+  return lines.map((line) => `<span data-ui-paragraph>${line ? escapeHtml(line) : '<br>'}</span>`).join('')
 }
 
 const emptyDoc = () => schema.topNodeType.createAndFill() || schema.node('doc', null, [schema.node('paragraph')])
@@ -54,7 +66,7 @@ const htmlToDoc = (html = '') => {
 
 const markdownToDoc = (markdown = '') => {
   try {
-    return normalizeHeadingsToH3(defaultMarkdownParser.parse(String(markdown || '')))
+    return normalizeHeadingsToH3(markdownParser.parse(String(markdown || '')))
   } catch {
     return emptyDoc()
   }
@@ -66,7 +78,7 @@ const docToHtml = (doc) => {
   return host.innerHTML
 }
 
-const docToMarkdown = (doc) => defaultMarkdownSerializer.serialize(doc)
+const docToMarkdown = (doc) => markdownSerializer.serialize(doc)
 
 const normalizeUrl = (value) => {
   const raw = String(value || '').trim()

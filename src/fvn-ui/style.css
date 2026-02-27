@@ -175,6 +175,11 @@ body.fvn-ui {
     --shade-back: hsl(var(--hsl-shade));
     background: var(--shade-back);
 
+    & .ui-select__trigger,
+    & .ui-editable,
+    & .ui-input {
+      background: var(--back);
+    }
     & .ui-border:not(.ui-card *) {
       border-color: transparent;
     }
@@ -207,6 +212,10 @@ body.fvn-ui {
 }
 
 /* ---- Utilities ---- */
+
+.ui-component {
+  color: var(--text);
+}
 
 /* Layout primitives */
 .row, .col {
@@ -290,7 +299,7 @@ body.fvn-ui {
   & .round { border-radius: var(--radius); }
   
   & .shade { background: var(--shade); padding: var(--padding); }
-  & .border { border: 1px solid var(--border); padding: var(--padding); }
+  & .border { border: 1px solid var(--border); padding: var(--padding); border-radius: var(--radius); }
 
   & .border-bottom { border-bottom: 1px solid var(--border); padding-bottom: var(--space); }
   & .border-top { border-top: 1px solid var(--border); padding-top: var(--space); }

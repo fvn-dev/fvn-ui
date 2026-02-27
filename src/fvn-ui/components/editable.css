@@ -3,7 +3,7 @@
   border-radius: var(--radius);
   padding: var(--input-padding);
   color: var(--text);
-  background: var(--back);
+  background: transparent;
   width: 100%;
   font: inherit;
   min-height: 1.5em;
@@ -19,7 +19,7 @@
   padding: 0;
   min-height: auto;
   border-radius: 0;
-  background: transparent;
+  background: transparent !important;
 }
 
 .ui-editable:not(.ui-plain):hover {
@@ -114,7 +114,8 @@
 .ui-editable__toolbar:hover {
   --text: hsl(var(--hsl-text));
 }
-.col.ui-editable__wrap:has(.ui-editable:focus) .ui-editable__toolbar {
+.col.ui-editable__wrap:has(.ui-editable:focus) .ui-editable__toolbar,
+.col.ui-editable__wrap:has(.ui-input:focus) .ui-editable__toolbar {
   border-color: var(--text);
 }
 .ui-editable__rte-btn.is-active {
@@ -143,11 +144,15 @@
   font-size: 1.35em;
   margin: 0;
 }
-.ui-editable--rich p,
+.ui-editable--rich span[data-ui-paragraph],
 .ui-editable--rich blockquote,
 .ui-editable--rich ul,
 .ui-editable--rich ol {
   margin: 0;
+}
+
+.ui-editable--rich span[data-ui-paragraph] {
+  display: block;
 }
 .ui-editable--rich b,
 .ui-editable--rich strong {

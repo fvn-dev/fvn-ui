@@ -125,7 +125,7 @@ function buttonPresentation() {
     button({ label: 'Primary round', shape: 'round',color: 'primary' }),
     button({ label: 'Toggle loading', shape: 'round', variant: 'secondary', onClick(e) {
       this.toggleLoading('');
-      setTimeout(() => this.toggleLoading(), 300000);
+      setTimeout(() => this.toggleLoading(), 3000);
     }}),
   ]);
   const c = layout.row({ gap: 2 }, [
@@ -392,11 +392,10 @@ function inputPresentation() {
           min: 10,
           max: 50,
           counter: true,
-          value: '<a href=\"https://www.fvn.no/mening/debatt/i/pWOAgj/slik-skriver-du-et-godt-meningsinnlegg\">Slik skriver du et godt debattinnlegg</a>',
           message: {
             min: 'Minimum {min} characters required',
             max: 'Maximum {max} characters allowed',
-            validate: (e) => console.log('øøøø', e)
+            validate: (e) => console.log('validate manually', e)
           },
           info: 'General info message'          
         }),         
@@ -515,7 +514,12 @@ function collapsiblePresentation() {
           title: 'Card component',
           description: 'With a description',
         })
-      })
+      }),
+      collapsible({
+        label: 'With divider',
+        divider: true,
+        content: ui.label('Banana')
+      })      
     ])  
   ]);
 }
