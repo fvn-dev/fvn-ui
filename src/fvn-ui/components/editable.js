@@ -146,10 +146,7 @@ const toMarkdownFromHtml = (html = '', { slackFormat = false } = {}) => {
     return renderContainer(node);
   };
 
-  return [...root.childNodes]
-    .map(renderBlock)
-    .filter(Boolean)
-    .join('\n\n')
+  return renderContainer(root)
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 };
@@ -255,7 +252,7 @@ const toHtmlFromMarkdown = (markdown = '') => {
  * @param {Function} [config.onKeydown] - Called on keydown with (event)
  * @param {Function} [config.onSubmit] - Called on Enter key with (html, event) - single line mode only
  * @param {string} [config.id] - Registers to dom.editable[id] and dom[id]
- * @returns {HTMLDivElement} Wrapper with .value/.html getter-setters, .isValid(), .setLimits(), .toMarkdown(), .toSlackMarkdown(), and .fromMarkdown()
+ * @returns {HTMLDivElement} Wrapper with .value/.html/.text/.markdown getters, .isValid(), .setLimits(), .toText(), .toMarkdown(), .toSlackMarkdown(), and .fromMarkdown()
  * @example
  * editable({ placeholder: 'Type here...' })  // multiline by default
  * editable({ label: 'Title', rows: 1, onSubmit: (e) => save(e.value) })  // single line
@@ -328,23 +325,20 @@ export function editable(...args) {
     }
   };
 
-  const getMarkdownValue = () => (
-    richApi?.isMarkdownMode?.()
-      ? richApi.getMarkdown?.() ?? ''
-      : null
-  );
-
-  const getValue = () => {
-    const markdownValue = getMarkdownValue();
-    if (markdownValue != null) return markdownValue;
-    return editableEl?.textContent || '';
-  };
-
   const getHtml = () => {
-    const markdownValue = getMarkdownValue();
-    if (markdownValue != null) return toHtmlFromMarkdown(markdownValue);
+    if (richApi?.isMarkdownMode?.()) {
+      return toHtmlFromMarkdown(richApi.getMarkdown?.() || '');
+    }
     return editableEl?.innerHTML || '';
   };
+
+  const getText = () => {
+    const probe = document.createElement('div');
+    probe.innerHTML = getHtml();
+    return probe.textContent || '';
+  };
+
+  const getValue = () => getText();
 
   const counterController = createCounterController({
     min: currentMin,
@@ -518,9 +512,34 @@ export function editable(...args) {
     }
   });
 
+  Object.defineProperty(root, 'text', {
+    get: getText,
+    set: (v) => {
+      const nextText = String(v || '');
+      if (richApi?.isMarkdownMode?.()) {
+        richApi.setMarkdown?.(nextText);
+      } else {
+        editableEl.textContent = nextText;
+      }
+      normalizeContent();
+      validation.clearManualError();
+      if (validation.hasRules) validation.check();
+      if (counter) counterController.update();
+    }
+  });
+
+  Object.defineProperty(root, 'markdown', {
+    get: () => toMarkdownFromHtml(getHtml(), { slackFormat: false }),
+    set: (v) => {
+      const nextMarkdown = String(v || '');
+      root.fromMarkdown(nextMarkdown);
+    }
+  });
+
   root.isValid = validation.check;
   root.error = validation.error;
   root.ok = validation.ok;
+  root.toText = () => getText();
   root.toMarkdown = () => toMarkdownFromHtml(getHtml(), { slackFormat: false });
   root.toSlackMarkdown = () => toMarkdownFromHtml(getHtml(), { slackFormat: true });
   root.fromMarkdown = (markdown) => {
@@ -587,6 +606,8 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
 
   let markdownMode = false;
   let markdownValue = '';
+  let markdownSourceHtml = null;
+  let markdownSourceValue = null;
 
   // --- Selection save/restore (for dialogs like link prompt) ---
   let savedRange = null;
@@ -936,7 +957,9 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
     if (nextMode === markdownMode) return markdownMode;
 
     if (nextMode) {
+      markdownSourceHtml = editableEl.innerHTML;
       markdownValue = toMarkdownFromHtml(editableEl.innerHTML, { slackFormat: false });
+      markdownSourceValue = markdownValue;
       markdownMode = true;
       editableEl.classList.add(bem('markdown'));
       editableEl.textContent = markdownValue;
@@ -950,7 +973,15 @@ function addRichTextUI(root, editableEl, richInclude, richExclude) {
     markdownValue = editableEl.textContent || '';
     markdownMode = false;
     editableEl.classList.remove(bem('markdown'));
-    editableEl.innerHTML = toHtmlFromMarkdown(markdownValue);
+
+    if (markdownSourceHtml != null && markdownValue === (markdownSourceValue || '')) {
+      editableEl.innerHTML = markdownSourceHtml;
+    } else {
+      editableEl.innerHTML = toHtmlFromMarkdown(markdownValue);
+    }
+
+    markdownSourceHtml = null;
+    markdownSourceValue = null;
     normalizeRichMarkup();
     updateActiveStates();
     editableEl.dispatchEvent(new Event('input', { bubbles: true }));
