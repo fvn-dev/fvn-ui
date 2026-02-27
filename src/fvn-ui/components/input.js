@@ -23,7 +23,7 @@ const parseLimitArgs = (minOrConfig, maxValue) => (
  * @param {'email'|'url'|'phone'|Function} [config.validate] - Validation rule or custom function
  * @param {number} [config.min] - Minimum length (also used for counter color)
  * @param {number} [config.max] - Maximum length (also used for counter color)
- * @param {boolean} [config.counter] - Show character counter (textarea only)
+ * @param {boolean} [config.counter] - Show character counter
  * @param {boolean} [config.required] - Require input to have a value
  * @param {string|Object} [config.message] - Validation error message(s)
  * @param {Function} [config.onSubmit] - Called on Enter key with value (input only)
@@ -214,7 +214,7 @@ export function input(...args) {
           text: info,
           ref: (e) => infoEl = e
         }),
-        isTextarea && counter && el('div', {
+        counter && el('div', {
           class: bem.el('counter'),
           end: true,
           ref: (e) => { counterEl = e; counterController.update(); }

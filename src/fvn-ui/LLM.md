@@ -383,7 +383,7 @@ input({ label: 'Bio', rows: 4, placeholder: 'Tell us about yourself' })
 | `required` | Require input to have a value (validates via `isValid()`) |
 | `validate` | Built-in: `'email'`, `'url'`, `'phone'` or custom function |
 | `min/max` | Character length limits (also colors counter) |
-| `counter` | Show character counter (textarea) |
+| `counter` | Show character counter |
 | `message` | Error message(s) — string or object |
 
 **Validation examples:**
