@@ -31,7 +31,7 @@
 
 /* Control icon (checkmark, dot, etc.) */
 .ui-form-control .ui-icon {
-  --icon-size: calc(var(--control-size) * .7);
+  --ui-icon-size: calc(var(--control-size) * .7);
   color: var(--fg, var(--back));
   opacity: 0;
   transform: scale(.5);

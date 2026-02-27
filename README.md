@@ -167,7 +167,6 @@ Rich runtime is lazy-loaded only when `rich: true` is used (source/ESM builds).
 const ed = ui.editable({ label: 'Body', rich: true })
 
 ed.toMarkdown()
-ed.toSlackMarkdown()
 ed.fromMarkdown('## Heading\n- Item')
 
 ed.toggleMarkdownMode() // rich <-> markdown editor

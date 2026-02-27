@@ -1,6 +1,6 @@
 .ui-icon {
   flex: none;
-  width: var(--icon-size, var(--icon-size-default));
-  height: var(--icon-size, var(--icon-size-default));
+  width: var(--ui-icon-size);
+  height: var(--ui-icon-size);
   stroke-width: var(--stroke-width, 1.5);
 }

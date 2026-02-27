@@ -85,18 +85,58 @@ export const layout = {
 let container = document.body;
 
 export const darkmode = (() => {
-  const getIcons = () => isDark() ? ['sun', 'moon'] : ['moon', 'sun'];
-  const isDark = () => container.classList.contains('dark');
-  const toggle = on => {
-    return container.classList.toggle('dark', on);
+  const root = document.documentElement;
+  const media = matchMedia('(prefers-color-scheme: dark)');
+
+  const normalizeMode = (value) => {
+    const mode = String(value || '').toLowerCase();
+    return mode === 'on' || mode === 'off' || mode === 'auto' ? mode : 'auto';
   };
-  if (matchMedia('(prefers-color-scheme: dark)').matches) {
-    toggle(true);
-  }
+
+  const getMode = () => normalizeMode(root.dataset.darkmode);
+  const resolveDark = () => {
+    const mode = getMode();
+    return mode === 'on' || (mode === 'auto' && media.matches);
+  };
+
+  const sync = () => {
+    const dark = resolveDark();
+    container?.classList?.toggle('dark', dark);
+    return dark;
+  };
+
+  const setMode = (mode) => {
+    root.dataset.darkmode = normalizeMode(mode);
+    return sync();
+  };
+
+  const isDark = () => resolveDark();
+  const getIcons = () => isDark() ? ['sun', 'moon'] : ['moon', 'sun'];
+  const toggle = (on) => {
+    if (on === 'auto') return setMode('auto');
+    if (typeof on === 'boolean') return setMode(on ? 'on' : 'off');
+    return setMode(isDark() ? 'off' : 'on');
+  };
+
+  root.dataset.darkmode = getMode();
+  sync();
+
+  media.addEventListener?.('change', () => {
+    if (getMode() === 'auto') sync();
+  });
+
+  const observer = new MutationObserver(() => {
+    sync();
+  });
+  observer.observe(root, { attributes: true, attributeFilter: ['data-darkmode'] });
+
   return {
     isDark,
     getIcons,
     toggle,
+    setMode,
+    getMode,
+    sync,
     menuItem: { icon: getIcons(), action: () => toggle() }
   }
 })();
@@ -104,6 +144,7 @@ export const darkmode = (() => {
 const init = (root = document.body) => {
   container = root;
   root.classList.add('fvn-ui');
+  darkmode.sync();
 };
 
 export const ui = {

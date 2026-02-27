@@ -26,7 +26,7 @@
 /* ---- Tokens ---- */
 .fvn-ui {
   --core: 15px;
-  --icon-size-default: calc(1.2 * var(--core));
+  --ui-icon-size: calc(1.2 * var(--core));
   --radius: calc(var(--core) * .375);
 
   /* Spacing scale */
@@ -448,13 +448,13 @@ body.fvn-ui {
 
   & .ui-ratio--square.ui-size--medium {
     --input-padding: calc(var(--space-4) * .75);
-    --icon-size: calc(1.25 * var(--input-padding));
+    --ui-icon-size: calc(1.25 * var(--input-padding));
     --stroke-width: 1.25;
   }  
 
   & .ui-ratio--square.ui-size--large {
     --input-padding: calc(var(--space-6) * .75);
-    --icon-size: calc(1.5 * var(--input-padding));
+    --ui-icon-size: calc(1.5 * var(--input-padding));
     --stroke-width: 1;
   }    
 }

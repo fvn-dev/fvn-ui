@@ -155,7 +155,7 @@
 }
 .ui-btn__icon {
   position: relative;
-  width: var(--icon-size, var(--icon-size-default));
+  width: var(--ui-icon-size);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -174,7 +174,7 @@
 }
 
 .ui-btn.loading {
-  --icon-size: var(--core);
+  --ui-icon-size: var(--core);
 
   flex-direction: row-reverse;
   pointer-events: none;
@@ -183,8 +183,8 @@
 
   &::before {
     content: '';
-    width: var(--icon-size, var(--icon-size-default));
-    height: var(--icon-size, var(--icon-size-default));
+    width: var(--ui-icon-size);
+    height: var(--ui-icon-size);
     border: 1px solid var(--fg);
     border-radius: 50%;
     border-color: var(--fg) var(--fg) var(--fg) transparent;

@@ -744,7 +744,6 @@ ed.reset()
 
 // Convert content
 ed.toMarkdown()
-ed.toSlackMarkdown()
 ed.fromMarkdown('## Heading\n- Item')
 
 // Rich mode only: toggle raw markdown editor in-place
@@ -765,7 +764,6 @@ Notes:
 - Heading toggle is fixed to `h3`.
 - `underline` / `strikethrough` in `richInclude` are ignored (no crash).
 - `toMarkdown()` returns CommonMark output.
-- `toSlackMarkdown()` converts markdown links to Slack format (`<url|text>`).
 - If markdown text is unchanged while toggling back to rich mode, previous HTML output is restored.
 
 ---

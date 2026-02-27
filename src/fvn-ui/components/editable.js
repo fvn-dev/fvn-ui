@@ -37,8 +37,6 @@ const fallbackHtmlToMarkdown = (html = '') => {
   return (root.textContent || '').trim();
 };
 
-const toSlackLinkFormat = (markdown = '') => String(markdown || '').replace(/\[([^\]]+)\]\(([^\)\s]+)\)/g, '<$2|$1>');
-
 /**
  * Creates a editable element with input-like behavior
  * @param {Object} config
@@ -63,7 +61,7 @@ const toSlackLinkFormat = (markdown = '') => String(markdown || '').replace(/\[(
  * @param {Function} [config.onKeydown] - Called on keydown with (event)
  * @param {Function} [config.onSubmit] - Called on Enter key with (html, event) - single line mode only
  * @param {string} [config.id] - Registers to dom.editable[id] and dom[id]
- * @returns {HTMLDivElement} Wrapper with .value/.html/.text/.markdown getters, .isValid(), .setLimits(), .toText(), .toMarkdown(), .toSlackMarkdown(), and .fromMarkdown()
+ * @returns {HTMLDivElement} Wrapper with .value/.html/.text/.markdown getters, .isValid(), .setLimits(), .toText(), .toMarkdown(), and .fromMarkdown()
  */
 export function editable(...args) {
   const {
@@ -340,7 +338,6 @@ export function editable(...args) {
   root.ok = validation.ok;
   root.toText = () => getText();
   root.toMarkdown = () => getMarkdown();
-  root.toSlackMarkdown = () => toSlackLinkFormat(getMarkdown());
   root.fromMarkdown = (markdown) => {
     const md = String(markdown || '');
     if (richApi?.fromMarkdown) {
