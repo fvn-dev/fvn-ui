@@ -161,10 +161,11 @@ notes.setLimits({ max: 200 })
 ### Editable Markdown Mode
 
 `editable({ rich: true })` uses a ProseMirror-backed editor with a markdown toggle.
-Rich runtime is lazy-loaded only when `rich: true` is used (source/ESM builds).
+Rich runtime is fetched on demand from `https://esm.sh` only when `rich: true` is used.
 
 ```js
 const ed = ui.editable({ label: 'Body', rich: true })
+const edCustomCdn = ui.editable({ label: 'Body', rich: true, richRuntimeBaseUrl: 'https://esm.sh' })
 
 ed.toMarkdown()
 ed.fromMarkdown('## Heading\n- Item')
@@ -177,6 +178,9 @@ ed.isMarkdownMode()     // true/false
 - Markdown uses CommonMark serialization/parsing.
 - If markdown is unchanged when toggling back, previous HTML output is restored.
 - Unsupported `richInclude/richExclude` actions (`underline`, `strikethrough`) are ignored.
+- Rich mode requires network/CSP access to `https://esm.sh`.
+- No ProseMirror dependency install is required for `fvn-ui` consumers.
+- If rich runtime fails to load, editable continues in plain mode.
 
 ### CSS Variables
 

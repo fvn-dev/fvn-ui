@@ -3,36 +3,102 @@ import { button } from './button.js'
 import { dialog } from './dialog.js'
 import { input } from './input.js'
 import { toggle } from './toggle.js'
-import { EditorState, TextSelection } from 'prosemirror-state'
-import { EditorView } from 'prosemirror-view'
-import { Schema, DOMParser as PMDOMParser, DOMSerializer } from 'prosemirror-model'
-import { baseKeymap, toggleMark, setBlockType, wrapIn, lift } from 'prosemirror-commands'
-import { keymap } from 'prosemirror-keymap'
-import { history, undo, redo } from 'prosemirror-history'
-import { inputRules, wrappingInputRule, textblockTypeInputRule } from 'prosemirror-inputrules'
-import { wrapInList, liftListItem, splitListItem } from 'prosemirror-schema-list'
-import { MarkdownParser, MarkdownSerializer, defaultMarkdownParser, defaultMarkdownSerializer, schema as markdownSchema } from 'prosemirror-markdown'
 
 const AVAILABLE_ACTIONS = ['heading', 'bold', 'italic', 'underline', 'strikethrough', 'quote', 'list', 'link', 'markdown', 'clear']
 const SUPPORTED_ACTIONS = new Set(['heading', 'bold', 'italic', 'quote', 'list', 'link', 'markdown', 'clear'])
 const SKIP_VALIDATION_EVENT_PROP = '__fvnSkipValidation'
 const USER_INTERACTION_EVENT_PROP = '__fvnUserInteraction'
 const RICH_ADAPTER_INSTANCE_PROP = '__fvnProseMirrorAdapter'
-const paragraphSpec = markdownSchema.spec.nodes.get('paragraph')
-const schema = new Schema({
-  nodes: markdownSchema.spec.nodes.update('paragraph', {
-    ...paragraphSpec,
-    parseDOM: [
-      { tag: 'span[data-ui-paragraph]' }
-    ],
-    toDOM: () => ['span', { 'data-ui-paragraph': '' }, 0]
-  }),
-  marks: markdownSchema.spec.marks
+const DEFAULT_RICH_RUNTIME_BASE_URL = 'https://esm.sh'
+const PROSEMIRROR_MODULES = Object.freeze({
+  state: 'prosemirror-state@1.4.4',
+  view: 'prosemirror-view@1.41.3',
+  model: 'prosemirror-model@1.25.4',
+  commands: 'prosemirror-commands@1.7.1',
+  keymap: 'prosemirror-keymap@1.2.3',
+  history: 'prosemirror-history@1.4.1',
+  inputrules: 'prosemirror-inputrules@1.5.1',
+  schemaList: 'prosemirror-schema-list@1.5.1',
+  markdown: 'prosemirror-markdown@1.13.2'
 })
-const domParser = PMDOMParser.fromSchema(schema)
-const domSerializer = DOMSerializer.fromSchema(schema)
-const markdownParser = new MarkdownParser(schema, defaultMarkdownParser.tokenizer, defaultMarkdownParser.tokens)
-const markdownSerializer = new MarkdownSerializer(defaultMarkdownSerializer.nodes, defaultMarkdownSerializer.marks)
+const prosemirrorRuntimeCache = new Map()
+
+const normalizeRuntimeBaseUrl = (baseUrl = DEFAULT_RICH_RUNTIME_BASE_URL) => {
+  const value = String(baseUrl || DEFAULT_RICH_RUNTIME_BASE_URL).trim()
+  if (!value) return DEFAULT_RICH_RUNTIME_BASE_URL
+  return value.replace(/\/+$/, '')
+}
+
+const buildRuntimeModuleUrl = (baseUrl, packageName) => (
+  `${normalizeRuntimeBaseUrl(baseUrl)}/${packageName}?bundle&target=es2022`
+)
+
+const importRuntimeModule = (url) => import(/* @vite-ignore */ url)
+
+const loadProseMirrorRuntime = (baseUrl = DEFAULT_RICH_RUNTIME_BASE_URL) => {
+  const normalizedBaseUrl = normalizeRuntimeBaseUrl(baseUrl)
+  if (prosemirrorRuntimeCache.has(normalizedBaseUrl)) {
+    return prosemirrorRuntimeCache.get(normalizedBaseUrl)
+  }
+
+  const runtimePromise = Promise.all([
+    importRuntimeModule(buildRuntimeModuleUrl(normalizedBaseUrl, PROSEMIRROR_MODULES.state)),
+    importRuntimeModule(buildRuntimeModuleUrl(normalizedBaseUrl, PROSEMIRROR_MODULES.view)),
+    importRuntimeModule(buildRuntimeModuleUrl(normalizedBaseUrl, PROSEMIRROR_MODULES.model)),
+    importRuntimeModule(buildRuntimeModuleUrl(normalizedBaseUrl, PROSEMIRROR_MODULES.commands)),
+    importRuntimeModule(buildRuntimeModuleUrl(normalizedBaseUrl, PROSEMIRROR_MODULES.keymap)),
+    importRuntimeModule(buildRuntimeModuleUrl(normalizedBaseUrl, PROSEMIRROR_MODULES.history)),
+    importRuntimeModule(buildRuntimeModuleUrl(normalizedBaseUrl, PROSEMIRROR_MODULES.inputrules)),
+    importRuntimeModule(buildRuntimeModuleUrl(normalizedBaseUrl, PROSEMIRROR_MODULES.schemaList)),
+    importRuntimeModule(buildRuntimeModuleUrl(normalizedBaseUrl, PROSEMIRROR_MODULES.markdown))
+  ])
+    .then(([
+      stateModule,
+      viewModule,
+      modelModule,
+      commandsModule,
+      keymapModule,
+      historyModule,
+      inputRulesModule,
+      schemaListModule,
+      markdownModule
+    ]) => ({
+      EditorState: stateModule.EditorState,
+      TextSelection: stateModule.TextSelection,
+      EditorView: viewModule.EditorView,
+      Schema: modelModule.Schema,
+      PMDOMParser: modelModule.DOMParser,
+      DOMSerializer: modelModule.DOMSerializer,
+      baseKeymap: commandsModule.baseKeymap,
+      toggleMark: commandsModule.toggleMark,
+      setBlockType: commandsModule.setBlockType,
+      wrapIn: commandsModule.wrapIn,
+      lift: commandsModule.lift,
+      keymap: keymapModule.keymap,
+      history: historyModule.history,
+      undo: historyModule.undo,
+      redo: historyModule.redo,
+      inputRules: inputRulesModule.inputRules,
+      wrappingInputRule: inputRulesModule.wrappingInputRule,
+      textblockTypeInputRule: inputRulesModule.textblockTypeInputRule,
+      wrapInList: schemaListModule.wrapInList,
+      liftListItem: schemaListModule.liftListItem,
+      splitListItem: schemaListModule.splitListItem,
+      MarkdownParser: markdownModule.MarkdownParser,
+      MarkdownSerializer: markdownModule.MarkdownSerializer,
+      defaultMarkdownParser: markdownModule.defaultMarkdownParser,
+      defaultMarkdownSerializer: markdownModule.defaultMarkdownSerializer,
+      markdownSchema: markdownModule.schema
+    }))
+
+  prosemirrorRuntimeCache.set(normalizedBaseUrl, runtimePromise)
+  runtimePromise.catch(() => {
+    if (prosemirrorRuntimeCache.get(normalizedBaseUrl) === runtimePromise) {
+      prosemirrorRuntimeCache.delete(normalizedBaseUrl)
+    }
+  })
+  return runtimePromise
+}
 
 const escapeHtml = (value = '') => String(value)
   .replace(/&/g, '&amp;')
@@ -45,42 +111,6 @@ const textToHtml = (text = '') => {
   const lines = String(text || '').replace(/\r\n?/g, '\n').split('\n')
   return lines.map((line) => `<span data-ui-paragraph>${line ? escapeHtml(line) : '<br>'}</span>`).join('')
 }
-
-const emptyDoc = () => schema.topNodeType.createAndFill() || schema.node('doc', null, [schema.node('paragraph')])
-
-const normalizeHeadingsToH3 = (node) => {
-  if (node.isText) return node
-  const children = []
-  node.forEach((child) => {
-    children.push(normalizeHeadingsToH3(child))
-  })
-  const attrs = node.type === schema.nodes.heading
-    ? { ...node.attrs, level: 3 }
-    : node.attrs
-  return node.type.create(attrs, children, node.marks)
-}
-
-const htmlToDoc = (html = '') => {
-  const host = document.createElement('div')
-  host.innerHTML = String(html || '')
-  return normalizeHeadingsToH3(domParser.parse(host))
-}
-
-const markdownToDoc = (markdown = '') => {
-  try {
-    return normalizeHeadingsToH3(markdownParser.parse(String(markdown || '')))
-  } catch {
-    return emptyDoc()
-  }
-}
-
-const docToHtml = (doc) => {
-  const host = document.createElement('div')
-  host.appendChild(domSerializer.serializeFragment(doc.content))
-  return host.innerHTML
-}
-
-const docToMarkdown = (doc) => markdownSerializer.serialize(doc)
 
 const normalizeUrl = (value) => {
   const raw = String(value || '').trim()
@@ -109,6 +139,172 @@ const createInputEvent = ({ skipValidation = false, userInteraction = false } = 
     event[USER_INTERACTION_EVENT_PROP] = true
   }
   return event
+}
+
+const createProseMirrorHelpers = (runtime) => {
+  const {
+    EditorState,
+    Schema,
+    PMDOMParser,
+    DOMSerializer,
+    baseKeymap,
+    toggleMark,
+    keymap,
+    history,
+    undo,
+    redo,
+    inputRules,
+    wrappingInputRule,
+    textblockTypeInputRule,
+    splitListItem,
+    MarkdownParser,
+    MarkdownSerializer,
+    defaultMarkdownParser,
+    defaultMarkdownSerializer,
+    markdownSchema
+  } = runtime
+
+  const paragraphSpec = markdownSchema.spec.nodes.get('paragraph')
+  const schema = new Schema({
+    nodes: markdownSchema.spec.nodes.update('paragraph', {
+      ...paragraphSpec,
+      parseDOM: [
+        { tag: 'span[data-ui-paragraph]' }
+      ],
+      toDOM: () => ['span', { 'data-ui-paragraph': '' }, 0]
+    }),
+    marks: markdownSchema.spec.marks
+  })
+
+  const domParser = PMDOMParser.fromSchema(schema)
+  const domSerializer = DOMSerializer.fromSchema(schema)
+  const markdownParser = new MarkdownParser(schema, defaultMarkdownParser.tokenizer, defaultMarkdownParser.tokens)
+  const markdownSerializer = new MarkdownSerializer(defaultMarkdownSerializer.nodes, defaultMarkdownSerializer.marks)
+
+  const emptyDoc = () => schema.topNodeType.createAndFill() || schema.node('doc', null, [schema.node('paragraph')])
+
+  const normalizeHeadingsToH3 = (node) => {
+    if (node.isText) return node
+    const children = []
+    node.forEach((child) => {
+      children.push(normalizeHeadingsToH3(child))
+    })
+    const attrs = node.type === schema.nodes.heading
+      ? { ...node.attrs, level: 3 }
+      : node.attrs
+    return node.type.create(attrs, children, node.marks)
+  }
+
+  const htmlToDoc = (html = '') => {
+    const host = document.createElement('div')
+    host.innerHTML = String(html || '')
+    return normalizeHeadingsToH3(domParser.parse(host))
+  }
+
+  const markdownToDoc = (markdown = '') => {
+    try {
+      return normalizeHeadingsToH3(markdownParser.parse(String(markdown || '')))
+    } catch {
+      return emptyDoc()
+    }
+  }
+
+  const docToHtml = (doc) => {
+    const host = document.createElement('div')
+    host.appendChild(domSerializer.serializeFragment(doc.content))
+    return host.innerHTML
+  }
+
+  const docToMarkdown = (doc) => markdownSerializer.serialize(doc)
+
+  const isDocEmpty = (doc) => (
+    doc.childCount === 1
+    && doc.firstChild?.type === schema.nodes.paragraph
+    && doc.firstChild.content.size === 0
+  )
+
+  const createInputRulesPlugin = () => {
+    const rules = []
+
+    if (schema.nodes.heading) {
+      rules.push(textblockTypeInputRule(/^#{1,6}\s$/, schema.nodes.heading, () => ({ level: 3 })))
+    }
+
+    if (schema.nodes.blockquote) {
+      rules.push(wrappingInputRule(/^\s*>\s$/, schema.nodes.blockquote))
+    }
+
+    if (schema.nodes.ordered_list) {
+      rules.push(wrappingInputRule(/^(\d+)\.\s$/, schema.nodes.ordered_list, (match) => ({ order: Number(match[1]) })))
+    }
+
+    if (schema.nodes.bullet_list) {
+      rules.push(wrappingInputRule(/^\s*([-+*])\s$/, schema.nodes.bullet_list))
+    }
+
+    return inputRules({ rules })
+  }
+
+  const createPlugins = () => {
+    const bindings = {
+      'Mod-z': undo,
+      'Shift-Mod-z': redo,
+      'Mod-y': redo
+    }
+
+    if (schema.marks.strong) bindings['Mod-b'] = toggleMark(schema.marks.strong)
+    if (schema.marks.em) bindings['Mod-i'] = toggleMark(schema.marks.em)
+    if (schema.nodes.list_item) bindings.Enter = splitListItem(schema.nodes.list_item)
+
+    return [
+      history(),
+      createInputRulesPlugin(),
+      keymap(bindings),
+      keymap(baseKeymap)
+    ]
+  }
+
+  const createState = (doc, plugins) => EditorState.create({
+    schema,
+    doc,
+    plugins
+  })
+
+  const getActiveLinkHref = (state) => {
+    const linkType = schema.marks.link
+    if (!linkType) return ''
+
+    const range = getLinkRangeAtSelection(state, linkType)
+    if (!range) {
+      const mark = (state.storedMarks || state.selection.$from.marks()).find((item) => item.type === linkType)
+      return mark?.attrs?.href || ''
+    }
+
+    let href = ''
+    state.doc.nodesBetween(range.from, range.to, (node) => {
+      if (!node.isText) return
+      const linkMark = node.marks.find((item) => item.type === linkType)
+      if (linkMark?.attrs?.href) {
+        href = linkMark.attrs.href
+        return false
+      }
+    })
+
+    return href
+  }
+
+  return {
+    schema,
+    emptyDoc,
+    htmlToDoc,
+    markdownToDoc,
+    docToHtml,
+    docToMarkdown,
+    isDocEmpty,
+    createPlugins,
+    createState,
+    getActiveLinkHref
+  }
 }
 
 const markActive = (state, markType) => {
@@ -174,91 +370,16 @@ const getLinkRangeAtSelection = (state, markType) => {
   return { from: start, to: end }
 }
 
-const getActiveLinkHref = (state) => {
-  const linkType = schema.marks.link
-  if (!linkType) return ''
-
-  const range = getLinkRangeAtSelection(state, linkType)
-  if (!range) {
-    const mark = (state.storedMarks || state.selection.$from.marks()).find((item) => item.type === linkType)
-    return mark?.attrs?.href || ''
-  }
-
-  let href = ''
-  state.doc.nodesBetween(range.from, range.to, (node) => {
-    if (!node.isText) return
-    const linkMark = node.marks.find((item) => item.type === linkType)
-    if (linkMark?.attrs?.href) {
-      href = linkMark.attrs.href
-      return false
-    }
-  })
-
-  return href
-}
-
-const isDocEmpty = (doc) => (
-  doc.childCount === 1
-  && doc.firstChild?.type === schema.nodes.paragraph
-  && doc.firstChild.content.size === 0
-)
-
-const createInputRulesPlugin = () => {
-  const rules = []
-
-  if (schema.nodes.heading) {
-    rules.push(textblockTypeInputRule(/^#{1,6}\s$/, schema.nodes.heading, () => ({ level: 3 })))
-  }
-
-  if (schema.nodes.blockquote) {
-    rules.push(wrappingInputRule(/^\s*>\s$/, schema.nodes.blockquote))
-  }
-
-  if (schema.nodes.ordered_list) {
-    rules.push(wrappingInputRule(/^(\d+)\.\s$/, schema.nodes.ordered_list, (match) => ({ order: Number(match[1]) })))
-  }
-
-  if (schema.nodes.bullet_list) {
-    rules.push(wrappingInputRule(/^\s*([-+*])\s$/, schema.nodes.bullet_list))
-  }
-
-  return inputRules({ rules })
-}
-
-const createPlugins = () => {
-  const bindings = {
-    'Mod-z': undo,
-    'Shift-Mod-z': redo,
-    'Mod-y': redo
-  }
-
-  if (schema.marks.strong) bindings['Mod-b'] = toggleMark(schema.marks.strong)
-  if (schema.marks.em) bindings['Mod-i'] = toggleMark(schema.marks.em)
-  if (schema.nodes.list_item) bindings.Enter = splitListItem(schema.nodes.list_item)
-
-  return [
-    history(),
-    createInputRulesPlugin(),
-    keymap(bindings),
-    keymap(baseKeymap)
-  ]
-}
-
-const createState = (doc, plugins) => EditorState.create({
-  schema,
-  doc,
-  plugins
-})
-
 const linkTip = (icon) => icon.charAt(0).toUpperCase() + icon.slice(1).replace('-', ' ')
 
-export function createProseMirrorAdapter({
+export async function createProseMirrorAdapter({
   root,
   editableEl,
   placeholder,
   minRows,
   richInclude,
   richExclude,
+  richRuntimeBaseUrl,
   plainText,
   validationConfig = {},
   bem,
@@ -276,6 +397,30 @@ export function createProseMirrorAdapter({
       editableEl.innerHTML = preservedHtml
     }
   }
+
+  const runtime = await loadProseMirrorRuntime(richRuntimeBaseUrl)
+  const {
+    EditorView,
+    TextSelection,
+    toggleMark,
+    setBlockType,
+    wrapIn,
+    lift,
+    wrapInList,
+    liftListItem
+  } = runtime
+  const {
+    schema,
+    emptyDoc,
+    htmlToDoc,
+    markdownToDoc,
+    docToHtml,
+    docToMarkdown,
+    isDocEmpty,
+    createPlugins,
+    createState,
+    getActiveLinkHref
+  } = createProseMirrorHelpers(runtime)
 
   const actions = resolveActions(richInclude, richExclude)
   const plugins = createPlugins()

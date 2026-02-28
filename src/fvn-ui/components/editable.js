@@ -47,6 +47,7 @@ const fallbackHtmlToMarkdown = (html = '') => {
  * @param {string} [config.value] - Initial HTML content
  * @param {'default'|'large'} [config.size='default'] - Size variant
  * @param {number} [config.rows] - 1 = single line, > 1 = multiline (sets min-height)
+ * @param {string} [config.richRuntimeBaseUrl='https://esm.sh'] - Base URL for rich runtime CDN modules (rich mode only)
  * @param {boolean} [config.multiline=true] - Allow multiple lines (false = single line)
  * @param {boolean} [config.plainText=false] - Strip formatting on paste
  * @param {'email'|'url'|'phone'|Function} [config.validate] - Validation rule or custom function
@@ -75,6 +76,7 @@ export function editable(...args) {
     value,
     rows,
     rich = false,
+    richRuntimeBaseUrl,
     richInclude,
     richExclude,
     multiline,
@@ -382,50 +384,52 @@ export function editable(...args) {
 
   if (rich) {
     loadProseMirrorAdapter()
-      .then(({ createProseMirrorAdapter }) => {
-        richApi = createProseMirrorAdapter({
-          root,
-          editableEl,
-          placeholder,
-          minRows,
-          richInclude,
-          richExclude,
-          plainText,
-          validationConfig: {
-            validate,
-            required,
-            message,
-            min: currentMin,
-            max: currentMax
-          },
-          bem,
-          onHtmlInput: (html, target, event) => {
-            const skipValidation = !!event?.[SKIP_VALIDATION_EVENT_PROP];
-            const isUserInteraction = !!event?.isTrusted || !!event?.[USER_INTERACTION_EVENT_PROP];
-            if (!skipValidation && isUserInteraction) {
-              hasInteracted = true;
-              validation.clearManualError();
-              applyValidationState();
-            }
-            emitCallbacks(target, event, html);
-          },
-          onFocus: (target, event) => {
-            onFocus?.call(target || editableEl, event);
-          },
-          onBlur: (target, event) => {
-            onBlur?.call(target || editableEl, getHtml(), event);
-          },
-          onKeydown: (target, event) => {
-            onKeydown?.call(target || editableEl, event);
-            if (isSingleLine && event.key === 'Enter') {
-              event.preventDefault();
-              onSubmit?.call(target || editableEl, getHtml(), event);
-            }
-          },
-          onReady: () => {
-            if (counter) counterController.update();
+      .then(({ createProseMirrorAdapter }) => createProseMirrorAdapter({
+        root,
+        editableEl,
+        placeholder,
+        minRows,
+        richRuntimeBaseUrl,
+        richInclude,
+        richExclude,
+        plainText,
+        validationConfig: {
+          validate,
+          required,
+          message,
+          min: currentMin,
+          max: currentMax
+        },
+        bem,
+        onHtmlInput: (html, target, event) => {
+          const skipValidation = !!event?.[SKIP_VALIDATION_EVENT_PROP];
+          const isUserInteraction = !!event?.isTrusted || !!event?.[USER_INTERACTION_EVENT_PROP];
+          if (!skipValidation && isUserInteraction) {
+            hasInteracted = true;
+            validation.clearManualError();
+            applyValidationState();
           }
-        });
+          emitCallbacks(target, event, html);
+        },
+        onFocus: (target, event) => {
+          onFocus?.call(target || editableEl, event);
+        },
+        onBlur: (target, event) => {
+          onBlur?.call(target || editableEl, getHtml(), event);
+        },
+        onKeydown: (target, event) => {
+          onKeydown?.call(target || editableEl, event);
+          if (isSingleLine && event.key === 'Enter') {
+            event.preventDefault();
+            onSubmit?.call(target || editableEl, getHtml(), event);
+          }
+        },
+        onReady: () => {
+          if (counter) counterController.update();
+        }
+      }))
+      .then((adapter) => {
+        richApi = adapter;
       })
       .catch((err) => {
         console.warn('[fvn-ui/editable] failed to load rich editor runtime', err);

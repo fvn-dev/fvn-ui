@@ -721,7 +721,8 @@ editable({ multiline: false })  // same as rows: 1
 | `value` | Initial HTML content |
 | `rows` | 1 = single line, >1 = sets min-height |
 | `multiline` | `false` = single line mode |
-| `rich` | Enable rich text toolbar (lazy-loads rich runtime) |
+| `rich` | Enable rich text toolbar (loads rich runtime on demand) |
+| `richRuntimeBaseUrl` | Optional rich runtime CDN base URL (default: `https://esm.sh`) |
 | `richInclude/richExclude` | Include/exclude toolbar actions (`heading`, `bold`, `italic`, `quote`, `list`, `link`, `clear`, `markdown`) |
 | `plainText` | Strip formatting on paste |
 | `required` | Require text content to be non-empty |
@@ -765,6 +766,10 @@ Notes:
 - `underline` / `strikethrough` in `richInclude` are ignored (no crash).
 - `toMarkdown()` returns CommonMark output.
 - If markdown text is unchanged while toggling back to rich mode, previous HTML output is restored.
+- Rich runtime modules are fetched from `https://esm.sh` by default.
+- Rich mode requires network/CSP access to runtime CDN URLs.
+- No ProseMirror packages are required in consuming app dependencies.
+- If rich runtime fails to load, editable stays usable in plain mode.
 
 ---
 
