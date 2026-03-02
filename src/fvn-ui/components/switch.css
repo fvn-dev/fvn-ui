@@ -1,5 +1,8 @@
 .ui-switch {
   --bg: var(--text);
+  --switch-track-off: var(--control-track-off, var(--muted-back));
+  --switch-track-on: var(--control-track-on-muted, var(--muted-back-active, var(--bg)));
+  --switch-thumb: var(--control-thumb, hsl(var(--hsl-white)));
   flex: none;
   display: inline-flex;
   align-items: center;
@@ -11,7 +14,7 @@
   height: var(--switch-size);
   border-radius: 999px;
   border: none;
-  background: hsl(var(--hsl-muted) / .25);
+  background: var(--switch-track-off);
   position: relative;
   cursor: pointer;
   padding: 0;
@@ -21,7 +24,7 @@
   width: calc(.8 * var(--switch-size));
   height: calc(.8 * var(--switch-size));
   border-radius: 999px;
-  background: hsl(var(--hsl-white));
+  background: var(--switch-thumb);
   position: absolute;
   top: 50%;
   left: calc(.1 * var(--switch-size));
@@ -31,5 +34,8 @@
 .ui-switch[data-checked="true"] .ui-switch__button {
   background: var(--bg);
   border-color: var(--bg);
+}
+.ui-switch[data-ui-col="default"][data-checked="true"] .ui-switch__button {
+  background: var(--switch-track-on);
 }
 .ui-switch[data-checked="true"] .ui-switch__thumb { left: calc(1.1 * var(--switch-size)); }

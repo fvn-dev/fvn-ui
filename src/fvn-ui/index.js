@@ -82,31 +82,31 @@ export const layout = {
  * // Manual toggle
  * ui.darkmode().toggle()
  */
-let container = document.body;
-
 export const darkmode = (() => {
   const root = document.documentElement;
   const media = matchMedia('(prefers-color-scheme: dark)');
+  const modeKey = 'darkmodeMode';
 
   const normalizeMode = (value) => {
     const mode = String(value || '').toLowerCase();
     return mode === 'on' || mode === 'off' || mode === 'auto' ? mode : 'auto';
   };
 
-  const getMode = () => normalizeMode(root.dataset.darkmode);
+  let mode = normalizeMode(root.dataset[modeKey] || root.dataset.darkmode);
+  const getMode = () => mode;
   const resolveDark = () => {
-    const mode = getMode();
     return mode === 'on' || (mode === 'auto' && media.matches);
   };
 
   const sync = () => {
     const dark = resolveDark();
-    container?.classList?.toggle('dark', dark);
+    root.dataset.darkmode = dark ? 'on' : 'off';
     return dark;
   };
 
-  const setMode = (mode) => {
-    root.dataset.darkmode = normalizeMode(mode);
+  const setMode = (nextMode) => {
+    mode = normalizeMode(nextMode);
+    root.dataset[modeKey] = mode;
     return sync();
   };
 
@@ -118,17 +118,18 @@ export const darkmode = (() => {
     return setMode(isDark() ? 'off' : 'on');
   };
 
-  root.dataset.darkmode = getMode();
-  sync();
+  const syncOnReady = () => requestAnimationFrame(sync);
+  root.dataset[modeKey] = mode;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', syncOnReady, { once: true });
+  } else {
+    syncOnReady();
+  }
 
   media.addEventListener?.('change', () => {
-    if (getMode() === 'auto') sync();
+    if (mode === 'auto') sync();
   });
-
-  const observer = new MutationObserver(() => {
-    sync();
-  });
-  observer.observe(root, { attributes: true, attributeFilter: ['data-darkmode'] });
 
   return {
     isDark,
@@ -142,7 +143,6 @@ export const darkmode = (() => {
 })();
 
 const init = (root = document.body) => {
-  container = root;
   root.classList.add('fvn-ui');
 };
 
@@ -161,4 +161,3 @@ export const ui = {
 };
 
 !globalThis._uiManualInit && init();
-darkmode.sync();

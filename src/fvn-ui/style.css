@@ -63,7 +63,9 @@
   --back: hsl(var(--hsl-back));
   --text: hsl(var(--hsl-text));
   --muted: hsl(var(--hsl-muted) / .5);
-  
+  --muted-back: hsl(var(--hsl-muted) / .25);
+  --muted-back-active: var(--text);
+
   --border-opacity: .15;
   --border-opacity-sub: .5;
   --border: hsl(var(--hsl-border) / var(--border-opacity, 1));
@@ -122,7 +124,7 @@
 }
 
 /* ---- Dark Mode ---- */
-.dark {
+:root[data-darkmode="on"] .fvn-ui {
   color-scheme: dark;
 
   --hsl-black: var(--dark-hsl-black);
@@ -140,6 +142,9 @@
   --border-opacity: var(--dark-border-opacity);
   --shadow-sm: var(--dark-shadow-sm);
   --shadow-md: var(--dark-shadow-md);
+
+  --muted-back: hsl(223.2 19.69% 24.9%);
+  --muted-back-active: hsl(var(--hsl-muted) / .5);
 
   --shade-mix: white;
 }
