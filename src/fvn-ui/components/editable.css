@@ -106,30 +106,37 @@
 .ui-editable__toolbar {
   --text: var(--muted);
   border: 1px solid var(--border);
-  border-bottom-width: 0;
-  border-radius: var(--radius) var(--radius) 0 0;
+  border-top-width: 0;
+  border-radius: 0 0 var(--radius) var(--radius);
+  margin-top: calc(-1 * var(--space-2));
+}
+.ui-editable__toolbar button:last-child {
+  margin-left: auto;
 }
 .ui-editable__toolbar:hover {
   --text: hsl(var(--hsl-text));
 }
-.col.ui-editable__wrap:has(.ui-editable:focus) .ui-editable__toolbar,
-.col.ui-editable__wrap:has(.ui-editable__markdown:focus) .ui-editable__toolbar {
+.col.ui-editable__wrap:has(.ui-editable__editor:focus) .ui-editable__toolbar {
   border-color: var(--text);
 }
-.ui-editable__rte-btn.is-active {
+.col.ui-editable__content:has(.ui-editable__toolbar) > .ui-editable__editor {
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.ui-editable__toolbar .ui-btn {
+  border-radius: 0;
+}
+.ui-editable__toolbar .ui-btn:first-child {
+  border-bottom-left-radius: var(--radius);
+}
+.ui-editable__toolbar .ui-btn:last-child {
+  border-bottom-right-radius: var(--radius);
+}
+.ui-editable__toolbar .ui-btn.is-active {
   background: var(--hover);
   color: var(--text);
 }
-.ui-editable__rte-btn[disabled] {
+.ui-editable__toolbar .ui-btn[disabled] {
   opacity: .5;
-}
-.ui-editable__toolbar + .ui-editable {
-  border-radius: 0 0 var(--radius) var(--radius);
-  margin-top: calc(-1 * var(--space-2));
-}
-.ui-editable__toolbar ~ .ui-editable__markdown {
-  margin-top: calc(-1 * var(--space-2));
-  border-radius: 0 0 var(--radius) var(--radius);
 }
 
 .ui-editable__markdown {
@@ -174,4 +181,8 @@
 .ui-editable--rich b,
 .ui-editable--rich strong {
   font-weight: 700 !important;
+}
+
+.ui-editable__tooltip {
+  min-width: 300px;
 }

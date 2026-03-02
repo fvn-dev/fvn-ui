@@ -1,6 +1,8 @@
 import { el, row, col, parseArgs, configToClasses, bemFactory, noSpellcheck, focusAfterRender } from '../dom.js';
 import { label as textLabel } from './text.js';
 import { button } from './button.js';
+import { dialog } from './dialog.js';
+import { input } from './input.js';
 import { createValidationController, createCounterController } from './validation.js';
 import withRichText from './editable.rich.js';
 import './editable.css';
@@ -29,6 +31,12 @@ const prettifyLabel = (value) => (
     .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
     .join(' ')
 );
+
+const normalizeLinkUrl = (value) => {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  return /^[a-z][a-z0-9+.-]*:\/\//i.test(raw) ? raw : `https://${raw}`;
+};
 
 const loadRuntimeScript = (name, src, readGlobal) => {
   const existingRuntime = readGlobal();
@@ -177,6 +185,8 @@ export function editable(...args) {
       href: null,
       quote: false
     },
+    linkDialog: null,
+    linkInput: null,
     toolbarButtons: new Map()
   };
 
@@ -296,6 +306,7 @@ export function editable(...args) {
 
     try {
       if (nextMode === 'markdown') {
+        state.linkDialog?.hide?.();
         const markdown = await convertHtmlToMarkdown(state.editableEl.innerHTML || '');
         if (token !== state.modeToken) return isMarkdownMode();
 
@@ -325,6 +336,86 @@ export function editable(...args) {
       console.warn('[fvn-ui/editable] failed to toggle markdown mode', error);
       return isMarkdownMode();
     }
+  };
+
+  const applyLink = () => {
+    const nextUrl = normalizeLinkUrl(state.linkInput?.value || '');
+    if (!nextUrl) {
+      state.richController?.toggle('link', null);
+      state.linkDialog?.hide?.();
+      return;
+    }
+
+    try {
+      // Validate absolute URL before applying.
+      new URL(nextUrl);
+    } catch {
+      state.linkInput?.error?.('Invalid URL');
+      return;
+    }
+
+    state.richController?.toggle('link', nextUrl);
+    state.linkDialog?.hide?.();
+  };
+
+  const ensureLinkDialog = (anchorEl) => {
+    if (state.linkDialog) return state.linkDialog;
+
+    const linkField = input({
+      placeholder: 'https://example.com',
+      onInput: () => linkField.ok?.(),
+      callback: () => applyLink()
+    });
+
+    const cancelBtn = button({
+      label: 'Cancel',
+      variant: 'ghost',
+      size: 'small',
+      onClick: () => state.linkDialog?.hide?.()
+    });
+
+    const applyBtn = button({
+      label: 'Apply',
+      variant: 'outline',
+      size: 'small',
+      onClick: () => applyLink()
+    });
+
+    const removeBtn = button({
+      label: 'Remove',
+      color: 'red',
+      size: 'small',
+      start: true,
+      onClick: () => {
+        linkField.value = '';
+        applyLink();
+      }
+    });    
+
+    state.linkInput = linkField;
+    state.linkDialog = dialog({
+      type: 'tooltip',
+      class: bem.el('tooltip'),
+      small: true,
+      anchor: anchorEl,
+      position: 'bottom',
+      content: col({
+        gap: 2,
+        children: [
+          linkField,
+          row({ gap: 2, end: true }, [removeBtn, cancelBtn, applyBtn])
+        ]
+      }),
+      onOpen: () => {
+        const { href } = state.richController?.getState?.() || {};
+        linkField.value = href || '';
+        removeBtn.style.display = href ? '' : 'none';
+        linkField.ok?.();
+        setTimeout(() => linkField.input?.focus(), 0);
+      }
+    });
+
+    return state.linkDialog;
   };
 
   const toolbarActions = rich
@@ -363,12 +454,13 @@ export function editable(...args) {
           key: 'link',
           icon: 'link',
           active: () => !!state.richState.link,
-          run: () => {
-            const { href } = state.richController?.getState?.() || {};
-            const next = prompt('URL (empty = remove)', href || '');
-            if (next === null) return;
-            const normalized = next.trim();
-            state.richController?.toggle('link', normalized === '' ? null : normalized);
+          run: (btn) => {
+            const tip = ensureLinkDialog(btn);
+            if (tip.isOpen) {
+              tip.hide();
+              return;
+            }
+            tip.show(btn);
           }
         },
         {
@@ -390,14 +482,13 @@ export function editable(...args) {
           icon: action.icon,
           tip: prettifyLabel(action.key),
           variant: 'ghost',
-          class: ['rte-btn', bem.el('rte-btn')],
           attrs: { 'aria-pressed': 'false' }
         });
         btn.addEventListener('mousedown', (event) => event.preventDefault());
         btn.addEventListener('click', async (event) => {
           event.preventDefault();
           if (btn.disabled) return;
-          await action.run();
+          await action.run(btn);
           updateToolbarState();
         });
         state.toolbarButtons.set(action.key, { btn, action });
@@ -495,6 +586,7 @@ export function editable(...args) {
     style: minRows ? { minHeight: `${minRows * 1.5}em` } : undefined,
     class: [
       bem(),
+      bem.el('editor'),
       plain && 'ui-plain',
       bem.core('size', size),
       rich && bem('rich'),
@@ -517,7 +609,7 @@ export function editable(...args) {
   const markdownEl = rich
     ? el('textarea', {
       ...noSpellcheck,
-      class: [bem.el('markdown'), bem.core('size', size), 'ui-border'],
+      class: [bem.el('markdown'), bem.el('editor'), bem.core('size', size), 'ui-border'],
       rows: markdownRows,
       placeholder,
       hidden: true,
@@ -536,9 +628,11 @@ export function editable(...args) {
     class: [bem.el('wrap'), configToClasses(props)],
     children: [
       label && textLabel({ text: label, soft: true }),
-      toolbar,
-      editableEl,
-      markdownEl,
+      col({ class: bem.el('content') }, [
+        editableEl,
+        markdownEl,
+        toolbar
+      ]),
       (message || info || counter) && row({ class: bem.el('footer'), justify: 'between' }, [
         message && el('div', {
           class: bem.el('message'),
