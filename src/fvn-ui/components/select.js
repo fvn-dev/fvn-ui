@@ -40,6 +40,7 @@ export function selectComponent(...args) {
     ghost,
     adaptive = true,
     multiselect = false,
+    contrast,
     filter: filterProp,
     filterPlaceholder = 'Filter...',
     required,
@@ -331,7 +332,7 @@ export function selectComponent(...args) {
     grow: !!grow,  // Don't grow in flex containers by default
     class: [configToClasses(props), rest.class],
     children: [
-      label && text.label({ text: label, soft: true }),
+      label && text.label({ text: label, soft: !contrast }),
       el('div', {
         class: [bem(), multiselect && bem('multi')],
         data: { open: false },
@@ -339,7 +340,7 @@ export function selectComponent(...args) {
         children: [
           el('button', {
             type: 'button',
-            class: [bem.el('trigger'), 'ui-border', ghost && bem('ghost')],
+            class: [bem.el('trigger'), 'ui-border', , contrast && 'ui-contrast', ghost && bem('ghost')],
             attrs: { 'aria-haspopup': 'listbox', 'aria-expanded': false },
             ref: (e) => {
               triggerEl = e;

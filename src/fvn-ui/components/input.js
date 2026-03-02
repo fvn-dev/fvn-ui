@@ -43,6 +43,7 @@ export function input(...args) {
     size = 'default',
     rows,
     icon,
+    contrast,
     value,
     label,
     placeholder,
@@ -143,7 +144,7 @@ export function input(...args) {
     gap: 2,
     class: ['ui-input-root', configToClasses(props), rest.class],
     children: [
-      label && textLabel({ text: label, soft: true }),
+      label && textLabel({ text: label, soft: !contrast }),
       el('div', {
         class: [bem.el('wrap'), bem.core('size', size), isNumber && bem.el('wrap--number')],
         ref: (e) => wrapEl = e,
@@ -152,7 +153,7 @@ export function input(...args) {
             ...rest,
             ...inputAttrs,
             ...noSpellcheck,
-            class: [bem(), submitCallback && bem('submit'), isNumber && bem('number'), 'ui-border', rest.class],
+            class: [bem(), submitCallback && bem('submit'), isNumber && bem('number'), 'ui-border', contrast && 'ui-contrast', rest.class],
             ref: (e) => {
               inputEl = e;
               if (isTextarea && value) e.textContent = value;

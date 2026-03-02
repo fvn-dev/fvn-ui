@@ -294,6 +294,11 @@ body.fvn-ui {
   flex-direction: row-reverse;
 }
 
+.ui-border.ui-contrast:focus-visible {
+  outline: 1px solid var(--primary);
+  outline-offset: 1px;
+}
+
 /* :root wrapper for specificity boost */
 .fvn-ui {
   /* Keep: used by components */

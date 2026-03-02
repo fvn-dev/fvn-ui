@@ -28,6 +28,7 @@ export function radio(...args) {
     label,
     orientation,
     disabled,
+    contrast,
     color = 'default',
     props,
     ...rest
@@ -57,7 +58,7 @@ export function radio(...args) {
     class: [bem(), 'ui-form-group', isRow && 'horizontal', configToClasses(props), rest.class],
     attrs: { role: 'radio' },
     children: [
-      label && textLabel({ text: label, soft: true }),
+      label && textLabel({ text: label, soft: !contrast }),
       el('div', {
         class: 'ui-form-group__items',
         children: list.map(item => {
@@ -80,7 +81,7 @@ export function radio(...args) {
                 onChange: e => setValue(e.target.value, e)
               }),
               el('span', { 
-                class: 'ui-form-control ui-form-control--round ui-border',
+                class: ['ui-form-control', 'ui-form-control--round', 'ui-border', contrast && 'ui-contrast'],
                 data: { uiCol: checked ? color : `sub-${color}` },
                 ref: e => controlEl = e
               }),

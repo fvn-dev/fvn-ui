@@ -175,6 +175,7 @@ export function editable(...args) {
     onKeydown,
     onSubmit,
     props,
+    contrast,
     attrs = {},
     ...rest
   } = parseArgs(...args);
@@ -644,7 +645,7 @@ export function editable(...args) {
   const markdownEl = rich
     ? el('textarea', {
       ...noSpellcheck,
-      class: [bem.el('markdown'), bem.el('editor'), bem.core('size', size), 'ui-border'],
+      class: [bem.el('markdown'), bem.el('editor'), bem.core('size', size), 'ui-border', contrast && 'ui-contrast'],
       rows: markdownRows,
       placeholder,
       hidden: true,
@@ -663,7 +664,7 @@ export function editable(...args) {
   const root = col(parent, {
     class: [bem.el('wrap'), configToClasses(props)],
     children: [
-      label && textLabel({ text: label, soft: true }),
+      label && textLabel({ text: label, soft: !contrast }),
       col({ class: bem.el('content') }, [
         editableEl,
         markdownEl,

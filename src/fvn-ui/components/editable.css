@@ -166,10 +166,10 @@
   font-family: var(--ui-font) !important;
 }
 .ui-editable--rich h2 {
-  font-weight: 900;
-  font-size: 1.35em;
-  margin: 0;
+  font-weight: 900 !important;
+  font-size: 1.35em !important;
 }
+.ui-editable--rich h2,
 .ui-editable--rich p,
 .ui-editable--rich blockquote,
 .ui-editable--rich ul {

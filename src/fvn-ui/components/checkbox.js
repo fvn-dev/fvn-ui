@@ -31,6 +31,7 @@ export function checkbox(...args) {
     name,
     value = 'on',
     color,
+    contrast,
     props,
     ...rest
   } = parseArgs(...args);
@@ -69,7 +70,7 @@ export function checkbox(...args) {
         onChange: (e) => setState(e.target.checked, e)
       }),
       el('span', { 
-        class: 'ui-form-control ui-border',
+        class: ['ui-form-control', 'ui-border', contrast && 'ui-contrast'],
         data: { uiCol: getColor() },
         ref: (e) => controlEl = e,
         html: svg('check')
