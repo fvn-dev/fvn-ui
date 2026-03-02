@@ -294,8 +294,18 @@ body.fvn-ui {
   flex-direction: row-reverse;
 }
 
+.has-ui-border.ui-contrast:focus-within .ui-border.ui-contrast, 
+.ui-border.ui-contrast:focus,
+.ui-border.ui-contrast:focus-within,
 .ui-border.ui-contrast:focus-visible {
   outline: 1px solid var(--primary);
+  outline-offset: 1px;
+}
+.has-ui-border.ui-contrast.invalid:focus-within .ui-border.ui-contrast,
+.ui-border.ui-contrast:focus-within:has(.invalid),
+.ui-border.ui-contrast.invalid:focus-within,
+.ui-border.ui-contrast.invalid:focus-visible {
+  outline: 1px solid var(--pink);
   outline-offset: 1px;
 }
 

@@ -82,7 +82,7 @@ export function input(...args) {
     message,
     checkLength: !isNumber,
     getValue: () => inputEl?.value || '',
-    setInvalid: (isInvalid) => wrapEl?.classList.toggle('invalid', isInvalid),
+    setInvalid: (isInvalid) => inputEl?.classList.toggle('invalid', isInvalid),
     setMessage: (text, visible) => {
       if (!messageEl) return;
       messageEl.textContent = text;

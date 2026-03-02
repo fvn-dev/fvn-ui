@@ -334,13 +334,13 @@ export function selectComponent(...args) {
     children: [
       label && text.label({ text: label, soft: !contrast }),
       el('div', {
-        class: [bem(), multiselect && bem('multi')],
+        class: [bem(), multiselect && bem('multi'), 'has-ui-border', contrast && 'ui-contrast'],
         data: { open: false },
         ref: (e) => selectEl = e,
         children: [
           el('button', {
             type: 'button',
-            class: [bem.el('trigger'), 'ui-border', , contrast && 'ui-contrast', ghost && bem('ghost')],
+            class: [bem.el('trigger'), 'ui-border', contrast && 'ui-contrast', ghost && bem('ghost')],
             attrs: { 'aria-haspopup': 'listbox', 'aria-expanded': false },
             ref: (e) => {
               triggerEl = e;

@@ -626,8 +626,7 @@ export function editable(...args) {
       plain && 'ui-plain',
       bem.core('size', size),
       rich && bem('rich'),
-      isSingleLine && bem('single-line'),
-      'ui-border',
+      isSingleLine && bem('single-line'),      
       rest.class
     ],
     ref: (node) => {
@@ -645,7 +644,7 @@ export function editable(...args) {
   const markdownEl = rich
     ? el('textarea', {
       ...noSpellcheck,
-      class: [bem.el('markdown'), bem.el('editor'), bem.core('size', size), 'ui-border', contrast && 'ui-contrast'],
+      class: [bem.el('markdown'), bem.el('editor'), bem.core('size', size)],
       rows: markdownRows,
       placeholder,
       hidden: true,
@@ -665,7 +664,7 @@ export function editable(...args) {
     class: [bem.el('wrap'), configToClasses(props)],
     children: [
       label && textLabel({ text: label, soft: !contrast }),
-      col({ class: bem.el('content') }, [
+      col({ class: [ bem.el('content'), 'ui-border', contrast && 'ui-contrast' ] }, [
         editableEl,
         markdownEl,
         toolbar

@@ -1,6 +1,6 @@
 {
   "name": "fvn-ui",
-  "version": "0.1.0-alpha.96",
+  "version": "0.1.0-alpha.99",
   "description": "Minimalist vanilla JS component library",
   "type": "module",
   "sideEffects": [

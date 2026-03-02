@@ -1,9 +1,5 @@
 .ui-select { position: relative; }
 
-.ui-select.invalid .ui-select__trigger {
-  border-color: var(--red);
-}
-
 .ui-select__trigger {
   width: 100%;
   display: flex;
@@ -18,7 +14,10 @@
   cursor: pointer;
 }
 .ui-select__trigger:hover { 
-  border-color: var(--border-dark); 
+  --border: var(--border-dark); 
+}
+.ui-select.invalid .ui-select__trigger {
+  --border: var(--red);
 }
 
 .ui-select__trigger.ui-select--ghost { 

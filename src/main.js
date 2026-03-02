@@ -276,7 +276,10 @@ function selectPresentation() {
       selectComponent({
         label: 'Pick a fruit',
         options: exampleOptions.slice(0, 5),
-        value: 1
+        value: 1,
+        contrast: true,
+        required: true,
+        ref: e => setTimeout(() => e.error('asd'), 2000)
       }),
       selectComponent({
         label: '<span>&nbsp;</span>',
