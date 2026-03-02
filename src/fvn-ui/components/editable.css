@@ -22,14 +22,11 @@
   background: transparent !important;
 }
 
-.ui-editable:not(.ui-plain):hover {
+.ui-editable__editor:not(.ui-plain):hover {
   border-color: var(--border-dark);
 }
-.ui-editable:not(.ui-plain):focus-visible {
-  border-color: var(--muted);
-}
-.ui-editable.invalid {
-  border-color: var(--red);
+.ui-editable__editor:not(.ui-plain):focus-visible {
+  border-color: var(--border-dark);
 }
 
 .ui-editable:not(.ui-editable--rich):empty::before {
@@ -116,11 +113,16 @@
 .ui-editable__toolbar:hover {
   --text: hsl(var(--hsl-text));
 }
-.col.ui-editable__wrap:has(.ui-editable__editor:focus) .ui-editable__toolbar {
-  border-color: var(--text);
+.ui-editable__wrap:has(.ui-editable__editor:hover) .ui-editable__toolbar {
+  border-color: var(--border-dark);
 }
-.col.ui-editable__content:has(.ui-editable__toolbar) > .ui-editable__editor {
+.ui-editable__wrap:has(.ui-editable__editor:focus) .ui-editable__toolbar {
+  --text: hsl(var(--hsl-text));
+  border-color: var(--border-dark);
+}
+.ui-editable__content:has(.ui-editable__toolbar) .ui-editable__editor {
   border-radius: var(--radius) var(--radius) 0 0;
+  border-bottom-width: 0;
 }
 .ui-editable__toolbar .ui-btn {
   border-radius: 0;
@@ -159,10 +161,14 @@
 .ui-editable__markdown:focus-visible {
   border-color: var(--muted);
 }
-.ui-editable__markdown.invalid {
-  border-color: var(--red);
+.ui-editable__editor * {
+    all: unset;
+    display: block;
+    font-weight: 400 !important;
+    font-size: calc(.9 * var(--core)) !important;
+    line-height: 1.3 !important;
+    font-family: var(--ui-font) !important;
 }
-
 .ui-editable--rich h2 {
   font-weight: 900;
   font-size: 1.35em;
@@ -185,4 +191,9 @@
 
 .ui-editable__tooltip {
   min-width: 300px;
+}
+
+.ui-editable__editor.invalid,
+.col.ui-editable__wrap:has(.ui-editable__editor.invalid) .ui-editable__toolbar {
+  border-color: var(--red);
 }

@@ -33,7 +33,7 @@
   letter-spacing: .1em;
   pointer-events: none;
   font-weight: 700 !important;
-  font-size: 75% !important;
+  font-size: calc(min(75%, 10px)) !important;
   line-height: 1 !important;
 }
 .ui-btn > div {
