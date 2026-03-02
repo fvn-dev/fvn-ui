@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bare Bones Rich Text Demo</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: sans-serif;
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    button {
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+
+    button.active {
+      background: #111827;
+      color: #ffffff;
+      border-color: #111827;
+    }
+
+    #editor {
+      min-height: 160px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 12px;
+      outline: none;
+    }
+
+    pre {
+      margin-top: 12px;
+      background: #111827;
+      color: #d1d5db;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 12px;
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="toolbar">
+    <button id="boldButton">bold</button>
+    <button id="italicButton">italic</button>
+    <button id="headingButton">heading</button>
+    <button id="quoteButton">quote</button>
+    <button id="listButton">list</button>
+    <button id="linkButton">link</button>
+    <button id="unlinkButton">unlink</button>
+    <button id="universalLinkButton">universal link</button>
+    <button id="resumeButton">resume</button>
+  </div>
+
+  <div id="editor" contenteditable="true">
+    <p>Select text and use the buttons.</p>
+  </div>
+
+  <pre id="stateView"></pre>
+  <pre id="positionView"></pre>
+  <pre id="focusView"></pre>
+
+  <script type="module">
+  import withRichText from "./editable.rich.js";
+
+  const editorElement = document.getElementById("editor");
+  const stateView = document.getElementById("stateView");
+  const positionView = document.getElementById("positionView");
+  const focusView = document.getElementById("focusView");
+
+  function renderPosition() {
+    positionView.textContent = JSON.stringify(editor.position(), null, 2);
+  }
+
+  function renderFocus() {
+    const active = document.activeElement;
+    const id = active ? active.id || "(no id)" : "null";
+    const tag = active ? active.tagName : "null";
+    focusView.textContent = JSON.stringify({ activeTag: tag, activeId: id }, null, 2);
+  }
+
+  const editor = withRichText(editorElement);
+  editor.listen((state) => {
+    stateView.textContent = JSON.stringify(state, null, 2);
+    document.getElementById("boldButton").classList.toggle("active", state.bold);
+    document.getElementById("italicButton").classList.toggle("active", state.italic);
+    document.getElementById("headingButton").classList.toggle("active", state.heading);
+    document.getElementById("quoteButton").classList.toggle("active", state.quote);
+    document.getElementById("listButton").classList.toggle("active", state.list);
+    document.getElementById("linkButton").classList.toggle("active", state.link);
+    document.getElementById("universalLinkButton").classList.toggle("active", state.link);
+    renderPosition();
+    renderFocus();
+  });
+
+  document.getElementById("boldButton").onclick = () => editor.toggle("bold");
+  document.getElementById("italicButton").onclick = () => editor.toggle("italic");
+  document.getElementById("headingButton").onclick = () => editor.toggle("heading");
+  document.getElementById("quoteButton").onclick = () => editor.toggle("quote");
+  document.getElementById("listButton").onclick = () => editor.toggle("list");
+  document.getElementById("linkButton").onclick = () => {
+    const href = prompt("href");
+    if (href) {
+      editor.toggle("link", href);
+    }
+  };
+  document.getElementById("unlinkButton").onclick = () => editor.toggle("link", null);
+  document.getElementById('universalLinkButton').onclick = () => {
+    const { href } = editor.getState();
+    const next = prompt('URL (empty = remove)', href || '');
+    if (next === null) return;
+    editor.toggle('link', next.trim() === '' ? null : next.trim());
+  };  
+  document.getElementById("resumeButton").onclick = () => {
+    editor.resume();
+    renderPosition();
+    renderFocus();
+  };
+  document.addEventListener("selectionchange", renderPosition);
+  document.addEventListener("focusin", renderFocus);
+  renderPosition();
+  renderFocus();
+</script>
+</body>
+
+</html>

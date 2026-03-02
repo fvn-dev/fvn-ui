@@ -158,29 +158,27 @@ notes.setLimits({ max: 200 })
 `setLimits(...)` accepts `(min, max)` or `{ min, max }`.
 `undefined` keeps existing bounds, `null` clears a bound.
 
-### Editable Markdown Mode
+### Editable Rich + Markdown Mode
 
-`editable({ rich: true })` uses a ProseMirror-backed editor with a markdown toggle.
-Rich runtime is fetched on demand from `https://esm.sh` only when `rich: true` is used.
+`editable({ rich: true })` uses the built-in `contenteditable` rich driver and a minimal fixed toolbar:
+`heading`, `bold`, `italic`, `quote`, `list`, `link`, and markdown mode toggle.
 
 ```js
-const ed = ui.editable({ label: 'Body', rich: true })
-const edCustomCdn = ui.editable({ label: 'Body', rich: true, richRuntimeBaseUrl: 'https://esm.sh' })
+const ed = ui.editable({ label: 'Body', rich: true, rows: 6 })
 
-ed.toMarkdown()
-ed.fromMarkdown('## Heading\n- Item')
-
-ed.toggleMarkdownMode() // rich <-> markdown editor
-ed.isMarkdownMode()     // true/false
+await ed.toggleMarkdownMode() // rich <-> markdown editor
+await ed.toMarkdown()         // Promise<string>
+await ed.toHTML()             // Promise<string>
 ```
 
-- `onInput(html, event)` / `onChange(html, event)` always emit HTML in both modes.
-- Markdown uses CommonMark serialization/parsing.
-- If markdown is unchanged when toggling back, previous HTML output is restored.
-- Unsupported `richInclude/richExclude` actions (`underline`, `strikethrough`) are ignored.
-- Rich mode requires network/CSP access to `https://esm.sh`.
-- No ProseMirror dependency install is required for `fvn-ui` consumers.
-- If rich runtime fails to load, editable continues in plain mode.
+- `value` is mode-dependent:
+  - rich mode: HTML
+  - markdown mode: markdown
+- `onInput(value, event)` / `onChange(value, event)` emit mode-dependent values.
+- Link uses one universal button (set URL / clear URL).
+- Numbered lists are not supported in toolbar (unordered list only).
+- `toMarkdown()` lazily loads `turndown` from jsDelivr on first use.
+- `toHTML()` lazily loads `marked` from jsDelivr on first use.
 
 ### CSS Variables
 

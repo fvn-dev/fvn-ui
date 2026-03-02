@@ -702,7 +702,7 @@ list.items  // get current items array
 
 ### `editable({ label, placeholder })`
 
-Contenteditable element with input-like behavior. Rich mode is ProseMirror-backed with CommonMark markdown conversion.
+Contenteditable element with input-like behavior. Rich mode uses the built-in rich driver and a fixed minimal toolbar.
 
 ```js
 // Multiline (default)
@@ -721,17 +721,15 @@ editable({ multiline: false })  // same as rows: 1
 | `value` | Initial HTML content |
 | `rows` | 1 = single line, >1 = sets min-height |
 | `multiline` | `false` = single line mode |
-| `rich` | Enable rich text toolbar (loads rich runtime on demand) |
-| `richRuntimeBaseUrl` | Optional rich runtime CDN base URL (default: `https://esm.sh`) |
-| `richInclude/richExclude` | Include/exclude toolbar actions (`heading`, `bold`, `italic`, `quote`, `list`, `link`, `clear`, `markdown`) |
+| `rich` | Enable rich text toolbar |
 | `plainText` | Strip formatting on paste |
 | `required` | Require text content to be non-empty |
 | `validate` | Built-in: `'email'`, `'url'`, `'phone'` or custom function |
 | `min/max` | Character length limits |
 | `message` | Error message(s) — string or object |
 | `info` | Helper text shown when valid |
-| `onInput` | Called with `(html, event)` in both rich and markdown modes |
-| `onChange` | Called with `(html, event)` |
+| `onInput` | Called with `(value, event)` where value is mode-dependent |
+| `onChange` | Called with `(value, event)` where value is mode-dependent |
 | `onSubmit` | Called on Enter (single line only) |
 
 **Methods:**
@@ -743,13 +741,10 @@ ed.error('Custom error')
 ed.ok()
 ed.reset()
 
-// Convert content
-ed.toMarkdown()
-ed.fromMarkdown('## Heading\n- Item')
-
-// Rich mode only: toggle raw markdown editor in-place
-ed.toggleMarkdownMode()
-ed.isMarkdownMode() // true/false
+// Rich mode markdown toggle + conversion
+await ed.toggleMarkdownMode()
+await ed.toMarkdown() // Promise<string>
+await ed.toHTML()     // Promise<string>
 
 // Update length limits at runtime (revalidates + refreshes counter immediately)
 ed.setLimits(5, 300)
@@ -761,15 +756,15 @@ ed.setLimits({ min: null }) // clear min limit
 `undefined` keeps existing bounds, `null` clears a bound.
 
 Notes:
-- Markdown mode is rendered with fvn-ui textarea input styling.
-- Heading toggle is fixed to `h3`.
-- `underline` / `strikethrough` in `richInclude` are ignored (no crash).
-- `toMarkdown()` returns CommonMark output.
-- If markdown text is unchanged while toggling back to rich mode, previous HTML output is restored.
-- Rich runtime modules are fetched from `https://esm.sh` by default.
-- Rich mode requires network/CSP access to runtime CDN URLs.
-- No ProseMirror packages are required in consuming app dependencies.
-- If rich runtime fails to load, editable stays usable in plain mode.
+- Toolbar actions are fixed: `heading`, `bold`, `italic`, `quote`, `list`, `link`, `markdown`.
+- Link is a single universal button (set URL / clear URL).
+- Numbered list action is not supported.
+- Heading toggle is fixed to `h2`.
+- In rich editors, `value` is mode-dependent:
+  - rich mode: HTML
+  - markdown mode: markdown
+- `toMarkdown()` lazily loads `turndown` from jsDelivr.
+- `toHTML()` lazily loads `marked` from jsDelivr.
 
 ---
 

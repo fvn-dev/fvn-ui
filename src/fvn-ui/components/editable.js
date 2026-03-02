@@ -1,12 +1,14 @@
-import { el, row, col, parseArgs, configToClasses, bemFactory, noSpellcheck, focusAfterRender } from '../dom.js'
-import { label as textLabel } from './text.js'
-import { createValidationController, createCounterController } from './validation.js'
-import './editable.css'
+import { el, row, col, parseArgs, configToClasses, bemFactory, noSpellcheck, focusAfterRender } from '../dom.js';
+import { label as textLabel } from './text.js';
+import { button } from './button.js';
+import { createValidationController, createCounterController } from './validation.js';
+import withRichText from './editable.rich.js';
+import './editable.css';
 
 const bem = bemFactory('editable');
-let prosemirrorAdapterPromise;
-const SKIP_VALIDATION_EVENT_PROP = '__fvnSkipValidation';
-const USER_INTERACTION_EVENT_PROP = '__fvnUserInteraction';
+const MARKED_CDN_URL = 'https://cdn.jsdelivr.net/npm/marked@17.0.3/lib/marked.umd.min.js';
+const TURNDOWN_CDN_URL = 'https://cdn.jsdelivr.net/npm/turndown@7.1.2/dist/turndown.js';
+const runtimeLoaders = new Map();
 
 const parseLimitArgs = (minOrConfig, maxValue) => (
   minOrConfig && typeof minOrConfig === 'object' && !Array.isArray(minOrConfig)
@@ -14,29 +16,84 @@ const parseLimitArgs = (minOrConfig, maxValue) => (
     : { min: minOrConfig, max: maxValue }
 );
 
-const loadProseMirrorAdapter = () => {
-  if (!prosemirrorAdapterPromise) {
-    prosemirrorAdapterPromise = import('./editable.prosemirror.js');
-  }
-  return prosemirrorAdapterPromise;
+const htmlToText = (html = '') => {
+  const probe = document.createElement('div');
+  probe.innerHTML = String(html || '');
+  return probe.textContent || '';
 };
 
-const escapeHtml = (value = '') => String(value)
-  .replace(/&/g, '&amp;')
-  .replace(/</g, '&lt;')
-  .replace(/>/g, '&gt;')
-  .replace(/"/g, '&quot;')
-  .replace(/'/g, '&#39;');
+const prettifyLabel = (value) => (
+  String(value || '')
+    .split('-')
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ')
+);
 
-const fallbackMarkdownToHtml = (markdown = '') => String(markdown || '')
-  .split(/\n{2,}/)
-  .map((block) => `<span data-ui-paragraph>${escapeHtml(block).replace(/\n/g, '<br>')}</span>`)
-  .join('');
+const loadRuntimeScript = (name, src, readGlobal) => {
+  const existingRuntime = readGlobal();
+  if (existingRuntime) return Promise.resolve(existingRuntime);
+  if (runtimeLoaders.has(name)) return runtimeLoaders.get(name);
 
-const fallbackHtmlToMarkdown = (html = '') => {
-  const root = document.createElement('div');
-  root.innerHTML = html;
-  return (root.textContent || '').trim();
+  const promise = new Promise((resolve, reject) => {
+    const onResolve = () => {
+      const runtime = readGlobal();
+      if (runtime) {
+        resolve(runtime);
+        return;
+      }
+      reject(new Error(`[fvn-ui/editable] "${name}" loaded but global runtime was missing`));
+    };
+
+    const onReject = () => reject(new Error(`[fvn-ui/editable] failed to load "${name}" runtime`));
+
+    let script = document.querySelector(`script[data-fvn-editable-lib="${name}"]`);
+    if (!script) {
+      script = document.createElement('script');
+      script.src = src;
+      script.async = true;
+      script.dataset.fvnEditableLib = name;
+      script.addEventListener('load', () => {
+        script.dataset.fvnEditableReady = 'true';
+        onResolve();
+      }, { once: true });
+      script.addEventListener('error', onReject, { once: true });
+      document.head.appendChild(script);
+      return;
+    }
+
+    script.addEventListener('load', onResolve, { once: true });
+    script.addEventListener('error', onReject, { once: true });
+    if (script.dataset.fvnEditableReady === 'true') onResolve();
+  });
+
+  runtimeLoaders.set(name, promise);
+  promise.catch(() => runtimeLoaders.delete(name));
+  return promise;
+};
+
+const loadMarked = () => loadRuntimeScript('marked', MARKED_CDN_URL, () => globalThis.marked || null);
+const loadTurndown = () => loadRuntimeScript('turndown', TURNDOWN_CDN_URL, () => globalThis.TurndownService || null);
+
+const convertMarkdownToHtml = async (markdown = '') => {
+  const markedRuntime = await loadMarked();
+  const parser = typeof markedRuntime?.parse === 'function'
+    ? markedRuntime.parse.bind(markedRuntime)
+    : typeof markedRuntime?.marked?.parse === 'function'
+      ? markedRuntime.marked.parse.bind(markedRuntime.marked)
+      : null;
+
+  if (!parser) {
+    throw new Error('[fvn-ui/editable] marked runtime did not expose parse(...)');
+  }
+
+  return String(parser(String(markdown || '')) || '');
+};
+
+const convertHtmlToMarkdown = async (html = '') => {
+  const TurndownService = await loadTurndown();
+  const service = new TurndownService();
+  return service.turndown(String(html || ''));
 };
 
 /**
@@ -44,12 +101,12 @@ const fallbackHtmlToMarkdown = (html = '') => {
  * @param {Object} config
  * @param {string} [config.label] - Label text
  * @param {string} [config.placeholder] - Placeholder text (shown when empty)
- * @param {string} [config.value] - Initial HTML content
+ * @param {string} [config.value] - Initial content
  * @param {'default'|'large'} [config.size='default'] - Size variant
  * @param {number} [config.rows] - 1 = single line, > 1 = multiline (sets min-height)
- * @param {string} [config.richRuntimeBaseUrl='https://esm.sh'] - Base URL for rich runtime CDN modules (rich mode only)
  * @param {boolean} [config.multiline=true] - Allow multiple lines (false = single line)
- * @param {boolean} [config.plainText=false] - Strip formatting on paste
+ * @param {boolean} [config.rich=false] - Enable rich text editing
+ * @param {boolean} [config.plainText=false] - Strip formatting on paste in contenteditable mode
  * @param {'email'|'url'|'phone'|Function} [config.validate] - Validation rule or custom function
  * @param {number} [config.min] - Minimum character length
  * @param {number} [config.max] - Maximum character length
@@ -57,14 +114,14 @@ const fallbackHtmlToMarkdown = (html = '') => {
  * @param {boolean} [config.required] - Require text content
  * @param {string|Object} [config.message] - Validation error message(s)
  * @param {string} [config.info] - Helper text shown when valid
- * @param {Function} [config.onChange] - Called on input with (html, event)
- * @param {Function} [config.onInput] - Called on every input with (html, event)
+ * @param {Function} [config.onChange] - Called on input with (value, event)
+ * @param {Function} [config.onInput] - Called on every input with (value, event)
  * @param {Function} [config.onFocus] - Called on focus with (event)
- * @param {Function} [config.onBlur] - Called on blur with (html, event)
+ * @param {Function} [config.onBlur] - Called on blur with (value, event)
  * @param {Function} [config.onKeydown] - Called on keydown with (event)
- * @param {Function} [config.onSubmit] - Called on Enter key with (html, event) - single line mode only
+ * @param {Function} [config.onSubmit] - Called on Enter key with (value, event) - single line mode only
  * @param {string} [config.id] - Registers to dom.editable[id] and dom[id]
- * @returns {HTMLDivElement} Wrapper with .value/.html/.text/.markdown getters, .isValid(), .setLimits(), .toText(), .toMarkdown(), and .fromMarkdown()
+ * @returns {HTMLDivElement}
  */
 export function editable(...args) {
   const {
@@ -76,9 +133,6 @@ export function editable(...args) {
     value,
     rows,
     rich = false,
-    richRuntimeBaseUrl,
-    richInclude,
-    richExclude,
     multiline,
     plainText = false,
     plain = false,
@@ -103,49 +157,73 @@ export function editable(...args) {
 
   const isSingleLine = rows === 1 || multiline === false;
   const minRows = rows && rows > 1 ? rows : null;
+  const markdownRows = Math.max(minRows || 6, 4);
 
-  let editableEl;
+  const state = {
+    mode: rich ? 'rich' : 'plain',
+    hasInteracted: false,
+    currentMin: min,
+    currentMax: max,
+    modeToken: 0,
+    editableEl: null,
+    markdownEl: null,
+    richController: null,
+    richState: {
+      bold: false,
+      italic: false,
+      heading: false,
+      list: false,
+      link: false,
+      href: null,
+      quote: false
+    },
+    toolbarButtons: new Map()
+  };
+
+  const isMarkdownMode = () => rich && state.mode === 'markdown';
+  const getRichHtml = () => state.editableEl?.innerHTML || '';
+  const getCurrentValue = () => (isMarkdownMode() ? state.markdownEl?.value || '' : getRichHtml());
+  const getValidationValue = () => (isMarkdownMode() ? state.markdownEl?.value || '' : htmlToText(getRichHtml()));
+
+  const syncRichEmptyState = () => {
+    if (!rich || !state.editableEl) return;
+    if (isMarkdownMode()) {
+      state.editableEl.dataset.empty = 'false';
+      return;
+    }
+    state.editableEl.dataset.empty = getValidationValue().trim().length === 0 ? 'true' : 'false';
+  };
+
+  const normalizePlainContent = () => {
+    if (rich || !state.editableEl) return;
+    if (!state.editableEl.textContent?.trim()) {
+      state.editableEl.innerHTML = '';
+    }
+  };
+
+  const emitValue = (event, target) => {
+    const source = target || (isMarkdownMode() ? state.markdownEl : state.editableEl);
+    const payload = getCurrentValue();
+    const e = event || new Event('input', { bubbles: true });
+    onInput?.call(source, payload, e);
+    onChange?.call(source, payload, e);
+  };
+
   let messageEl;
   let infoEl;
   let counterEl;
-  let richApi = null;
-  let currentMin = min;
-  let currentMax = max;
-  let hasInteracted = false;
-
-  const getHtml = () => richApi?.getHTML?.() ?? (editableEl?.innerHTML || '');
-
-  const getText = () => {
-    const probe = document.createElement('div');
-    probe.innerHTML = getHtml();
-    return probe.textContent || '';
-  };
-
-  const getMarkdown = () => richApi?.toMarkdown?.() ?? fallbackHtmlToMarkdown(getHtml());
-
-  const applyValidationState = ({ force = false } = {}) => {
-    if ((force || hasInteracted) && validation.hasRules) validation.check();
-    if (counter) counterController.update();
-  };
-
-  const emitCallbacks = (target, event, htmlValue = getHtml()) => {
-    const source = target || editableEl;
-    const e = event || new Event('input', { bubbles: true });
-    onInput?.call(source, htmlValue, e);
-    onChange?.call(source, htmlValue, e);
-  };
 
   const validation = createValidationController({
     validate,
     required,
-    min: currentMin,
-    max: currentMax,
+    min: state.currentMin,
+    max: state.currentMax,
     message,
     checkLength: true,
-    getValue: getText,
+    getValue: getValidationValue,
     setInvalid: (isInvalid) => {
-      editableEl?.classList.toggle('invalid', isInvalid);
-      richApi?.setInvalid?.(isInvalid);
+      state.editableEl?.classList.toggle('invalid', isInvalid);
+      state.markdownEl?.classList.toggle('invalid', isInvalid);
     },
     setMessage: (text, visible) => {
       if (!messageEl) return;
@@ -158,75 +236,256 @@ export function editable(...args) {
   });
 
   const counterController = createCounterController({
-    min: currentMin,
-    max: currentMax,
+    min: state.currentMin,
+    max: state.currentMax,
     checkLength: true,
-    getValue: getText,
+    getValue: getValidationValue,
     setCounter: counter
-      ? (text, state) => {
+      ? (text, variant) => {
           if (!counterEl) return;
           counterEl.textContent = text;
           counterEl.classList.remove('warn', 'error', 'ok');
-          if (state) counterEl.classList.add(state);
+          if (variant) counterEl.classList.add(variant);
         }
       : null
   });
 
-  const normalizePlainContent = () => {
-    if (!editableEl || richApi?.isReady?.()) return;
-    if (!editableEl.textContent.trim()) {
-      editableEl.innerHTML = '';
+  const applyValidation = ({ force = false } = {}) => {
+    if ((force || state.hasInteracted) && validation.hasRules) validation.check();
+    if (counter) counterController.update();
+    syncRichEmptyState();
+  };
+
+  const setCurrentValue = (nextValue) => {
+    const next = String(nextValue || '');
+    if (isMarkdownMode()) {
+      if (state.markdownEl) state.markdownEl.value = next;
+      return;
+    }
+
+    if (state.editableEl) {
+      state.editableEl.innerHTML = next;
+      if (!rich) normalizePlainContent();
+      syncRichEmptyState();
     }
   };
 
-  const handleInput = (e) => {
-    if (richApi?.isReady?.()) return;
-    hasInteracted = true;
+  const updateToolbarState = () => {
+    if (!rich) return;
+    const markdown = isMarkdownMode();
+
+    state.toolbarButtons.forEach((entry) => {
+      const { btn, action } = entry;
+      const disabled = action.key !== 'markdown' && markdown;
+      btn.disabled = disabled;
+      const active = !disabled && action.active();
+      btn.classList.toggle('is-active', !!active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  };
+
+  const setMarkdownMode = async (force) => {
+    if (!rich || !state.markdownEl || !state.editableEl) return false;
+
+    const nextMode = typeof force === 'boolean'
+      ? (force ? 'markdown' : 'rich')
+      : (isMarkdownMode() ? 'rich' : 'markdown');
+
+    if (nextMode === state.mode) return isMarkdownMode();
+    const token = ++state.modeToken;
+
+    try {
+      if (nextMode === 'markdown') {
+        const markdown = await convertHtmlToMarkdown(state.editableEl.innerHTML || '');
+        if (token !== state.modeToken) return isMarkdownMode();
+
+        state.markdownEl.value = markdown;
+        state.mode = 'markdown';
+        state.editableEl.hidden = true;
+        state.markdownEl.hidden = false;
+        updateToolbarState();
+        applyValidation();
+        focusAfterRender(state.markdownEl);
+        return true;
+      }
+
+      const html = await convertMarkdownToHtml(state.markdownEl.value || '');
+      if (token !== state.modeToken) return isMarkdownMode();
+
+      state.editableEl.innerHTML = html;
+      state.mode = 'rich';
+      state.markdownEl.hidden = true;
+      state.editableEl.hidden = false;
+      state.richController?.resume?.();
+      syncRichEmptyState();
+      updateToolbarState();
+      applyValidation();
+      return false;
+    } catch (error) {
+      console.warn('[fvn-ui/editable] failed to toggle markdown mode', error);
+      return isMarkdownMode();
+    }
+  };
+
+  const toolbarActions = rich
+    ? [
+        {
+          key: 'heading',
+          icon: 'heading',
+          active: () => !!state.richState.heading,
+          run: () => state.richController?.toggle('heading')
+        },
+        {
+          key: 'bold',
+          icon: 'bold',
+          active: () => !!state.richState.bold,
+          run: () => state.richController?.toggle('bold')
+        },
+        {
+          key: 'italic',
+          icon: 'italic',
+          active: () => !!state.richState.italic,
+          run: () => state.richController?.toggle('italic')
+        },
+        {
+          key: 'quote',
+          icon: 'quote',
+          active: () => !!state.richState.quote,
+          run: () => state.richController?.toggle('quote')
+        },
+        {
+          key: 'list',
+          icon: 'list',
+          active: () => !!state.richState.list,
+          run: () => state.richController?.toggle('list')
+        },
+        {
+          key: 'link',
+          icon: 'link',
+          active: () => !!state.richState.link,
+          run: () => {
+            const { href } = state.richController?.getState?.() || {};
+            const next = prompt('URL (empty = remove)', href || '');
+            if (next === null) return;
+            const normalized = next.trim();
+            state.richController?.toggle('link', normalized === '' ? null : normalized);
+          }
+        },
+        {
+          key: 'markdown',
+          icon: 'code',
+          active: () => isMarkdownMode(),
+          run: () => setMarkdownMode()
+        }
+      ]
+    : [];
+
+  const toolbar = rich
+    ? row({
+      class: bem.el('toolbar'),
+      gap: 0,
+      align: 'center',
+      children: toolbarActions.map((action) => {
+        const btn = button({
+          icon: action.icon,
+          tip: prettifyLabel(action.key),
+          variant: 'ghost',
+          class: ['rte-btn', bem.el('rte-btn')],
+          attrs: { 'aria-pressed': 'false' }
+        });
+        btn.addEventListener('mousedown', (event) => event.preventDefault());
+        btn.addEventListener('click', async (event) => {
+          event.preventDefault();
+          if (btn.disabled) return;
+          await action.run();
+          updateToolbarState();
+        });
+        state.toolbarButtons.set(action.key, { btn, action });
+        return btn;
+      })
+    })
+    : null;
+
+  if (toolbar) {
+    toolbar.setAttribute('role', 'toolbar');
+  }
+
+  const handleContentInput = (event) => {
+    if (isMarkdownMode()) return;
+    state.hasInteracted = true;
     validation.clearManualError();
     normalizePlainContent();
-    applyValidationState();
-    emitCallbacks(e.target || editableEl, e);
+    applyValidation();
+    emitValue(event, state.editableEl);
   };
 
-  const handleKeydown = (e) => {
-    if (richApi?.isReady?.()) return;
-    onKeydown?.call(editableEl, e);
+  const handleMarkdownInput = (event) => {
+    if (!isMarkdownMode()) return;
+    state.hasInteracted = true;
+    validation.clearManualError();
+    applyValidation();
+    emitValue(event, state.markdownEl);
+  };
 
-    if (isSingleLine && e.key === 'Enter') {
-      e.preventDefault();
-      onSubmit?.call(editableEl, getHtml(), e);
+  const handleContentKeydown = (event) => {
+    if (isMarkdownMode()) return;
+    onKeydown?.call(state.editableEl, event);
+
+    if (isSingleLine && event.key === 'Enter') {
+      event.preventDefault();
+      onSubmit?.call(state.editableEl, getCurrentValue(), event);
     }
   };
 
-  const handlePaste = (e) => {
-    if (richApi?.isReady?.()) return;
-    if (plainText || isSingleLine) {
-      e.preventDefault();
-      let text = e.clipboardData.getData('text/plain');
-      if (isSingleLine) text = text.replace(/[\r\n]+/g, ' ');
-      document.execCommand('insertText', false, text);
+  const handleMarkdownKeydown = (event) => {
+    if (!isMarkdownMode()) return;
+    onKeydown?.call(state.markdownEl, event);
+
+    if (isSingleLine && event.key === 'Enter') {
+      event.preventDefault();
+      onSubmit?.call(state.markdownEl, getCurrentValue(), event);
     }
   };
 
-  const handleFocus = (e) => {
-    if (richApi?.isReady?.()) return;
-    if (plain && editableEl.textContent) {
+  const handleContentPaste = (event) => {
+    if (isMarkdownMode()) return;
+    if (!plainText && !isSingleLine) return;
+
+    event.preventDefault();
+    let text = event.clipboardData?.getData('text/plain') || '';
+    if (isSingleLine) text = text.replace(/[\r\n]+/g, ' ');
+    document.execCommand('insertText', false, text);
+  };
+
+  const handleContentFocus = (event) => {
+    if (isMarkdownMode()) return;
+    if (plain && state.editableEl?.textContent) {
       const range = document.createRange();
-      range.selectNodeContents(editableEl);
-      const sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(range);
+      range.selectNodeContents(state.editableEl);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
     }
-    onFocus?.call(editableEl, e);
+    onFocus?.call(state.editableEl, event);
   };
 
-  const handleBlur = (e) => {
-    if (richApi?.isReady?.()) return;
+  const handleMarkdownFocus = (event) => {
+    if (!isMarkdownMode()) return;
+    onFocus?.call(state.markdownEl, event);
+  };
+
+  const handleContentBlur = (event) => {
+    if (isMarkdownMode()) return;
     normalizePlainContent();
-    onBlur?.call(editableEl, getHtml(), e);
+    onBlur?.call(state.editableEl, getCurrentValue(), event);
   };
 
-  const editableDiv = el('div', {
+  const handleMarkdownBlur = (event) => {
+    if (!isMarkdownMode()) return;
+    onBlur?.call(state.markdownEl, getCurrentValue(), event);
+  };
+
+  const editableEl = el('div', {
     ...rest,
     ...attrs,
     ...noSpellcheck,
@@ -244,22 +503,42 @@ export function editable(...args) {
       rest.class
     ],
     ref: (node) => {
-      editableEl = node;
-      if (value) node.innerHTML = value;
+      state.editableEl = node;
+      if (value != null) node.innerHTML = String(value);
       if (focus) focusAfterRender(node);
     },
-    onInput: handleInput,
-    onKeydown: handleKeydown,
-    onPaste: handlePaste,
-    onFocus: handleFocus,
-    onBlur: handleBlur
+    onInput: handleContentInput,
+    onKeydown: handleContentKeydown,
+    onPaste: handleContentPaste,
+    onFocus: handleContentFocus,
+    onBlur: handleContentBlur
   });
+
+  const markdownEl = rich
+    ? el('textarea', {
+      ...noSpellcheck,
+      class: [bem.el('markdown'), bem.core('size', size), 'ui-border'],
+      rows: markdownRows,
+      placeholder,
+      hidden: true,
+      style: minRows ? { minHeight: `${minRows * 1.5}em` } : undefined,
+      ref: (node) => {
+        state.markdownEl = node;
+      },
+      onInput: handleMarkdownInput,
+      onKeydown: handleMarkdownKeydown,
+      onFocus: handleMarkdownFocus,
+      onBlur: handleMarkdownBlur
+    })
+    : null;
 
   const root = col(parent, {
     class: [bem.el('wrap'), configToClasses(props)],
     children: [
       label && textLabel({ text: label, soft: true }),
-      editableDiv,
+      toolbar,
+      editableEl,
+      markdownEl,
       (message || info || counter) && row({ class: bem.el('footer'), justify: 'between' }, [
         message && el('div', {
           class: bem.el('message'),
@@ -283,158 +562,54 @@ export function editable(...args) {
     ]
   });
 
-  const setHtml = (nextHtml) => {
-    const valueHtml = String(nextHtml || '');
-    if (richApi?.setHTML) {
-      richApi.setHTML(valueHtml);
-    } else {
-      editableEl.innerHTML = valueHtml;
-      normalizePlainContent();
-    }
-  };
+  if (rich && state.editableEl) {
+    state.richController = withRichText(state.editableEl);
+    state.richController.listen((nextState) => {
+      state.richState = nextState;
+      updateToolbarState();
+    });
+  }
 
-  const setText = (nextText) => {
-    const valueText = String(nextText || '');
-    if (richApi?.setText) {
-      richApi.setText(valueText);
-      return;
-    }
-    editableEl.textContent = valueText;
-    normalizePlainContent();
-  };
+  syncRichEmptyState();
+  updateToolbarState();
 
   Object.defineProperty(root, 'value', {
-    get: getText,
-    set: (v) => {
-      setText(v);
+    get: getCurrentValue,
+    set: (nextValue) => {
+      setCurrentValue(nextValue);
       validation.clearManualError();
-      applyValidationState();
-    }
-  });
-
-  Object.defineProperty(root, 'html', {
-    get: getHtml,
-    set: (v) => {
-      setHtml(v);
-      validation.clearManualError();
-      applyValidationState();
-    }
-  });
-
-  Object.defineProperty(root, 'text', {
-    get: getText,
-    set: (v) => {
-      setText(v);
-      validation.clearManualError();
-      applyValidationState();
-    }
-  });
-
-  Object.defineProperty(root, 'markdown', {
-    get: getMarkdown,
-    set: (v) => {
-      root.fromMarkdown(v);
+      applyValidation();
     }
   });
 
   root.isValid = validation.check;
   root.error = validation.error;
   root.ok = validation.ok;
-  root.toText = () => getText();
-  root.toMarkdown = () => getMarkdown();
-  root.fromMarkdown = (markdown) => {
-    const md = String(markdown || '');
-    if (richApi?.fromMarkdown) {
-      richApi.fromMarkdown(md);
-    } else {
-      setHtml(fallbackMarkdownToHtml(md));
-    }
-    validation.clearManualError();
-    applyValidationState();
-    return getHtml();
-  };
-  root.toggleMarkdownMode = (force) => richApi?.toggleMarkdownMode?.(force) ?? false;
-  root.isMarkdownMode = () => richApi?.isMarkdownMode?.() ?? false;
+  root.toggleMarkdownMode = (force) => setMarkdownMode(force);
+  root.toMarkdown = async () => (isMarkdownMode() ? state.markdownEl?.value || '' : convertHtmlToMarkdown(getRichHtml()));
+  root.toHTML = async () => (isMarkdownMode() ? convertMarkdownToHtml(state.markdownEl?.value || '') : getRichHtml());
 
   root.setLimits = (minOrConfig, maxValue) => {
     const { min: nextMin, max: nextMax } = parseLimitArgs(minOrConfig, maxValue);
-
-    if (nextMin !== undefined) currentMin = nextMin;
-    if (nextMax !== undefined) currentMax = nextMax;
+    if (nextMin !== undefined) state.currentMin = nextMin;
+    if (nextMax !== undefined) state.currentMax = nextMax;
 
     validation.setLimits({ min: nextMin, max: nextMax });
     counterController.setLimits({ min: nextMin, max: nextMax });
-    richApi?.setLimits?.({ min: nextMin, max: nextMax });
 
-    if (hasInteracted) validation.check();
+    if (state.hasInteracted) validation.check();
     if (counter) counterController.update();
   };
 
   root.reset = () => {
-    if (richApi?.reset) {
-      richApi.reset();
-    } else {
-      editableEl.innerHTML = '';
-      normalizePlainContent();
-    }
-    hasInteracted = false;
+    if (state.editableEl) state.editableEl.innerHTML = '';
+    if (state.markdownEl) state.markdownEl.value = '';
+    state.hasInteracted = false;
+    syncRichEmptyState();
     validation.reset();
     if (counter) counterController.reset();
+    updateToolbarState();
   };
-
-  if (rich) {
-    loadProseMirrorAdapter()
-      .then(({ createProseMirrorAdapter }) => createProseMirrorAdapter({
-        root,
-        editableEl,
-        placeholder,
-        minRows,
-        richRuntimeBaseUrl,
-        richInclude,
-        richExclude,
-        plainText,
-        validationConfig: {
-          validate,
-          required,
-          message,
-          min: currentMin,
-          max: currentMax
-        },
-        bem,
-        onHtmlInput: (html, target, event) => {
-          const skipValidation = !!event?.[SKIP_VALIDATION_EVENT_PROP];
-          const isUserInteraction = !!event?.isTrusted || !!event?.[USER_INTERACTION_EVENT_PROP];
-          if (!skipValidation && isUserInteraction) {
-            hasInteracted = true;
-            validation.clearManualError();
-            applyValidationState();
-          }
-          emitCallbacks(target, event, html);
-        },
-        onFocus: (target, event) => {
-          onFocus?.call(target || editableEl, event);
-        },
-        onBlur: (target, event) => {
-          onBlur?.call(target || editableEl, getHtml(), event);
-        },
-        onKeydown: (target, event) => {
-          onKeydown?.call(target || editableEl, event);
-          if (isSingleLine && event.key === 'Enter') {
-            event.preventDefault();
-            onSubmit?.call(target || editableEl, getHtml(), event);
-          }
-        },
-        onReady: () => {
-          if (counter) counterController.update();
-        }
-      }))
-      .then((adapter) => {
-        richApi = adapter;
-      })
-      .catch((err) => {
-        console.warn('[fvn-ui/editable] failed to load rich editor runtime', err);
-      });
-  }
 
   return root;
 }

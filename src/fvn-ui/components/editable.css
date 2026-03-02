@@ -14,11 +14,6 @@
   font-size: calc(.9 * var(--core));
 }
 
-.ui-editable [contenteditable] {
-  outline: none !important;
-  height: 100%;
-}
-
 .ui-editable.ui-plain {
   border: none;
   padding: 0;
@@ -37,15 +32,13 @@
   border-color: var(--red);
 }
 
-/* Placeholder via :empty and data attribute */
-.ui-editable:empty::before {
+.ui-editable:not(.ui-editable--rich):empty::before {
   content: attr(data-placeholder);
   color: var(--muted);
   pointer-events: none;
 }
 
-/* Ensure minimum clickable area even when "empty" */
-.ui-editable::after {
+.ui-editable:not(.ui-editable--rich)::after {
   content: '\200B'; /* zero-width space - ensures element never truly collapses */
   display: inline;
 }
@@ -120,7 +113,7 @@
   --text: hsl(var(--hsl-text));
 }
 .col.ui-editable__wrap:has(.ui-editable:focus) .ui-editable__toolbar,
-.col.ui-editable__wrap:has(.ui-input:focus) .ui-editable__toolbar {
+.col.ui-editable__wrap:has(.ui-editable__markdown:focus) .ui-editable__toolbar {
   border-color: var(--text);
 }
 .ui-editable__rte-btn.is-active {
@@ -128,46 +121,57 @@
   color: var(--text);
 }
 .ui-editable__rte-btn[disabled] {
-  visibility: hidden;
+  opacity: .5;
 }
 .ui-editable__toolbar + .ui-editable {
   border-radius: 0 0 var(--radius) var(--radius);
   margin-top: calc(-1 * var(--space-2));
 }
-.ui-editable__toolbar ~ .ui-input-root {
+.ui-editable__toolbar ~ .ui-editable__markdown {
   margin-top: calc(-1 * var(--space-2));
-}
-.ui-editable__toolbar ~ .ui-input-root .ui-input {
   border-radius: 0 0 var(--radius) var(--radius);
 }
-.ui-editable__toolbar ~ .ui-input-root .ui-input__footer {
-  display: none;
+
+.ui-editable__markdown {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--input-padding);
+  color: var(--text);
+  background: transparent;
+  width: 100%;
+  min-height: 1.5em;
+  outline: none;
+  resize: vertical;
+  font: inherit;
+  font-size: calc(.9 * var(--core));
+  line-height: 1.5;
+}
+.ui-editable__markdown:hover {
+  border-color: var(--border-dark);
+}
+.ui-editable__markdown:focus-visible {
+  border-color: var(--muted);
+}
+.ui-editable__markdown.invalid {
+  border-color: var(--red);
 }
 
-.ui-editable--rich h3 {
+.ui-editable--rich h2 {
   font-weight: 900;
   font-size: 1.35em;
   margin: 0;
 }
-.ui-editable--rich span[data-ui-paragraph],
+.ui-editable--rich p,
 .ui-editable--rich blockquote,
-.ui-editable--rich ul,
-.ui-editable--rich ol {
+.ui-editable--rich ul {
   margin: 0;
 }
-
-.ui-editable--rich span[data-ui-paragraph] {
-  display: block;
+.ui-editable--rich blockquote {
+  color: var(--muted);
+  border-left: 4px solid var(--border);
+  padding-left: var(--space-2);
 }
 .ui-editable--rich b,
 .ui-editable--rich strong {
   font-weight: 700 !important;
-}
-
-.ui-editable__tooltip {
-  min-width: 300px;
-}
-
-.ui-editable__markdown-toggle {
-  margin-right: auto;
 }
