@@ -107,9 +107,6 @@
   border-radius: 0 0 var(--radius) var(--radius);
   margin-top: calc(-1 * var(--space-2));
 }
-.ui-editable__toolbar button:last-child {
-  margin-left: auto;
-}
 .ui-editable__toolbar:hover {
   --text: hsl(var(--hsl-text));
 }
@@ -127,18 +124,19 @@
 .ui-editable__toolbar .ui-btn {
   border-radius: 0;
 }
-.ui-editable__toolbar .ui-btn:first-child {
-  border-bottom-left-radius: var(--radius);
-}
-.ui-editable__toolbar .ui-btn:last-child {
-  border-bottom-right-radius: var(--radius);
-}
 .ui-editable__toolbar .ui-btn.is-active {
   background: var(--hover);
   color: var(--text);
 }
 .ui-editable__toolbar .ui-btn[disabled] {
   opacity: .5;
+}
+.ui-editable__toolbar .ui-btn:first-child {
+  border-bottom-left-radius: var(--radius);
+}
+.ui-editable__toolbar .ui-btn:last-child {
+  border-bottom-right-radius: var(--radius);
+  margin-left: auto;
 }
 
 .ui-editable__markdown {
@@ -195,5 +193,5 @@
 
 .ui-editable__editor.invalid,
 .col.ui-editable__wrap:has(.ui-editable__editor.invalid) .ui-editable__toolbar {
-  border-color: var(--red);
+  border-color: var(--red) !important;
 }

@@ -38,6 +38,22 @@ const normalizeLinkUrl = (value) => {
   return /^[a-z][a-z0-9+.-]*:\/\//i.test(raw) ? raw : `https://${raw}`;
 };
 
+const sanitizePastedText = (value, { singleLine = false } = {}) => {
+  const raw = String(value || '')
+    .replace(/\r\n?/g, '\n')
+    .replace(/\\n/g, '\n');
+
+  const probe = document.createElement('div');
+  probe.innerHTML = raw;
+  let text = probe.textContent || '';
+
+  if (singleLine) {
+    text = text.replace(/[\r\n]+/g, ' ');
+  }
+
+  return text;
+};
+
 const loadRuntimeScript = (name, src, readGlobal) => {
   const existingRuntime = readGlobal();
   if (existingRuntime) return Promise.resolve(existingRuntime);
@@ -310,6 +326,10 @@ export function editable(...args) {
         const markdown = await convertHtmlToMarkdown(state.editableEl.innerHTML || '');
         if (token !== state.modeToken) return isMarkdownMode();
 
+        const richHeight = state.editableEl.offsetHeight;
+        if (richHeight > 0) {
+          state.markdownEl.style.height = `${richHeight}px`;
+        }
         state.markdownEl.value = markdown;
         state.mode = 'markdown';
         state.editableEl.hidden = true;
@@ -324,6 +344,7 @@ export function editable(...args) {
       if (token !== state.modeToken) return isMarkdownMode();
 
       state.editableEl.innerHTML = html;
+      state.markdownEl.style.height = '';
       state.mode = 'rich';
       state.markdownEl.hidden = true;
       state.editableEl.hidden = false;
@@ -540,12 +561,26 @@ export function editable(...args) {
 
   const handleContentPaste = (event) => {
     if (isMarkdownMode()) return;
-    if (!plainText && !isSingleLine) return;
 
     event.preventDefault();
-    let text = event.clipboardData?.getData('text/plain') || '';
-    if (isSingleLine) text = text.replace(/[\r\n]+/g, ' ');
+    const clipboardText = event.clipboardData?.getData('text/plain')
+      || event.clipboardData?.getData('text/html')
+      || '';
+    const text = sanitizePastedText(clipboardText, { singleLine: isSingleLine || plainText });
     document.execCommand('insertText', false, text);
+  };
+
+  const handleMarkdownPaste = (event) => {
+    if (!isMarkdownMode() || !state.markdownEl) return;
+
+    event.preventDefault();
+    const clipboardText = event.clipboardData?.getData('text/plain')
+      || event.clipboardData?.getData('text/html')
+      || '';
+    const text = sanitizePastedText(clipboardText, { singleLine: isSingleLine });
+    const { selectionStart, selectionEnd } = state.markdownEl;
+    state.markdownEl.setRangeText(text, selectionStart, selectionEnd, 'end');
+    state.markdownEl.dispatchEvent(new Event('input', { bubbles: true }));
   };
 
   const handleContentFocus = (event) => {
@@ -618,6 +653,7 @@ export function editable(...args) {
         state.markdownEl = node;
       },
       onInput: handleMarkdownInput,
+      onPaste: handleMarkdownPaste,
       onKeydown: handleMarkdownKeydown,
       onFocus: handleMarkdownFocus,
       onBlur: handleMarkdownBlur
