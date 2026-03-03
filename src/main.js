@@ -388,6 +388,15 @@ function inputPresentation() {
       text.label('Contenteditable'),
       layout.col([
         editable({ 
+          id: 'mrkdwn',
+          inserted() {
+            console.log('Content inserted:', this);
+            console.log(dom.mrkdwn.value);
+            dom.mrkdwn.toMarkdown().then(console.log)
+          },
+          onclick() {
+            dom.mrkdwn.toMarkdown().then(console.log)
+          },
           label: 'Rich text',
           placeholder: 'Faux text input...',
           rows: 5,

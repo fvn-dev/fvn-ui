@@ -172,16 +172,21 @@
   margin: 0 !important;
   padding: 0 !important;
 }
+.ui-editable--rich ul {
+  margin-left: var(--space-8) !important;
+}
 .ui-editable--rich blockquote {
   color: var(--muted);
-  border-left: 4px solid var(--border);
-  padding-left: var(--space-2);
+  border-left: 4px solid var(--muted);
+  padding-left: var(--space-2) !important;
 }
 .ui-editable--rich b,
 .ui-editable--rich strong {
   font-weight: 700 !important;
 }
-
+.ui-editable--rich a {
+  color: var(--primary) !important;
+}
 .ui-editable__tooltip {
   min-width: 300px;
 }

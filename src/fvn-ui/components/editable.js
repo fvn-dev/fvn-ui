@@ -116,7 +116,7 @@ const convertMarkdownToHtml = async (markdown = '') => {
 
 const convertHtmlToMarkdown = async (html = '') => {
   const TurndownService = await loadTurndown();
-  const service = new TurndownService();
+  const service = new TurndownService({ strongDelimiter: '*' });
   return service.turndown(String(html || ''));
 };
 

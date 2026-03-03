@@ -1,5 +1,8 @@
 /*
   TODO
+    - AI rettskriving
+    - rich tooltip(s): buttons too big, url needs fvn-ui class
+
     - bug: el({ children }) not working?
     - bug: row|col does not allow { class }
     - add counter min/max to editable
