@@ -95,7 +95,7 @@
 }
 .ui-btn--stripped {
   --input-padding: 0;
-  & > div {
+  & > div:not(.ui-btn__icon) {
     border-bottom: 1px solid var(--muted);
   }
 }
