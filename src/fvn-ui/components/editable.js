@@ -117,6 +117,14 @@ const convertMarkdownToHtml = async (markdown = '') => {
 const convertHtmlToMarkdown = async (html = '') => {
   const TurndownService = await loadTurndown();
   const service = new TurndownService({ strongDelimiter: '*' });
+  service.addRule('slackLinks', {
+    filter: 'a',
+    replacement: function (content, node) {
+      const href = node.getAttribute('href')
+      if (!href) return content
+      return `<${href}|${content}>`
+    }
+  });
   return service.turndown(String(html || ''));
 };
 

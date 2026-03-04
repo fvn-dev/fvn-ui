@@ -299,14 +299,14 @@ body.fvn-ui {
 .ui-border.ui-contrast:focus-within,
 .ui-border.ui-contrast:focus-visible {
   outline: 1px solid var(--primary);
-  outline-offset: 1px;
+  outline-offset: 0;
 }
 .has-ui-border.ui-contrast.invalid:focus-within .ui-border.ui-contrast,
 .ui-border.ui-contrast:focus-within:has(.invalid),
 .ui-border.ui-contrast.invalid:focus-within,
 .ui-border.ui-contrast.invalid:focus-visible {
   outline: 1px solid var(--pink);
-  outline-offset: 1px;
+  outline-offset: 0;
 }
 
 /* :root wrapper for specificity boost */
