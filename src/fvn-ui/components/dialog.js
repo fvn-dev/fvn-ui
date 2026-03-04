@@ -362,10 +362,30 @@ export function dialog(...args) {
     rest.class
   ];
 
+
   let root;
   let mountNode;
   let modalLayer;
   let modalBackdrop;
+
+  // Helper: check if an element or its ancestors have .fvn-ui
+  function hasFvnUiAncestor(node) {
+    while (node && node !== document.body && node !== document.documentElement) {
+      if (node.classList && node.classList.contains('fvn-ui')) return true;
+      node = node.parentElement;
+    }
+    return false;
+  }
+
+  // Helper: wrap node in <div class="fvn-ui"> if needed
+  function wrapWithFvnUiIfNeeded(node) {
+    const bodyHasFvnUi = document.body.classList.contains('fvn-ui');
+    if (bodyHasFvnUi || hasFvnUiAncestor(document.body)) return node;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'fvn-ui';
+    wrapper.appendChild(node);
+    return wrapper;
+  }
 
   if (isModal) {
     root = el('div', {
@@ -396,7 +416,7 @@ export function dialog(...args) {
       children: [modalBackdrop, root]
     });
 
-    mountNode = modalLayer;
+    mountNode = wrapWithFvnUiIfNeeded(modalLayer);
   } else {
     root = el('div', {
       ...rest,
@@ -407,7 +427,7 @@ export function dialog(...args) {
         contentEl
       ]
     });
-    mountNode = root;
+    mountNode = wrapWithFvnUiIfNeeded(root);
   }
 
   if (inverted) {

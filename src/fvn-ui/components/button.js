@@ -116,7 +116,6 @@ export function button(...args) {
       this.textContent = text || label;
       if (Number.isInteger(duration)) {
         setTimeout(() => {
-          this.disabled = false;
           this.textContent = label;
         }, duration);
       }
@@ -130,8 +129,9 @@ export function button(...args) {
       this.textContent = label;
     },    
     toggleLoading(text) {
-      this.classList.toggle('loading', typeof text === 'string');
+      const isLoading = this.classList.toggle('loading', typeof text === 'string');
       this.textContent = text || label;
+      this.disabled = isLoading;
     }
   });
 
