@@ -1,26 +1,45 @@
-.ui-dialog::backdrop { 
+.ui-dialog__layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.ui-dialog__layer[data-open="false"] {
+  display: none;
+}
+
+.ui-dialog__backdrop {
+  position: absolute;
+  inset: 0;
   background: hsl(var(--hsl-text) / .2);
 }
+
 .ui-dialog {
+  position: relative;
+  z-index: 1;
   border: none;
   border-radius: var(--radius);
   width: min(520px, calc(100vw - 32px));
   max-height: calc(100vh - 32px);
+  max-width: 100%;
   overflow: auto;
   box-shadow: var(--shadow-md);
   background: var(--back);
   color: var(--text);
-}
-.ui-dialog:not([open]) {
-  display: none;
+  outline: none;
 }
 
 .ui-popover,
 .ui-popover .ui-header {
   align-items: center;
 }
+
 /* Dialog sections - uses text.css header() for title/description */
-.ui-dialog__content { 
+.ui-dialog__content {
   padding: var(--space-4);
   gap: var(--space-4);
   align-items: flex-start;
@@ -32,7 +51,10 @@
 
 /* Direct row/col children grow to fill dialog */
 .ui-dialog__inner > .row,
-.ui-dialog__inner > .col { flex: 1; width: 100%; }
+.ui-dialog__inner > .col {
+  flex: 1;
+  width: 100%;
+}
 
 .ui-dialog__footer {
   display: flex;
@@ -47,8 +69,8 @@
 
 /* ---- Popover (tooltip/dropdown variant) ---- */
 .ui-popover {
-  position: fixed;
-  z-index: 50;
+  position: absolute;
+  z-index: 1100;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--back);
@@ -58,29 +80,52 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity .12s ease;
+  max-width: min(360px, calc(100vw - 24px));
 }
+
 .ui-popover[data-open="true"] {
   opacity: 1;
   pointer-events: auto;
 }
+
 /* Invisible bridge to cover gap between anchor and tooltip */
-.ui-popover[data-open="true"]:before {
+.ui-popover[data-open="true"]::before {
   content: '';
   position: absolute;
+}
+
+.ui-popover[data-position="bottom"][data-open="true"]::before {
+  top: -12px;
   left: 0;
   right: 0;
   height: 12px;
 }
-.ui-popover[data-position="bottom"][data-open="true"]:before {
-  top: -12px;
-}
-.ui-popover[data-position="top"][data-open="true"]:before {
+
+.ui-popover[data-position="top"][data-open="true"]::before {
   bottom: -12px;
+  left: 0;
+  right: 0;
+  height: 12px;
+}
+
+.ui-popover[data-position="right"][data-open="true"]::before {
+  top: 0;
+  bottom: 0;
+  left: -12px;
+  width: 12px;
+}
+
+.ui-popover[data-position="left"][data-open="true"]::before {
+  top: 0;
+  bottom: 0;
+  right: -12px;
+  width: 12px;
 }
 
 .ui-popover__arrow {
   --size: 10px;
   --offset: calc(var(--size) / -2);
+
   position: absolute;
   width: var(--size);
   height: var(--size);
@@ -88,13 +133,28 @@
   border: 1px solid var(--border);
   border-right: 0;
   border-bottom: 0;
+}
+
+.ui-popover[data-position="bottom"] .ui-popover__arrow {
+  top: var(--offset);
   left: 50%;
   transform: translateX(-50%) rotate(45deg);
 }
-.ui-popover[data-position="bottom"] .ui-popover__arrow {
-  top: var(--offset);
-}
+
 .ui-popover[data-position="top"] .ui-popover__arrow {
   bottom: var(--offset);
+  left: 50%;
   transform: translateX(-50%) rotate(-135deg);
+}
+
+.ui-popover[data-position="right"] .ui-popover__arrow {
+  left: var(--offset);
+  top: 50%;
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+.ui-popover[data-position="left"] .ui-popover__arrow {
+  right: var(--offset);
+  top: 50%;
+  transform: translateY(-50%) rotate(135deg);
 }

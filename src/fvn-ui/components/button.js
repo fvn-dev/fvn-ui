@@ -177,6 +177,9 @@ export function button(...args) {
       tipDialog = dialog({
         type: 'tooltip',
         anchor: btn,
+        hover: true,
+        scrollPolicy: 'close',
+        padding: 0,
         inverted: tipInverted,
         content: el('div', {
           class: bem.el('tip'),

@@ -277,7 +277,6 @@ function selectPresentation() {
         label: 'Pick a fruit',
         options: exampleOptions.slice(0, 5),
         value: 1,
-        contrast: true,
         required: true,
         ref: e => setTimeout(() => e.error('asd'), 2000)
       }),
@@ -389,11 +388,6 @@ function inputPresentation() {
       layout.col([
         editable({ 
           id: 'mrkdwn',
-          inserted() {
-            console.log('Content inserted:', this);
-            console.log(dom.mrkdwn.value);
-            dom.mrkdwn.toMarkdown().then(console.log)
-          },
           onclick() {
             dom.mrkdwn.toMarkdown().then(console.log)
           },

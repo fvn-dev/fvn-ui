@@ -3,7 +3,240 @@ import './dialog.css'
 
 const bem = bemFactory('dialog');
 const bemPop = bemFactory('popover');
-const dialogCache = new WeakMap(); // cache toggled dialogs
+const dialogCache = new WeakMap();
+
+const HOVER_EVENT_TYPES = new Set(['mouseenter', 'mouseover', 'pointerenter']);
+const TRANSIENT_EVENT_TYPES = new Set(['mouseenter', 'mouseover', 'pointerenter', 'focus', 'focusin']);
+const FOCUSABLE_SELECTOR = [
+  'a[href]',
+  'button:not([disabled])',
+  'input:not([disabled]):not([type="hidden"])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])'
+].join(',');
+const OPPOSITE_POSITION = { top: 'bottom', bottom: 'top', left: 'right', right: 'left' };
+
+let bodyScrollLockCount = 0;
+let bodyOverflow = '';
+let bodyPaddingRight = '';
+const modalStack = [];
+
+const isElement = (value) => value instanceof Element;
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+const normalizePosition = (value) => {
+  if (!value) return 'bottom';
+  return ['top', 'bottom', 'left', 'right'].includes(value) ? value : 'bottom';
+};
+
+const normalizeScrollPolicy = (value, fallback = 'reposition') => {
+  return value === 'close' || value === 'reposition' ? value : fallback;
+};
+
+const isTopModal = (root) => modalStack.length && modalStack.at(-1) === root;
+
+const pushModal = (root) => {
+  const idx = modalStack.indexOf(root);
+  if (idx !== -1) {
+    modalStack.splice(idx, 1);
+  }
+  modalStack.push(root);
+};
+
+const pullModal = (root) => {
+  const idx = modalStack.indexOf(root);
+  if (idx !== -1) {
+    modalStack.splice(idx, 1);
+  }
+};
+
+const lockBodyScroll = () => {
+  if (bodyScrollLockCount > 0) {
+    bodyScrollLockCount++;
+    return;
+  }
+
+  const body = document.body;
+  bodyOverflow = body.style.overflow;
+  bodyPaddingRight = body.style.paddingRight;
+
+  const scrollbarWidth = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
+  if (scrollbarWidth > 0) {
+    const currentPadding = Number.parseFloat(getComputedStyle(body).paddingRight) || 0;
+    body.style.paddingRight = `${currentPadding + scrollbarWidth}px`;
+  }
+
+  body.style.overflow = 'hidden';
+  bodyScrollLockCount = 1;
+};
+
+const unlockBodyScroll = () => {
+  if (bodyScrollLockCount <= 0) {
+    return;
+  }
+
+  bodyScrollLockCount--;
+  if (bodyScrollLockCount > 0) {
+    return;
+  }
+
+  const body = document.body;
+  body.style.overflow = bodyOverflow;
+  body.style.paddingRight = bodyPaddingRight;
+};
+
+const getAnchorFromTrigger = (trigger, fallbackAnchor) => {
+  if (trigger instanceof Event) {
+    return trigger.currentTarget || trigger.target || fallbackAnchor || null;
+  }
+  if (isElement(trigger)) {
+    return trigger;
+  }
+  if (trigger === true && isElement(fallbackAnchor)) {
+    return fallbackAnchor;
+  }
+  return isElement(fallbackAnchor) ? fallbackAnchor : null;
+};
+
+const eventType = (trigger) => trigger instanceof Event ? String(trigger.type || '').toLowerCase() : '';
+const isHoverTriggerEvent = (trigger) => HOVER_EVENT_TYPES.has(eventType(trigger));
+const isTransientTriggerEvent = (trigger) => TRANSIENT_EVENT_TYPES.has(eventType(trigger));
+
+const getDefaultScrollPolicy = ({ provided, hover, trigger }) => {
+  if (provided === 'close' || provided === 'reposition') {
+    return provided;
+  }
+  if (hover) {
+    return 'close';
+  }
+  if (isTransientTriggerEvent(trigger)) {
+    return 'close';
+  }
+  return 'reposition';
+};
+
+const ensureContent = (contentEl, content, close) => {
+  contentEl.innerHTML = '';
+  let value = content;
+
+  if (typeof value === 'function') {
+    value = value(close);
+  }
+
+  if (value == null) {
+    return;
+  }
+
+  if (typeof value === 'string') {
+    contentEl.innerHTML = value;
+    return;
+  }
+
+  if (value instanceof Node) {
+    contentEl.appendChild(value);
+    return;
+  }
+
+  if (Array.isArray(value)) {
+    value.forEach((child) => {
+      if (child == null) return;
+      if (child instanceof Node) {
+        contentEl.appendChild(child);
+      } else {
+        contentEl.append(String(child));
+      }
+    });
+    return;
+  }
+
+  contentEl.append(String(value));
+};
+
+const getFocusable = (container) => {
+  return [...container.querySelectorAll(FOCUSABLE_SELECTOR)]
+    .filter((node) => !node.hasAttribute('disabled'))
+    .filter((node) => node.getAttribute('aria-hidden') !== 'true')
+    .filter((node) => {
+      if (node === document.activeElement) return true;
+      const style = getComputedStyle(node);
+      return style.display !== 'none' && style.visibility !== 'hidden';
+    });
+};
+
+const ensurePositioningContext = (target) => {
+  if (!target || target === document.body || target === document.documentElement) {
+    return;
+  }
+  const style = getComputedStyle(target);
+  if (style.position === 'static') {
+    target.style.position = 'relative';
+  }
+};
+
+const getPositionOrder = (requested, spaces) => {
+  const pos = normalizePosition(requested);
+  const opposite = OPPOSITE_POSITION[pos];
+  const verticalFallback = spaces.left > spaces.right ? ['left', 'right'] : ['right', 'left'];
+  const horizontalFallback = spaces.top > spaces.bottom ? ['top', 'bottom'] : ['bottom', 'top'];
+  const extras = pos === 'top' || pos === 'bottom' ? verticalFallback : horizontalFallback;
+
+  return [pos, opposite, ...extras].filter((side, idx, arr) => arr.indexOf(side) === idx);
+};
+
+const canFit = (side, width, height, spaces, gap) => {
+  if (side === 'top' || side === 'bottom') {
+    return height <= Math.max(0, spaces[side] - gap);
+  }
+  return width <= Math.max(0, spaces[side] - gap);
+};
+
+const pickPosition = (requested, spaces, width, height, gap) => {
+  const order = getPositionOrder(requested, spaces);
+  const fitting = order.find((side) => canFit(side, width, height, spaces, gap));
+  if (fitting) {
+    return fitting;
+  }
+  return order.reduce((best, side) => (spaces[side] > spaces[best] ? side : best), order[0]);
+};
+
+const getViewportCoords = (position, anchorRect, width, height, gap) => {
+  const anchorCenterX = anchorRect.left + anchorRect.width / 2;
+  const anchorCenterY = anchorRect.top + anchorRect.height / 2;
+
+  if (position === 'top') {
+    return { left: anchorCenterX - width / 2, top: anchorRect.top - height - gap };
+  }
+  if (position === 'bottom') {
+    return { left: anchorCenterX - width / 2, top: anchorRect.bottom + gap };
+  }
+  if (position === 'left') {
+    return { left: anchorRect.left - width - gap, top: anchorCenterY - height / 2 };
+  }
+  return { left: anchorRect.right + gap, top: anchorCenterY - height / 2 };
+};
+
+const viewportToContainerCoords = (container, viewportLeft, viewportTop) => {
+  if (!container || container === document.body || container === document.documentElement) {
+    return {
+      left: viewportLeft + window.scrollX,
+      top: viewportTop + window.scrollY
+    };
+  }
+
+  const rect = container.getBoundingClientRect();
+  return {
+    left: viewportLeft - rect.left + container.scrollLeft,
+    top: viewportTop - rect.top + container.scrollTop
+  };
+};
+
+const findModalLayer = (node) => {
+  if (!isElement(node)) {
+    return null;
+  }
+  return node.closest('[data-ui-modal-layer="true"]');
+};
 
 /**
  * Creates a dialog (modal or popover/tooltip)
@@ -16,6 +249,7 @@ const dialogCache = new WeakMap(); // cache toggled dialogs
  * @param {HTMLElement} [config.anchor] - Anchor element for positioning
  * @param {'top'|'bottom'|'left'|'right'} [config.position='bottom'] - Popover position
  * @param {boolean} [config.arrow=true] - Show arrow on popover
+ * @param {'close'|'reposition'} [config.scrollPolicy] - Scroll behavior for open popovers
  * @param {boolean} [config.inverted] - Dark/inverted style
  * @param {boolean} [config.closeOnBackdrop=true] - Close modal when backdrop is clicked
  * @param {boolean} [config.closeOnEscape=true] - Close dialog when Escape is pressed
@@ -39,49 +273,38 @@ export function dialog(...args) {
     position = 'bottom',
     arrow = true,
     content,
-    toggled, // event or element - creates/toggles dialog on the fly
-    open: shouldOpen, // alias for toggled
-    hover, // if true, close on mouseleave from anchor/dialog
+    toggled,
+    open: shouldOpen,
+    hover,
+    scrollPolicy,
     inverted,
     small,
     closeOnBackdrop = true,
     closeOnEscape = true,
-    _isChildOfAnchor, // internal: tooltip is child of anchor for hover persistence
     props,
     ...rest
   } = parseArgs(...args);
 
-  const toggleEvent = toggled || shouldOpen;
-  if (toggleEvent) {
-    // Determine anchor: from event, from element, from anchor prop, or null (modal fallback)
-    let anchorEl = null;
-    let isHoverTrigger = false;
-    
-    if (toggleEvent instanceof Event) {
-      anchorEl = toggleEvent.currentTarget || toggleEvent.target;
-      isHoverTrigger = ['mouseover', 'mouseenter'].includes(toggleEvent.type);
-      
-      // For hover triggers, check cache FIRST before content is evaluated
-      // If event target is inside an already-open tooltip, ignore (prevents re-render spam)
-      if (isHoverTrigger && anchorEl) {
-        const cached = dialogCache.get(anchorEl);
-        if (cached?.isOpen) return cached;
-      }
-    } else if (toggleEvent instanceof Element) {
-      anchorEl = toggleEvent;
-    } else if (toggleEvent === true && anchor instanceof Element) {
-      anchorEl = anchor;
-    }
-    
-    // Reuse cached dialog per anchor when possible
+  const resolvedVariant = type || variant || 'modal';
+  const isModal = resolvedVariant === 'modal';
+  const toggleTrigger = toggled || shouldOpen;
+
+  if (toggleTrigger) {
+    const anchorEl = getAnchorFromTrigger(toggleTrigger, anchor);
+    const isHover = isHoverTriggerEvent(toggleTrigger);
+    const resolvedScrollPolicy = getDefaultScrollPolicy({
+      provided: scrollPolicy,
+      hover: hover ?? isHover,
+      trigger: toggleTrigger
+    });
+
     if (anchorEl) {
       const cached = dialogCache.get(anchorEl);
       if (cached?.isConnected) {
-        // Keep content fresh for event-driven dialogs
         if (content !== undefined) {
           cached.setContent?.(content);
         }
-        if (isHoverTrigger) {
+        if (isHover) {
           if (!cached.isOpen) cached.show(anchorEl);
         } else {
           cached.toggle(anchorEl);
@@ -90,66 +313,355 @@ export function dialog(...args) {
       }
     }
 
-    // Hover tooltips: append to anchor so tooltip persists when hovering it
-    if (anchorEl && isHoverTrigger) {
-      anchorEl.style.position = anchorEl.style.position || 'relative';
+    const instance = dialog({
+      ...rest,
+      parent,
+      variant: resolvedVariant,
+      anchor: anchorEl,
+      position,
+      arrow,
+      content,
+      hover: hover ?? isHover,
+      scrollPolicy: resolvedScrollPolicy,
+      inverted,
+      small,
+      closeOnBackdrop,
+      closeOnEscape
+    });
+
+    if (anchorEl) {
+      dialogCache.set(anchorEl, instance);
     }
 
-    // Click-triggered or no-anchor: create fresh dialog (and cache if anchor exists)
-    const newDialog = dialog({ 
-      ...rest, 
-      parent: anchorEl && isHoverTrigger ? anchorEl : document.body,
-      variant: variant || 'modal', 
-      type: type || variant || 'modal',
-      position, arrow, content, inverted,
-      closeOnBackdrop,
-      closeOnEscape,
-      anchor: anchorEl,
-      _isChildOfAnchor: !!(anchorEl && isHoverTrigger)
-    });
-    if (anchorEl) {
-      dialogCache.set(anchorEl, newDialog);
-    }
-    newDialog.show(anchorEl);
-    return newDialog;
+    instance.show(anchorEl || toggleTrigger);
+    return instance;
   }
 
   const cbOpen = getCallback('onOpen', rest);
   const cbClose = getCallback('onClose', rest);
+  const explicitScrollPolicy = scrollPolicy === 'close' || scrollPolicy === 'reposition';
 
   let isOpen = false;
+  let currentAnchor = isElement(anchor) ? anchor : null;
+  let activeScrollPolicy = normalizeScrollPolicy(scrollPolicy, hover ? 'close' : 'reposition');
   let cleanupOutside;
+  let detachHover;
+  let removeResize;
+  let removeScroll;
+  let positionRaf = 0;
+  let returnFocusEl;
   let arrowEl;
-  let currentAnchor = anchor;
-  let resizeHandlerBound = false;
 
-  const effectiveTye = type || variant;
-  const isModal = effectiveTye === 'modal';
+  const contentEl = col({ class: bem.el('content') });
 
-  const onKeydown = (e) => {
-    if (e.key !== 'Escape') {
-      return;
-    }
-    e.preventDefault();
-    if (!closeOnEscape) {
-      return;
-    }
-    close();
+  const rootClasses = [
+    isModal ? bem() : bemPop(),
+    small && (isModal ? bem('small') : bemPop('small')),
+    'ui-dialog-component',
+    configToClasses(props),
+    rest.class
+  ];
+
+  let root;
+  let mountNode;
+  let modalLayer;
+  let modalBackdrop;
+
+  if (isModal) {
+    root = el('div', {
+      ...rest,
+      class: rootClasses,
+      attrs: {
+        ...(rest.attrs || {}),
+        role: 'dialog',
+        'aria-modal': 'true',
+        tabindex: -1
+      },
+      children: [contentEl]
+    });
+
+    modalBackdrop = el('div', {
+      class: bem.el('backdrop'),
+      onClick: () => {
+        if (closeOnBackdrop) {
+          close();
+        }
+      }
+    });
+
+    modalLayer = el('div', {
+      class: bem.el('layer'),
+      data: { open: 'false', uiModalLayer: 'true' },
+      attrs: { 'aria-hidden': 'true' },
+      children: [modalBackdrop, root]
+    });
+
+    mountNode = modalLayer;
+  } else {
+    root = el('div', {
+      ...rest,
+      class: rootClasses,
+      data: { open: 'false', position: normalizePosition(position) },
+      children: [
+        arrow && el('div', { class: bemPop.el('arrow'), ref: (node) => (arrowEl = node) }),
+        contentEl
+      ]
+    });
+    mountNode = root;
+  }
+
+  if (inverted) {
+    root.classList.add('ui-inverted');
+  }
+
+  const clearRaf = () => {
+    if (!positionRaf) return;
+    cancelAnimationFrame(positionRaf);
+    positionRaf = 0;
   };
 
-  const close = () => {
+  const removeGlobalHandlers = () => {
+    cleanupOutside?.();
+    cleanupOutside = undefined;
+    detachHover?.();
+    detachHover = undefined;
+    removeResize?.();
+    removeResize = undefined;
+    removeScroll?.();
+    removeScroll = undefined;
+    clearRaf();
+  };
+
+  const setupHoverClose = () => {
+    if (!hover || !currentAnchor || isModal) {
+      return;
+    }
+
+    let closeTimer;
+    const queueClose = () => {
+      clearTimeout(closeTimer);
+      closeTimer = setTimeout(() => {
+        const overAnchor = currentAnchor?.matches(':hover');
+        const overRoot = root.matches(':hover');
+        if (!overAnchor && !overRoot) {
+          close();
+        }
+      }, 80);
+    };
+
+    const cancelClose = () => {
+      clearTimeout(closeTimer);
+    };
+
+    currentAnchor.addEventListener('mouseleave', queueClose);
+    currentAnchor.addEventListener('mouseenter', cancelClose);
+    root.addEventListener('mouseleave', queueClose);
+    root.addEventListener('mouseenter', cancelClose);
+
+    detachHover = () => {
+      clearTimeout(closeTimer);
+      currentAnchor?.removeEventListener('mouseleave', queueClose);
+      currentAnchor?.removeEventListener('mouseenter', cancelClose);
+      root.removeEventListener('mouseleave', queueClose);
+      root.removeEventListener('mouseenter', cancelClose);
+    };
+  };
+
+  const getMountTarget = () => {
+    if (isModal) {
+      return document.body;
+    }
+
+    if (isElement(parent)) {
+      return parent;
+    }
+
+    const modalParent = findModalLayer(currentAnchor);
+    if (modalParent) {
+      return modalParent;
+    }
+
+    return document.body;
+  };
+
+  const positionPopover = () => {
+    if (isModal || !currentAnchor || !mountNode.isConnected) {
+      return;
+    }
+
+    const gap = 8;
+    const pad = 12;
+    const anchorRect = currentAnchor.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    root.style.maxHeight = '';
+    root.style.overflowY = 'visible';
+    contentEl.style.maxHeight = '';
+    contentEl.style.overflowY = 'visible';
+
+    let popoverWidth = root.offsetWidth || 200;
+    let popoverHeight = root.offsetHeight || 100;
+
+    const spaces = {
+      top: Math.max(0, anchorRect.top - pad),
+      bottom: Math.max(0, viewportHeight - anchorRect.bottom - pad),
+      left: Math.max(0, anchorRect.left - pad),
+      right: Math.max(0, viewportWidth - anchorRect.right - pad)
+    };
+
+    const resolvedPosition = pickPosition(position, spaces, popoverWidth, popoverHeight, gap);
+    root.dataset.position = resolvedPosition;
+
+    const verticalSpace = Math.max(120, viewportHeight - pad * 2);
+    if (resolvedPosition === 'top' || resolvedPosition === 'bottom') {
+      const directionalSpace = Math.max(120, spaces[resolvedPosition] - gap);
+      const contentMaxHeight = Math.max(80, directionalSpace - 24);
+      contentEl.style.maxHeight = `${contentMaxHeight}px`;
+      contentEl.style.overflowY = 'auto';
+    } else {
+      const contentMaxHeight = Math.max(80, verticalSpace - 24);
+      contentEl.style.maxHeight = `${contentMaxHeight}px`;
+      contentEl.style.overflowY = 'auto';
+    }
+
+    popoverWidth = root.offsetWidth || popoverWidth;
+    popoverHeight = root.offsetHeight || popoverHeight;
+
+    const ideal = getViewportCoords(resolvedPosition, anchorRect, popoverWidth, popoverHeight, gap);
+    const clampedLeft = clamp(ideal.left, pad, Math.max(pad, viewportWidth - popoverWidth - pad));
+    const clampedTop = clamp(ideal.top, pad, Math.max(pad, viewportHeight - popoverHeight - pad));
+
+    const container = mountNode.parentElement || document.body;
+    const coords = viewportToContainerCoords(container, clampedLeft, clampedTop);
+
+    root.style.left = `${coords.left}px`;
+    root.style.top = `${coords.top}px`;
+    root.style.bottom = 'auto';
+    root.style.right = 'auto';
+
+    if (!arrowEl) {
+      return;
+    }
+
+    const rootRect = root.getBoundingClientRect();
+    const arrowPad = 12;
+
+    arrowEl.style.left = '';
+    arrowEl.style.top = '';
+
+    if (resolvedPosition === 'top' || resolvedPosition === 'bottom') {
+      const arrowLeft = clamp(
+        anchorRect.left + anchorRect.width / 2 - rootRect.left,
+        arrowPad,
+        Math.max(arrowPad, rootRect.width - arrowPad)
+      );
+      arrowEl.style.left = `${arrowLeft}px`;
+    } else {
+      const arrowTop = clamp(
+        anchorRect.top + anchorRect.height / 2 - rootRect.top,
+        arrowPad,
+        Math.max(arrowPad, rootRect.height - arrowPad)
+      );
+      arrowEl.style.top = `${arrowTop}px`;
+    }
+  };
+
+  const schedulePosition = () => {
+    clearRaf();
+    positionRaf = requestAnimationFrame(() => {
+      positionRaf = 0;
+      positionPopover();
+    });
+  };
+
+  const setupPopoverHandlers = () => {
+    if (isModal) {
+      return;
+    }
+
+    removeResize = () => window.removeEventListener('resize', schedulePosition, true);
+    window.addEventListener('resize', schedulePosition, true);
+
+    const onScroll = () => {
+      if (activeScrollPolicy === 'close') {
+        close();
+        return;
+      }
+      schedulePosition();
+    };
+
+    removeScroll = () => {
+      window.removeEventListener('scroll', onScroll, true);
+      document.removeEventListener('scroll', onScroll, true);
+    };
+    window.addEventListener('scroll', onScroll, true);
+    document.addEventListener('scroll', onScroll, true);
+
+    cleanupOutside = onOutsideClick(root, (event) => {
+      if (currentAnchor?.contains(event.target)) {
+        return;
+      }
+      close();
+    });
+
+    setupHoverClose();
+  };
+
+  const trapFocus = (event) => {
+    if (!isModal || !isTopModal(root) || event.key !== 'Tab') {
+      return;
+    }
+
+    const focusable = getFocusable(root);
+    if (!focusable.length) {
+      event.preventDefault();
+      root.focus();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    const active = document.activeElement;
+
+    if (event.shiftKey && (active === first || !root.contains(active))) {
+      event.preventDefault();
+      last.focus();
+      return;
+    }
+
+    if (!event.shiftKey && (active === last || !root.contains(active))) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
+  const onKeydown = (event) => {
     if (!isOpen) {
       return;
     }
-    isOpen = false;    
-    isModal ? root.close() : (root.dataset.open = 'false');
-    cleanupOutside?.();
-    document.removeEventListener('keydown', onKeydown, true);
-    if (resizeHandlerBound) {
-      window.removeEventListener('resize', positionPopover);
-      resizeHandlerBound = false;
+
+    if (isModal && !isTopModal(root)) {
+      return;
     }
-    cbClose?.();
+
+    if (event.key === 'Escape') {
+      if (!closeOnEscape) {
+        return;
+      }
+      event.preventDefault();
+      close();
+      return;
+    }
+
+    trapFocus(event);
+  };
+
+  const setContent = (newContent) => {
+    ensureContent(contentEl, newContent, close);
+    if (isOpen && !isModal) {
+      schedulePosition();
+    }
   };
 
   const open = (eventOrElement) => {
@@ -157,181 +669,94 @@ export function dialog(...args) {
       return;
     }
 
-    // Auto-assign anchor from click event or passed element
-    if (!anchor && eventOrElement) {
-      currentAnchor = eventOrElement instanceof Event 
-        ? eventOrElement.currentTarget || eventOrElement.target 
-        : eventOrElement;
+    if (isElement(eventOrElement)) {
+      currentAnchor = eventOrElement;
+    } else if (eventOrElement instanceof Event) {
+      currentAnchor = eventOrElement.currentTarget || eventOrElement.target || currentAnchor;
+      if (!explicitScrollPolicy && !isModal) {
+        activeScrollPolicy = normalizeScrollPolicy(undefined, isTransientTriggerEvent(eventOrElement) ? 'close' : 'reposition');
+      }
+    } else if (!explicitScrollPolicy && !isModal) {
+      activeScrollPolicy = normalizeScrollPolicy(undefined, hover ? 'close' : 'reposition');
     }
 
-    // Ensure dialog is in the document before showing
-    if (!root.isConnected) {
-      document.body.appendChild(root);
+    const target = getMountTarget();
+    if (target && mountNode.parentElement !== target) {
+      if (!isModal) {
+        ensurePositioningContext(target);
+      }
+      target.appendChild(mountNode);
     }
 
     isOpen = true;
 
     if (isModal) {
-      root.showModal();
-    } else {
-      positionPopover();
-      root.dataset.open = 'true';
-      if (!resizeHandlerBound) {
-        window.addEventListener('resize', positionPopover);
-        resizeHandlerBound = true;
-      }
-      // Exclude anchor from outside click detection so toggle works
-      cleanupOutside = onOutsideClick(root, (e) => {
-        if (currentAnchor?.contains(e.target)) return; // Let toggle handle anchor clicks
-        close();
+      modalLayer.dataset.open = 'true';
+      modalLayer.setAttribute('aria-hidden', 'false');
+      pushModal(root);
+      lockBodyScroll();
+      returnFocusEl = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+      requestAnimationFrame(() => {
+        const autofocusTarget = root.querySelector('[autofocus]');
+        const focusTarget = autofocusTarget || getFocusable(root)[0] || root;
+        focusTarget?.focus?.();
       });
+    } else {
+      root.style.visibility = 'hidden';
+      root.dataset.open = 'true';
+      positionPopover();
+      root.style.visibility = '';
+      setupPopoverHandlers();
     }
 
     document.addEventListener('keydown', onKeydown, true);
     cbOpen?.();
   };
 
-  const toggle = (eventOrElement) => isOpen ? close() : open(eventOrElement);
-
-  const positionPopover = () => {
-    if (!currentAnchor || isModal) return;
-    
-    const gap = 8;
-    const pad = 12;
-    const anchor = currentAnchor.getBoundingClientRect();
-    const pw = root.offsetWidth || 200;
-    const ph = root.offsetHeight || 100;
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    
-    const spaceBelow = Math.max(0, vh - anchor.bottom - gap - pad);
-    const spaceAbove = Math.max(0, anchor.top - gap - pad);
-
-    // Flip or choose best-fit side for tall content
-    let pos = position;
-    if (position === 'bottom' && ph > spaceBelow) {
-      pos = spaceAbove > spaceBelow ? 'top' : 'bottom';
-    } else if (position === 'top' && ph > spaceAbove) {
-      pos = spaceBelow >= spaceAbove ? 'bottom' : 'top';
+  const close = () => {
+    if (!isOpen) {
+      return;
     }
-    root.dataset.position = pos;
 
-    const maxHeight = Math.max(120, pos === 'bottom' ? spaceBelow : spaceAbove);
-    root.style.maxHeight = '';
-    root.style.overflowY = 'visible';
-    if (contentEl) {
-      const contentMaxHeight = Math.max(80, maxHeight - 24);
-      contentEl.style.maxHeight = `${contentMaxHeight}px`;
-      contentEl.style.overflowY = 'auto';
-    }
-    
-    // Calculate left position (clamped to viewport)
-    const anchorCenterX = anchor.left + anchor.width / 2;
-    const idealLeft = anchorCenterX - pw / 2;
-    const left = Math.max(pad, Math.min(vw - pw - pad, idealLeft));
-    
-    // Apply positioning
-    if (_isChildOfAnchor) {
-      // Relative to anchor
-      const relativeLeft = left - anchor.left;
-      root.style.left = `${relativeLeft}px`;
-      root.style.top = pos === 'bottom' ? `${anchor.height + gap}px` : 'auto';
-      root.style.bottom = pos === 'top' ? `${anchor.height + gap}px` : 'auto';
+    isOpen = false;
+
+    document.removeEventListener('keydown', onKeydown, true);
+    removeGlobalHandlers();
+
+    if (isModal) {
+      modalLayer.dataset.open = 'false';
+      modalLayer.setAttribute('aria-hidden', 'true');
+      pullModal(root);
+      unlockBodyScroll();
+      returnFocusEl?.focus?.();
+      returnFocusEl = null;
     } else {
-      // Fixed positioning
-      root.style.left = `${left}px`;
-      const preferredTop = pos === 'bottom' ? anchor.bottom + gap : anchor.top - ph - gap;
-      const clampedTop = Math.max(pad, Math.min(vh - pad - Math.min(ph, maxHeight), preferredTop));
-      root.style.top = `${clampedTop}px`;
-      root.style.bottom = 'auto';
+      root.dataset.open = 'false';
     }
-    root.style.transform = 'none';
-    
-    // Arrow points to anchor center
-    if (arrowEl) {
-      arrowEl.style.left = `${anchorCenterX - left}px`;
-    }
+
+    cbClose?.();
   };
 
-  const contentEl = col({
-    class: bem.el('content'),
-    children: content 
-      ? typeof content === 'function' 
-        ? content(close) 
-        : !Array.isArray(content) ? [ content ] : content
-      : []
-  });
+  const toggle = (eventOrElement) => (isOpen ? close() : open(eventOrElement));
 
-  const setContent = (newContent) => {
-    contentEl.innerHTML = '';
-    if (typeof newContent === 'string') {
-      contentEl.innerHTML = newContent;
-    } else if (newContent instanceof HTMLElement) {
-      contentEl.appendChild(newContent);
-    } else if (Array.isArray(newContent)) {
-      newContent.forEach(c => contentEl.appendChild(c));
-    } else if (typeof newContent === 'function') {
-      const result = newContent(close);
-      if (result instanceof HTMLElement) contentEl.appendChild(result);
-      else if (Array.isArray(result)) result.forEach(c => contentEl.appendChild(c));
-    }
-  };
+  ensureContent(contentEl, content, close);
 
-  let root;
-
-  if (isModal) {
-    root = el('dialog', parent, {
-      ...rest,
-      class: [bem(), small && bem('small'), 'ui-dialog-component', configToClasses(props), rest.class],
-      onClick: (e) => {
-        if (e.target === root && closeOnBackdrop) {
-          close();
-        }
-      },
-      onCancel: (e) => {
-        e.preventDefault();
-        if (closeOnEscape) {
-          close();
-        }
-      },
-      children: [contentEl]
-    });
-  } else {
-    root = el('div', parent, {
-      ...rest,
-      class: [bemPop(), small && bem('small'), 'ui-dialog-component', configToClasses(props), rest.class],
-      data: { open: 'false', position },
-      style: _isChildOfAnchor ? { position: 'absolute' } : undefined,
-      children: [
-        arrow && el('div', { class: bemPop.el('arrow'), ref: (e) => arrowEl = e }),
-        contentEl
-      ]
-    });
-  }
-
-  inverted && root.classList.add('ui-inverted');
-
-  // Use show/hide/toggle to avoid conflict with native <dialog>.open property
   root.show = open;
   root.hide = close;
   root.toggle = toggle;
   root.setContent = setContent;
   root.destroy = () => {
     close();
-    if (currentAnchor) dialogCache.delete(currentAnchor);
-    root.remove();
+    if (currentAnchor) {
+      dialogCache.delete(currentAnchor);
+    }
+    mountNode.remove();
+    if (isModal) {
+      pullModal(root);
+    }
   };
   Object.defineProperty(root, 'isOpen', { get: () => isOpen });
-
-  // Set up hover behavior
-  // If child of anchor, only need mouseleave on anchor (tooltip is inside, so hovering it won't trigger leave)
-  // Otherwise, need mouseleave on both anchor and tooltip
-  if (_isChildOfAnchor && anchor) {
-    anchor.addEventListener('mouseleave', close);
-  } else if (hover && anchor) {
-    anchor.addEventListener('mouseleave', close);
-    root.addEventListener('mouseleave', close);
-  }
 
   return root;
 }
