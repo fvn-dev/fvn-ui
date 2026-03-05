@@ -36,6 +36,7 @@ export {
   dialog,
   draggable,
   editable,
+  fullscreen,
   image,
   input,
   modal,

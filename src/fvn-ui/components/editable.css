@@ -1,3 +1,25 @@
+.ui-editable__wrap {
+  --ui-icon-size: var(--core);
+}
+
+.ui-editable__content {
+  &.ui-fullscreen-content {
+    overflow: auto;
+    border: none !important;
+    & .ui-fullscreen-btn {
+      visibility: hidden;
+    }    
+    & .ui-editable__editor {
+      height: calc(100% - (2 * var(--space)));
+    }
+    & .ui-editable__toolbar {
+      position: fixed;
+      bottom: var(--space);
+      width: calc(100% - (3 * var(--space)));      
+    }
+  }
+}
+
 .ui-editable {
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -108,6 +130,17 @@
 .ui-editable__content {
   border-radius: var(--radius);
   border: 1px solid var(--border);
+  position: relative;
+  & .ui-fullscreen-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 9;
+      border-radius: 0 var(--radius) 0 0;
+      &:not(:hover) {
+        --text: var(--muted);
+      }
+  }  
 }
 .ui-editable__content:focus-within,
 .ui-editable__content:hover {

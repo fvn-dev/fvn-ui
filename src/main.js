@@ -390,6 +390,7 @@ function inputPresentation() {
           min: 10,
           max: 50,
           counter: true,
+          zoom: true,
           message: {
             min: 'Minimum {min} characters required',
             max: 'Maximum {max} characters allowed',
@@ -610,7 +611,19 @@ function miscPresentation() {
         variant: 'outline',
         style: { alignSelf: 'flex-end' }
       })     
-    ])
+    ]),
+    layout.row({ gap: 2 },[
+      text.label('Label'), 
+      button({
+        variant: 'outline',
+        color: 'pink',
+        icon: ['expand', 'contract'],
+        shape: 'round',
+        onClick(e) {
+          ui.fullscreen(this, { closeButton: false });
+        }
+      })    
+    ]),    
   ]);
 }
 

@@ -20,6 +20,8 @@ import { switchComponent as _switchComponent } from './switch.js'
 import { tabs as _tabs } from './tabs.js'
 import { toggle as _toggle } from './toggle.js'
 import { text, divider, title, description, header, label } from './text.js'
+import { fullscreen } from './fullscreen.js'
+export { fullscreen };
 
 const BASE_CLASS = 'ui-component';
 

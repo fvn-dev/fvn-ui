@@ -1,4 +1,5 @@
 import { el, row, col, parseArgs, configToClasses, bemFactory, noSpellcheck, focusAfterRender } from '../dom.js';
+import { fullscreen } from './fullscreen.js';
 import { label as textLabel } from './text.js';
 import { button } from './button.js';
 import { dialog } from './dialog.js';
@@ -176,6 +177,7 @@ export function editable(...args) {
     message,
     info,
     focus,
+    zoom,
     onChange,
     onInput,
     onFocus,
@@ -668,11 +670,25 @@ export function editable(...args) {
     })
     : null;
 
+  let contentEl;
   const root = col(parent, {
     class: [bem.el('wrap'), configToClasses(props)],
     children: [
       label && textLabel({ text: label, soft: !contrast }),
-      col({ class: [ bem.el('content'), 'ui-border', contrast && 'ui-contrast' ] }, [
+      col({ 
+        class: [ bem.el('content'), 'ui-border', contrast && 'ui-contrast' ],
+        ref: e => contentEl = e
+      }, [
+        zoom && button({
+          class: 'ui-fullscreen-btn',
+          icon: 'expand',
+          tip: 'Fullscreen',
+          variant: 'ghost',
+          onclick(e) {
+            fullscreen(contentEl);
+            focusAfterRender(isMarkdownMode() ? state.markdownEl : state.editableEl);
+          }
+        }),
         editableEl,
         markdownEl,
         toolbar
