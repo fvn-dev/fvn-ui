@@ -6,16 +6,19 @@
   &.ui-fullscreen-content {
     overflow: auto;
     border: none !important;
+    outline: none !important;
+    padding-bottom: calc(3 * var(--space));
     & .ui-fullscreen-btn {
       visibility: hidden;
     }    
     & .ui-editable__editor {
-      height: calc(100% - (2 * var(--space)));
+      flex: 1;
     }
     & .ui-editable__toolbar {
       position: fixed;
-      bottom: var(--space);
-      width: calc(100% - (3 * var(--space)));      
+      bottom: calc(3 * var(--space));
+      width: calc(100% - (3 * var(--space)));
+      border-top: 1px dashed var(--border);  
     }
   }
 }

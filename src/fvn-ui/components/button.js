@@ -205,7 +205,11 @@ export function button(...args) {
     });
 
     btn.addEventListener('mouseleave', hideTip);
-    btn.addEventListener('focus', showTip);
+    btn.addEventListener('focus', () => {
+      // A modal restores focus to its trigger when it closes. Mouse focus
+      // should not reopen the tip after the pointer has already moved away.
+      if (btn.matches(':focus-visible')) showTip();
+    });
     btn.addEventListener('blur', hideTip);
     btn.addEventListener('pointerdown', hideTip);
     btn.addEventListener('keydown', (e) => {
