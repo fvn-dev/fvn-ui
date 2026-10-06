@@ -79,6 +79,7 @@ export function draggable(...args) {
       draggedItem = wrapper;
       draggedFromIndex = [...containerEl.children].indexOf(wrapper);
       wrapper.classList.add('ui-dragging');
+      containerEl.classList.add('ui-dragging-active');
       e.dataTransfer.effectAllowed = 'move';
 
       // Hide the ghost image using an offscreen empty element
@@ -92,6 +93,7 @@ export function draggable(...args) {
 
     wrapper.ondragend = () => {
       wrapper.classList.remove('ui-dragging');
+      containerEl.classList.remove('ui-dragging-active');
       const newIndex = [...containerEl.children].indexOf(wrapper);
       
       // Fire onChange if position changed
