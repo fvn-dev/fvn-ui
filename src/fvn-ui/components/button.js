@@ -5,6 +5,31 @@ import './button.css'
 
 const bem = bemFactory('btn');
 const TIP_DELAY_MS = 450;
+const navigationKeys = new Set(['Tab', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End']);
+const focusIntents = new WeakMap();
+
+// Track navigation for the current key event, not persistent keyboard modality.
+// Programmatic focus may match :focus-visible long after a keyboard interaction.
+function getFocusIntent(doc) {
+  if (focusIntents.has(doc)) return focusIntents.get(doc);
+  const intent = { navigating: false };
+  let resetTimer;
+  const reset = () => {
+    clearTimeout(resetTimer);
+    intent.navigating = false;
+  };
+  doc.addEventListener('keydown', event => {
+    reset();
+    if (navigationKeys.has(event.key) && !event.altKey && !event.ctrlKey && !event.metaKey) {
+      intent.navigating = true;
+      resetTimer = setTimeout(reset, 0);
+    }
+  }, true);
+  doc.addEventListener('pointerdown', reset, true);
+  doc.addEventListener('keyup', reset, true);
+  focusIntents.set(doc, intent);
+  return intent;
+}
 
 /**
  * Creates a button element
@@ -163,6 +188,7 @@ export function button(...args) {
   }
 
   if (tip) {
+    const focusIntent = getFocusIntent(btn.ownerDocument);
     let showTimer = null;
     let tipDialog = null;
 
@@ -206,9 +232,7 @@ export function button(...args) {
 
     btn.addEventListener('mouseleave', hideTip);
     btn.addEventListener('focus', () => {
-      // A modal restores focus to its trigger when it closes. Mouse focus
-      // should not reopen the tip after the pointer has already moved away.
-      if (btn.matches(':focus-visible')) showTip();
+      if (focusIntent.navigating && btn.matches(':focus-visible')) showTip();
     });
     btn.addEventListener('blur', hideTip);
     btn.addEventListener('pointerdown', hideTip);
