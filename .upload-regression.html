@@ -1,0 +1,15 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Upload regression</title></head><body><script type="module">
+import { ui } from './src/fvn-ui/index.js';
+import './src/fvn-ui/style.css';
+const status=ui.el('p',{text:'No callback yet'});
+let inputClicks=0;
+const upload=ui.upload({label:'Attachment',required:true,button:'Velg fil',removeButton:'Fjern',hint:'Ingen filer valgt',onUpload:(payload,file)=>{
+status.textContent=JSON.stringify({file:file?.name||null,value:upload.value?.filename||null,nativeFiles:upload.input.files.length,valid:upload.isValid(),pickerClicks:inputClicks});
+}});
+upload.input.addEventListener('click',()=>inputClicks++);
+const select=ui.button({label:'Select test file',onClick:()=>{
+const dt=new DataTransfer(); dt.items.add(new File(['example'],'sample.txt',{type:'text/plain'}));
+upload.input.files=dt.files; upload.input.dispatchEvent(new Event('change',{bubbles:true}));
+}});
+document.body.append(ui.col({gap:4,padding:8},[select,upload,status]));
+</script></body></html>

@@ -201,10 +201,11 @@ const createUploadPayload = (file) => {
  * @param {string} [config.placeholder='Drop file here'] - Main dropzone text
  * @param {string} [config.hint] - Helper text under placeholder
  * @param {string} [config.button='Choose file'] - Picker button label
+ * @param {string} [config.removeButton='Remove'] - Button label when a file is selected
  * @param {string} [config.accept] - Custom accept attribute (overrides type)
  * @param {boolean} [config.required=false] - Require a selected file
  * @param {string|Object} [config.message] - Validation message(s), supports { required }
- * @param {Function} [config.onUpload] - Callback with (payload, file, event)
+ * @param {Function} [config.onUpload] - Callback with (payload, file, event); payload and file are null on user removal
  * @param {Function} [config.onChange] - Alias callback with (payload, file, event)
  * @param {boolean} [config.disabled] - Disable interactions
  * @param {string} [config.id] - Registers to dom.upload[id] and dom[id]
@@ -222,6 +223,7 @@ export function upload(...args) {
     placeholder = 'Drop file here',
     hint = 'Drag and drop, or choose a file',
     button: buttonLabel = 'Choose file',
+    removeButton = 'Remove',
     accept,
     required = false,
     message,
@@ -235,7 +237,7 @@ export function upload(...args) {
   const normalizedType = normalizeType(type);
   const acceptValue = accept || ACCEPT_BY_TYPE[normalizedType];
 
-  let rootEl, dropEl, inputEl, fileNameEl, previewIconEl;
+  let rootEl, dropEl, inputEl, fileNameEl, previewIconEl, actionButton;
   let currentPayload = null;
 
   let badgeElement = el('span', { 
@@ -281,6 +283,7 @@ export function upload(...args) {
 
     validation.ok();
     currentPayload = createUploadPayload(file);
+    actionButton?.setLabel(removeButton);
     if (fileNameEl) {
       badgeElement._render(file);
       fileNameEl.textContent = file.name;
@@ -293,6 +296,8 @@ export function upload(...args) {
 
   const clear = () => {
     currentPayload = null;
+    actionButton?.setLabel(buttonLabel);
+    badgeElement.replaceChildren();
     if (inputEl) inputEl.value = '';
     if (fileNameEl) fileNameEl.textContent = hint;
     if (rootEl) rootEl.dataset.hasValue = 'false';
@@ -335,7 +340,7 @@ export function upload(...args) {
   };
 
   const onDropZoneKeydown = (e) => {
-    if (disabled) return;
+    if (disabled || e.target !== dropEl) return;
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       open();
@@ -408,12 +413,20 @@ export function upload(...args) {
           row({ class: bem.el('actions') }, [
             button({
               label: buttonLabel,
+              disabled,
+              ref: (e) => actionButton = e,
               variant: 'outline',
               end: true,
               onClick: (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                open();
+                if (disabled) return;
+                if (currentPayload) {
+                  clear();
+                  callback?.call(rootEl, null, null, e);
+                } else {
+                  open();
+                }
               }
             })
           ]),
